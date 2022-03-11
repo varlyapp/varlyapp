@@ -1,6 +1,5 @@
-build/bin
-build/windows/installer/wails_tools.nsh
-build/windows/installer/tmp/
+build/*
+!build/appicon.png
 
 .tmp
 .temp
