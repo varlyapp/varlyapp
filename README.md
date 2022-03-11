@@ -43,10 +43,11 @@
 
 ---
 
-## Help Me
+## Contribute♥️
 > To support my efforts in building **Varly.app**, you can **contribute** to the project or send **Eth** to this address `0xcEc5D699e254dB1fbF73fEA6fB929Ea31CB839F4`
 
 ---
 
-Thank You!
+Thank you🙏
+
 -**Selvin**
