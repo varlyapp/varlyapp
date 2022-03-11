@@ -1,0 +1,12 @@
+build/bin
+build/windows/installer/wails_tools.nsh
+build/windows/installer/tmp/
+
+.tmp
+.temp
+.DS_Store
+
+.idea
+.vscode
+
+node_modules
