@@ -1,0 +1,31 @@
+{
+  "name": "varly",
+  "frontend:build": "",
+  "frontend:install": "",
+  "frontend:dev": "",
+  "frontend:dev:watcher": "",
+  "wailsjsdir": "./frontend",
+  "version": "2",
+  "Path": "",
+  "BuildDir": "",
+  "outputfilename": "varly",
+  "OutputType": "",
+  "Platform": "",
+  "runNonNativeBuildHooks": false,
+  "postBuildHooks": null,
+  "Author": {
+    "name": "Selvin Ortiz",
+    "email": "selvin@selvin.dev"
+  },
+  "Info": {
+    "companyName": "Varly",
+    "productName": "Varly",
+    "productVersion": "1.0.0",
+    "copyright": "(c) 2022 Selvin Ortiz",
+    "comments": "Built with ♥️ by Selvin and the Varly team (https://varly.io)"
+  },
+  "debounceMS": 100,
+  "devserverurl": "http://localhost:34115",
+  "appargs": "",
+  "nsisType": ""
+}
