@@ -1,0 +1,17 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+*, a, button, a:link, a:visited, a:hover, a:active {
+    cursor: default;
+}
+
+.scrollbar-none {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+}

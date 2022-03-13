@@ -1,0 +1,36 @@
+{
+  "name": "varly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx mix watch",
+    "build": "npx mix",
+    "release": "npx mix --production"
+  },
+  "keywords": [],
+  "author": "Selvin Ortiz <selvin@selvin.dev>",
+  "license": "ISC",
+  "devDependencies": {
+    "@headlessui/vue": "^1.4.3",
+    "@heroicons/vue": "^1.0.5",
+    "@tailwindcss/forms": "^0.5.0",
+    "@types/webpack-env": "^1.16.3",
+    "@vue/compiler-sfc": "^3.2.29",
+    "@vueuse/core": "^7.7.0",
+    "axios": "^0.26.0",
+    "laravel-mix": "^6.0.41",
+    "laravel-mix-tailwind": "^0.1.2",
+    "laravel-mix-vue3": "^0.7.0",
+    "pinia": "^2.0.11",
+    "pinia-plugin-persistedstate": "^1.3.0",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.49.7",
+    "sass-loader": "^12.4.0",
+    "tailwindcss": "^3.0.18",
+    "vue": "^3.2.29",
+    "vue-loader": "^17.0.0",
+    "vue-router": "^4.0.12",
+    "vuedraggable": "^4.1.0"
+  }
+}
