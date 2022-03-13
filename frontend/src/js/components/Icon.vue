@@ -14,5 +14,5 @@ import { useTheme } from '@utils/Theme'
 const props = defineProps(['name', 'text', 'click'])
 const theme = useTheme()
 
-const src = `assets/images/icons/${theme.isDark ? 'dark/' : 'light/'}${props.name}.svg`
+const src = `assets/icons/${theme.isDark ? 'dark/' : 'light/'}${props.name}.svg`
 </script>
