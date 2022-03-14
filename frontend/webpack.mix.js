@@ -20,8 +20,8 @@ mix.webpackConfig({
 // Disable notifications
 mix.disableNotifications()
 
-// JS/SCSS compilation
+// TS/SCSS compilation
 mix.setPublicPath('src')
-  .js('src/js/app.js', 'app.js').vue({ version: 3 })
+  .ts('src/js/app.ts', 'app.js').vue({ version: 3 })
   .sass('src/css/app.scss', 'app.css')
   .tailwind()

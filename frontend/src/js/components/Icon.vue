@@ -8,7 +8,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 import { useTheme } from '@utils/Theme'
 
 const props = defineProps(['name', 'text', 'click'])

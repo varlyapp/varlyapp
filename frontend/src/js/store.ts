@@ -1,4 +1,4 @@
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 const useStore = defineStore('app', () => {
@@ -12,7 +12,7 @@ const useCollectionStore = defineStore('collection', () => {
   const layers = ref({})
   const directory = ref('') // where the layers were loaded from
 
-  function reset() {
+  function reset(this: { traits: Array<Object>, layers: Object, directory: string }) {
     this.traits = []
     this.layers = {}
     this.directory = ''

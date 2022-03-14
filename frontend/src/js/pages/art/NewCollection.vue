@@ -3,11 +3,13 @@
         class="h-full flex flex-col"
         :class="hasLayers ? 'justify-start container mx-auto' : 'justify-center'"
     >
+        <nav>
+            <button class="px-2" @click="generateCollection">Generate Collection</button>
+            <button class="px-2" @click="startOver">Start Over</button>
+            <button class="px-2" @click="isCollapsed = !isCollapsed">Expand/Collapse All</button>
+        </nav>
+
         <section v-if="hasLayers" class="text-slate-900 dark:text-white">
-            <nav>
-                <button class="px-2" @click="generateCollection">Generate Collection</button>
-                <button class="px-2" @click="startOver">Start Over</button>
-            </nav>
             <draggable
                 class="mt-4"
                 group="trait"
@@ -20,11 +22,15 @@
                 <template #item="{ element }">
                     <div>
                         <div class="flex items-center justify-between">
-                            <h1 v-text="element.name" class="text-2xl uppercase"></h1>
+                            <div class="flex items-center">
+                                <button @click="toggleCollapsed(element)" class="pr-4">👆</button>
+                                <h1 v-text="element.name" class="text-2xl uppercase"></h1>
+                            </div>
                             <h2>{{ weightDistributionTotal(store.layers[element.name]) }}</h2>
                         </div>
                         <draggable
                             class="mt-4"
+                            :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
                             group="layer"
                             :list="store.layers[element.name]"
                             :disabled="!isEnabled"
@@ -75,6 +81,7 @@ const dialog = useDialog(app)
 let isLoading = ref(false)
 const isDragging = ref(false)
 const isEnabled = ref(true)
+const isCollapsed = ref(false)
 
 const hasLayers = computed(() => {
     return store.layers && Object.keys(store.layers).length
@@ -83,15 +90,18 @@ const hasLayers = computed(() => {
 function weightDistributionTotal(items) {
     let total = 0
     items.forEach((item) => {
-        total += parseInt(item.Weight, 10)
+        total += parseInt(item.Weight.toString(), 10)
     })
 
-    console.log(total)
     return total
 }
 
 function toggleIsLoading() {
     isLoading.value = !isLoading.value
+}
+
+function toggleCollapsed(element) {
+    element.collapsed = !element.collapsed
 }
 
 function startOver() {
@@ -153,8 +163,6 @@ function generateCollection() {
         height: 1500,
         Size: 10
     }
-
-    console.log(config)
 
     app.GenerateCollectionFromConfig(config)
 }

@@ -1,7 +1,7 @@
 <template>
   <!-- url(assets/images/welcome-illustration.svg) -->
   <div
-    class="h-full flex flex-col bg-cover bg-center"
+    class="h-full flex flex-col bg-cover bg-center bg-purple-700"
     :style="{ backgroundImage: isOnWelcomeScreen ? '' : '' }"
   >
     <header data-wails-drag>
@@ -18,12 +18,14 @@
     </header>
     <router-view class="flex-1 overflow-auto scrollbar-none"></router-view>
     <footer class="text-center px-8 py-4">
-      <p class="text-sm opacity-75">&copy;2022 Varly v1.0.0</p>
+      <slot name="footer">
+        <p class="text-sm opacity-75">&copy;2022 Varly v1.0.0</p>
+      </slot>
     </footer>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
