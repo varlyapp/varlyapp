@@ -1,8 +1,7 @@
 <template>
-  <!-- url(assets/images/welcome-illustration.svg) -->
   <div
     class="h-full flex flex-col bg-cover bg-center bg-purple-700"
-    :style="{ backgroundImage: isOnWelcomeScreen ? '' : '' }"
+    :style="{ backgroundImage: isOnWelcomeScreen ? 'url(assets/images/varly-background.png)' : '' }"
   >
     <header data-wails-drag>
       <nav class="flex items-center justify-end px-2 py-4">
