@@ -7,7 +7,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useTheme } from '@utils/Theme'
 
 const props = defineProps(['name', 'text', 'click'])

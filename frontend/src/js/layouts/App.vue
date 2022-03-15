@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-full flex flex-col bg-cover bg-center bg-purple-700"
+    class="h-full flex flex-col bg-cover bg-center bg-gradient-to-br from-purple-700 to-purple-900"
     :style="{ backgroundImage: isOnWelcomeScreen ? 'url(assets/images/varly-background.png)' : '' }"
   >
     <header data-wails-drag>
@@ -30,10 +30,6 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const isOnWelcomeScreen = ref(false)
-
-function open(url) {
-  runtime.BrowserOpenURL(url)
-}
 
 function setIsOnWelcomeScreen(to) {
   isOnWelcomeScreen.value = to.name === 'welcome'

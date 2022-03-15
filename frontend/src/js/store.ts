@@ -1,18 +1,18 @@
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 
 const useStore = defineStore('app', () => {
-  const isDark = ref(false)
+  const isDark = ref<boolean>(false)
 
   return { isDark }
 })
 
 const useCollectionStore = defineStore('collection', () => {
-  const traits = ref([])
-  const layers = ref({})
-  const directory = ref('') // where the layers were loaded from
+  const traits = ref<Object[]>([])
+  const layers = ref<Object>({})
+  const directory = ref<string>('') // where the layers were loaded from
 
-  function reset(this: { traits: Array<Object>, layers: Object, directory: string }) {
+  function reset(this: any) {
     this.traits = []
     this.layers = {}
     this.directory = ''

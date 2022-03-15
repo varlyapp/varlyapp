@@ -1,49 +1,51 @@
 <template>
     <div
         class="h-full flex flex-col"
-        :class="hasLayers ? 'justify-start container mx-auto' : 'justify-center'"
+        :class="hasLayers ? 'justify-start container mx-auto max-w-4xl' : 'justify-center'"
     >
-        <nav>
-            <button class="px-2" @click="generateCollection">Generate Collection</button>
-            <button class="px-2" @click="startOver">Start Over</button>
-            <button class="px-2" @click="isCollapsed = !isCollapsed">Expand/Collapse All</button>
-        </nav>
-
         <section v-if="hasLayers" class="text-slate-900 dark:text-white">
+            <nav>
+                <button class="px-2" @click="generateCollection">Generate Collection</button>
+                <button class="px-2" @click="startOver">Start Over</button>
+                <button class="px-2" @click="isCollapsed = !isCollapsed">Expand/Collapse All</button>
+            </nav>
+
+            <!-- @see :force-fallback -->
+            <!-- Solves issue where dragging works first but second drag requires two clicks -->
+            <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
             <draggable
-                class="mt-4"
+                class=""
                 group="trait"
                 :list="store.traits"
-                :disabled="!isEnabled"
-                @start="isDragging = true"
-                @end="isDragging = false"
+                :force-fallback="true"
+                @start="isTraitDragging = true"
+                @end="isTraitDragging = false"
                 item-key="name"
             >
                 <template #item="{ element }">
                     <div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between mt-8 py-2 px-4 bg-white bg-opacity-20">
                             <div class="flex items-center">
                                 <button @click="toggleCollapsed(element)" class="pr-4">👆</button>
                                 <h1 v-text="element.name" class="text-2xl uppercase"></h1>
                             </div>
-                            <h2>{{ weightDistributionTotal(store.layers[element.name]) }}</h2>
+                            <h2 class="text-lg font-semibold">{{ weightDistributionTotal(store.layers[element.name]) }}&percnt;</h2>
                         </div>
                         <draggable
-                            class="mt-4"
                             :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
                             group="layer"
+                            :force-fallback="true"
                             :list="store.layers[element.name]"
-                            :disabled="!isEnabled"
-                            @start="isDragging = true"
-                            @end="isDragging = false"
+                            @start="isLayerDragging = true"
+                            @end="isLayerDragging = false"
                             item-key="name"
                         >
                             <template #item="{ element }">
                                 <div
-                                    class="flex items-center justify-between pt-2 py-1 px-2 border-t"
+                                    class="flex items-center justify-between mt-1 py-1 p-4 bg-white bg-opacity-10"
                                 >
                                     <p class="font-mono">{{ element.Name }}</p>
-                                    <input class="text-black" v-model="element.Weight" type="text" />
+                                    <input class="appearance-none border-none text-white w-1/12 bg-white bg-opacity-10 text-center" v-model="element.Weight" type="text" />
                                 </div>
                             </template>
                         </draggable>
@@ -65,7 +67,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDialog } from '@utils/Dialog'
@@ -79,9 +81,11 @@ const store = useCollectionStore()
 const dialog = useDialog(app)
 
 let isLoading = ref(false)
-const isDragging = ref(false)
-const isEnabled = ref(true)
 const isCollapsed = ref(false)
+const isTraitEnabled = ref(true)
+const isTraitDragging = ref(false)
+const isLayerDragging = ref(false)
+const isLayerEnabled = ref(true)
 
 const hasLayers = computed(() => {
     return store.layers && Object.keys(store.layers).length
@@ -129,7 +133,8 @@ async function loadLayers() {
 
     store.layers = { ...config.Layers }
 
-    const traits = []
+    const traits: Object[] = []
+
     for (const trait in store.layers) {
         if (Object.hasOwnProperty.call(store.layers, trait)) {
             traits.push({ name: trait })
