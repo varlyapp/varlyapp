@@ -58,7 +58,7 @@
             <h1 class="text-xl">{{ loadingText }}</h1>
         </section>
 
-        <section v-f="!hasLayers" class="text-center">
+        <section v-else class="text-center">
             <p
                 class="mt-1 max-w-md mx-auto"
             >Select the root folder that contains all other folders with layers for each&nbsp;trait.</p>
