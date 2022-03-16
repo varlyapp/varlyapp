@@ -14,13 +14,13 @@
         >Tweet @ Varly.app</button>
       </div>-->
       <Icon
-      class="mx-8"
+        class="mx-8"
         name="new"
         text="Start Project"
         @click="() => router.push({ name: 'art.collection.new' })"
       />
       <Icon
-        class="bg-red"
+        class="mx-8"
         name="import"
         text="Import Document"
         @click="() => open('https://twitter.com/varlyapp')"
@@ -29,13 +29,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router'
 import Icon from '@components/Icon.vue'
 
 const router = useRouter()
 
 function open(url) {
-  runtime.BrowserOpenURL(url)
+  window.runtime.BrowserOpenURL(url)
 }
 </script>
