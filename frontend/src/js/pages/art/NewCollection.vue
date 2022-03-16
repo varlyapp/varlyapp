@@ -3,7 +3,7 @@
         class="h-full flex flex-col"
         :class="hasLayers ? 'justify-start container mx-auto max-w-4xl' : 'justify-center'"
     >
-        <section v-if="hasLayers" class="text-slate-900 dark:text-white">
+        <section v-if="hasLayers && !isLoading" class="text-slate-900 dark:text-white">
             <nav>
                 <button class="px-2" @click="generateCollection">Generate Collection</button>
                 <button class="px-2" @click="startOver">Start Over</button>
@@ -16,7 +16,7 @@
             <draggable
                 class=""
                 group="trait"
-                :list="store.traits"
+                v-model="store.traits"
                 :force-fallback="true"
                 @start="isTraitDragging = true"
                 @end="isTraitDragging = false"
@@ -24,7 +24,7 @@
             >
                 <template #item="{ element }">
                     <div>
-                        <div class="flex items-center justify-between mt-8 py-2 px-4 bg-white bg-opacity-20">
+                        <div class="flex items-center justify-between mt-4 py-2 px-4 bg-white bg-opacity-20">
                             <div class="flex items-center">
                                 <button @click="toggleCollapsed(element)" class="pr-4">👆</button>
                                 <h1 v-text="element.name" class="text-2xl uppercase"></h1>
@@ -42,10 +42,10 @@
                         >
                             <template #item="{ element }">
                                 <div
-                                    class="flex items-center justify-between mt-1 py-1 p-4 bg-white bg-opacity-10"
+                                    class="flex items-center justify-between py-1 p-4 bg-white bg-opacity-5"
                                 >
                                     <p class="font-mono">{{ element.Name }}</p>
-                                    <input class="appearance-none border-none text-white w-1/12 bg-white bg-opacity-10 text-center" v-model="element.Weight" type="text" />
+                                    <input class="appearance-none border-none text-white w-1/12 bg-white bg-opacity-5 text-center" v-model="element.Weight" type="text" />
                                 </div>
                             </template>
                         </draggable>
@@ -54,14 +54,18 @@
             </draggable>
         </section>
 
-        <section v-else class="text-center">
+        <section v-if="isLoading && loadingText">
+            <h1 class="text-xl">{{ loadingText }}</h1>
+        </section>
+
+        <section v-f="!hasLayers" class="text-center">
             <p
                 class="mt-1 max-w-md mx-auto"
             >Select the root folder that contains all other folders with layers for each&nbsp;trait.</p>
             <button
                 @click="loadLayers()"
                 type="button"
-                class="mt-8 py-4 px-8 bg-purple-700 text-white rounded shadow-xl hover:bg-opacity-90 font-semibold"
+                class="mt-8 py-4 px-8 bg-purple-800 text-white rounded shadow-xl hover:bg-opacity-80 font-semibold"
             >Select Folder</button>
         </section>
     </div>
@@ -81,6 +85,8 @@ const store = useCollectionStore()
 const dialog = useDialog(app)
 
 let isLoading = ref(false)
+let loadingText = ref('')
+
 const isCollapsed = ref(false)
 const isTraitEnabled = ref(true)
 const isTraitDragging = ref(false)
@@ -114,20 +120,18 @@ function startOver() {
 }
 
 async function loadLayers() {
-    toggleIsLoading()
-
     store.directory = await dialog.openDirectoryDialog()
 
-    // runtime.EventsOn('collection.generation.started', (data) => {
-    //     loadingText.value = `Preparing collection of ${data.CollectionSize} items`
-    //     console.log(loadingText.value)
-    // })
+    window.runtime.EventsOn('collection.generation.started', (data) => {
+        loadingText.value = `Preparing collection of ${data.CollectionSize} items`
+        console.log(loadingText.value)
+    })
 
-    // runtime.EventsOn('collection.item.generated', (data) => {
-    //     console.log(data)
-    //     loadingText.value = `Generating collection: ${data.ItemNumber}/${data.CollectionSize}`
-    //     console.log(loadingText.value)
-    // })
+    window.runtime.EventsOn('collection.item.generated', (data) => {
+        console.log(data)
+        loadingText.value = `Generating collection: ${data.ItemNumber}/${data.CollectionSize}`
+        console.log(loadingText.value)
+    })
 
     const config = await app.GenerateCollection(store.directory)
 
@@ -142,11 +146,11 @@ async function loadLayers() {
     }
 
     store.traits = [...traits]
-
-    toggleIsLoading()
 }
 
-function generateCollection() {
+async function generateCollection() {
+    toggleIsLoading()
+
     const layers = { ...store.layers }
 
     for (const trait in Object.keys(layers)) {
@@ -162,13 +166,15 @@ function generateCollection() {
 
     const config = {
         Dir: store.directory,
-        Order: Object.keys(layers),
+        Order: [...store.traits].map((item: any) => item.name),
         Layers: layers,
         Width: 1500,
         height: 1500,
         Size: 10
     }
 
-    app.GenerateCollectionFromConfig(config)
+    await app.GenerateCollectionFromConfig(config)
+
+    toggleIsLoading()
 }
 </script>

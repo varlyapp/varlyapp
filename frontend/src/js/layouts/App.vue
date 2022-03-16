@@ -1,17 +1,15 @@
 <template>
-  <div
-    class="h-full flex flex-col bg-cover bg-center bg-gradient-to-br from-purple-700 to-purple-900"
-    :style="{ backgroundImage: isOnWelcomeScreen ? 'url(assets/images/varly-background.png)' : '' }"
-  >
+  <div class="h-full flex flex-col" :class="getBackgroundClasses()">
+    <!-- :style="{ backgroundImage: isOnWelcomeScreen ? 'url(assets/images/varly-background.png)' : '' }" -->
     <header data-wails-drag>
       <nav class="flex items-center justify-end px-2 py-4">
         <ul class="flex items-center">
           <!-- <li>
             <router-link :to="{ name: 'welcome' }" class="px-2 py-4 opacity-75 font-semibold">Home</router-link>
-          </li> -->
+          </li>-->
           <!-- <li>
             <button @click="open('https://twitter.com/varlyapp')" class="p-2 opacity-50">Support</button>
-          </li> -->
+          </li>-->
         </ul>
       </nav>
     </header>
@@ -33,6 +31,14 @@ const isOnWelcomeScreen = ref(false)
 
 function setIsOnWelcomeScreen(to) {
   isOnWelcomeScreen.value = to.name === 'welcome'
+}
+
+function getBackgroundClasses() {
+  if (isOnWelcomeScreen.value) {
+    return 'bg-gradient-to-b from-slate-100 to-slate-200 dark:from-purple-600 dark:to-purple-800'
+  }
+
+  return 'bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900'
 }
 
 router.beforeResolve(setIsOnWelcomeScreen)
