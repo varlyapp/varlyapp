@@ -1,20 +1,23 @@
 <template>
     <div
-        class="h-full flex flex-col"
-        :class="hasLayers ? 'justify-start container mx-auto max-w-4xl' : 'justify-center'"
+        class="h-full flex flex-col container mx-auto max-w-4xl py-2 px-4"
+        :class="hasLayers ? 'justify-start' : 'justify-center'"
     >
-        <section v-if="hasLayers && !isLoading" class="text-slate-900 dark:text-white">
-            <nav>
-                <button class="px-2" @click="generateCollection">Generate Collection</button>
-                <button class="px-2" @click="startOver">Start Over</button>
-                <button class="px-2" @click="isCollapsed = !isCollapsed">Expand/Collapse All</button>
+        <section v-if="showWorkspace" class="text-slate-900 dark:text-white">
+            <nav class="flex items-center justify-between">
+                <button class @click="startOver">🡠</button>
+                <button
+                    class="bg-purple-700 text-white px-4 py-2 rounded shadow"
+                    @click="generateCollection"
+                >✓&nbsp;Generate Collection</button>
+                <!-- <button class="pr-2" @click="isCollapsed = !isCollapsed">Expand/Collapse All</button> -->
             </nav>
 
             <!-- @see :force-fallback -->
             <!-- Solves issue where dragging works first but second drag requires two clicks -->
             <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
             <draggable
-                class=""
+                class
                 group="trait"
                 v-model="store.traits"
                 :force-fallback="true"
@@ -24,12 +27,22 @@
             >
                 <template #item="{ element }">
                     <div>
-                        <div class="flex items-center justify-between mt-4 py-2 px-4 bg-white bg-opacity-20">
+                        <div
+                            class="flex items-center justify-between mt-4 pt-1 border-t border-slate-400"
+                        >
                             <div class="flex items-center">
-                                <button @click="toggleCollapsed(element)" class="pr-4">👆</button>
+                                <button
+                                    class="py-1 px-2 mr-2 bg-slate-900 text-slate-100"
+                                    @click="toggleCollapsed(element)"
+                                >
+                                    <span v-if="element.collapsed">⇣</span>
+                                    <span v-else>⇡</span>
+                                </button>
                                 <h1 v-text="element.name" class="text-2xl uppercase"></h1>
                             </div>
-                            <h2 class="text-lg font-semibold">{{ weightDistributionTotal(store.layers[element.name]) }}&percnt;</h2>
+                            <h2
+                                class="text-lg font-semibold"
+                            >{{ weightDistributionTotal(store.layers[element.name]) }}&percnt;</h2>
                         </div>
                         <draggable
                             :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
@@ -42,10 +55,14 @@
                         >
                             <template #item="{ element }">
                                 <div
-                                    class="flex items-center justify-between py-1 p-4 bg-white bg-opacity-5"
+                                    class="flex items-center justify-between mt-1 border-t border-dashed border-slate-400"
                                 >
                                     <p class="font-mono">{{ element.Name }}</p>
-                                    <input class="appearance-none border-none text-white w-1/12 bg-white bg-opacity-5 text-center" v-model="element.Weight" type="text" />
+                                    <input
+                                        class="appearance-none border-none text-center w-1/12"
+                                        v-model="element.Weight"
+                                        type="text"
+                                    />
                                 </div>
                             </template>
                         </draggable>
@@ -54,11 +71,11 @@
             </draggable>
         </section>
 
-        <section v-if="isLoading && loadingText">
+        <section class="h-full flex items-start justify-center text-center" v-if="isLoading && loadingText">
             <h1 class="text-xl">{{ loadingText }}</h1>
         </section>
 
-        <section v-else class="text-center">
+        <section v-if="showOpenFolderPrompt" class="text-center">
             <p
                 class="mt-1 max-w-md mx-auto"
             >Select the root folder that contains all other folders with layers for each&nbsp;trait.</p>
@@ -97,6 +114,9 @@ const hasLayers = computed(() => {
     return store.layers && Object.keys(store.layers).length
 })
 
+const showWorkspace = computed(() => hasLayers.value && !isLoading.value)
+const showOpenFolderPrompt = computed(() => !hasLayers.value && !isLoading.value)
+
 function weightDistributionTotal(items) {
     let total = 0
     items.forEach((item) => {
@@ -111,6 +131,7 @@ function toggleIsLoading() {
 }
 
 function toggleCollapsed(element) {
+    console.log(element.collapsed)
     element.collapsed = !element.collapsed
 }
 
@@ -121,6 +142,24 @@ function startOver() {
 
 async function loadLayers() {
     store.directory = await dialog.openDirectoryDialog()
+
+    const config = await app.GenerateCollection(store.directory)
+
+    store.layers = { ...config.Layers }
+
+    const traits: Object[] = []
+
+    for (const trait in store.layers) {
+        if (Object.hasOwnProperty.call(store.layers, trait)) {
+            traits.push({ name: trait, collapsed: false })
+        }
+    }
+
+    store.traits = [...traits]
+}
+
+async function generateCollection() {
+    toggleIsLoading()
 
     window.runtime.EventsOn('collection.generation.started', (data) => {
         loadingText.value = `Preparing collection of ${data.CollectionSize} items`
@@ -133,23 +172,9 @@ async function loadLayers() {
         console.log(loadingText.value)
     })
 
-    const config = await app.GenerateCollection(store.directory)
+    const outputDirectory = await dialog.openDirectoryDialog()
 
-    store.layers = { ...config.Layers }
-
-    const traits: Object[] = []
-
-    for (const trait in store.layers) {
-        if (Object.hasOwnProperty.call(store.layers, trait)) {
-            traits.push({ name: trait })
-        }
-    }
-
-    store.traits = [...traits]
-}
-
-async function generateCollection() {
-    toggleIsLoading()
+    console.log(outputDirectory)
 
     const layers = { ...store.layers }
 
@@ -165,12 +190,12 @@ async function generateCollection() {
     }
 
     const config = {
-        Dir: store.directory,
+        Dir: outputDirectory,
         Order: [...store.traits].map((item: any) => item.name),
         Layers: layers,
         Width: 1500,
         height: 1500,
-        Size: 10
+        Size: 1000
     }
 
     await app.GenerateCollectionFromConfig(config)

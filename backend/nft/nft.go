@@ -97,8 +97,6 @@ func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfi
 func GenerateCollection(ctx context.Context, dir string, order []string, width int, height int, size int) fs.CollectionConfig {
 	var wg sync.WaitGroup
 
-	runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": size})
-
 	config, err := fs.ReadLayers(dir)
 
 	if err != nil {
