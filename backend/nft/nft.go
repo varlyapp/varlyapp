@@ -27,30 +27,19 @@ type NewCollectionConfig struct {
 }
 
 func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfig) {
-	var wg sync.WaitGroup
+	var waitForPngGeneration sync.WaitGroup
 
 	runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": config.Size})
-
-	// config, err := fs.ReadLayers(dir)
-
-	// if err != nil {
-	// 	log.Fatalf("Did not read layers: %s", err)
-	// }
-
-	// return config
-
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	items := 0
 	completed := 0
 
 	for items < config.Size {
-		wg.Add(1)
-
+		fmt.Printf("%d\n", items)
 		var images []string
 
 		for _, trait := range config.Order {
-			fmt.Printf("Processing layer: %s\n\n", trait)
 			files := config.Layers[trait]
 
 			if len(files) > 0 {
@@ -72,31 +61,30 @@ func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfi
 			}
 		}
 
-		fmt.Println("Should have finished setting up images")
+		waitForPngGeneration.Add(1)
 
-		go func(i int) {
-			defer func() {
-				completed += 1
+		go func(items int) {
+			output := fmt.Sprintf("%s/%d.png", config.Dir, items)
 
+			defer func(file string) {
+				completed++
 				data := map[string]int{"ItemNumber": completed, "CollectionSize": config.Size}
 				runtime.EventsEmit(ctx, "collection.item.generated", data)
-				wg.Done()
-			}()
+				fmt.Printf("Saved %s ☑️\n", file)
+				waitForPngGeneration.Done()
+			}(output)
 
-			output := fmt.Sprintf("%s/%d.png", config.Dir, i)
 			GeneratePNG(images, output, config.Width, config.Height)
 		}(items)
 
 		items++
 	}
 
-	wg.Wait()
+	waitForPngGeneration.Wait()
 	fmt.Println("👍")
 }
 
-func GenerateCollection(ctx context.Context, dir string, order []string, width int, height int, size int) fs.CollectionConfig {
-	var wg sync.WaitGroup
-
+func ReadLayers(ctx context.Context, dir string) fs.CollectionConfig {
 	config, err := fs.ReadLayers(dir)
 
 	if err != nil {
@@ -104,70 +92,16 @@ func GenerateCollection(ctx context.Context, dir string, order []string, width i
 	}
 
 	return config
-
-	rand.Seed(time.Now().UTC().UnixNano())
-
-	items := 0
-	completed := 0
-
-	for items < size {
-		wg.Add(1)
-
-		var images []string
-
-		for _, trait := range order {
-			files := config.Layers[trait]
-
-			if len(files) > 0 {
-				var choices []wr.Choice
-
-				for _, layer := range files {
-					choices = append(choices, wr.Choice{Item: layer.Item, Weight: uint(layer.Weight)})
-				}
-
-				chooser, err := wr.NewChooser(choices...)
-
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				pick := chooser.Pick().(string)
-
-				images = append(images, pick)
-			}
-		}
-
-		go func(i int) {
-			defer func() {
-				completed += 1
-
-				data := map[string]int{"ItemNumber": completed, "CollectionSize": size}
-				runtime.EventsEmit(ctx, "collection.item.generated", data)
-				wg.Done()
-			}()
-
-			output := fmt.Sprintf("./output/%d.png", i)
-			GeneratePNG(images, output, width, height)
-		}(items)
-
-		items++
-	}
-
-	wg.Wait()
-	fmt.Println("👍")
-
-	return config
 }
 
 func GeneratePNG(layers []string, output string, width int, height int) {
-	dc := gg.NewContext(width, height)
+	context := gg.NewContext(width, height)
 
 	for _, img := range layers {
-		fmt.Printf("Drawing image: %s\n", img)
-		dc.DrawImage(decode(img), 0, 0)
+		context.DrawImage(decode(img), 0, 0)
 	}
 
-	err := dc.SavePNG(output)
+	err := context.SavePNG(output)
 
 	if err != nil {
 		log.Fatalf("Unable to save image %s", err)
