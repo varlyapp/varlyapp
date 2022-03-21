@@ -8,6 +8,7 @@ build/*
 .env
 .idea
 .vscode
+.env
 
 node_modules
 
