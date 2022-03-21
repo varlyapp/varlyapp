@@ -5,12 +5,12 @@ const go = {
   "main": {
     "App": {
       /**
-       * GenerateCollection
+       * EncodeImage
        * @param {string} arg1 - Go Type: string
-       * @returns {Promise<CollectionConfig>}  - Go Type: fs.CollectionConfig
+       * @returns {Promise<string>}  - Go Type: string
        */
-      "GenerateCollection": (arg1) => {
-        return window.go.main.App.GenerateCollection(arg1);
+      "EncodeImage": (arg1) => {
+        return window.go.main.App.EncodeImage(arg1);
       },
       /**
        * GenerateCollectionFromConfig
@@ -19,6 +19,13 @@ const go = {
        */
       "GenerateCollectionFromConfig": (arg1) => {
         return window.go.main.App.GenerateCollectionFromConfig(arg1);
+      },
+      /**
+       * GetApplicationDocumentsDirectory
+       * @returns {Promise<string>}  - Go Type: string
+       */
+      "GetApplicationDocumentsDirectory": () => {
+        return window.go.main.App.GetApplicationDocumentsDirectory();
       },
       /**
        * OpenDirectoryDialog
@@ -33,6 +40,14 @@ const go = {
        */
       "OpenFileDialog": () => {
         return window.go.main.App.OpenFileDialog();
+      },
+      /**
+       * ReadLayers
+       * @param {string} arg1 - Go Type: string
+       * @returns {Promise<CollectionConfig>}  - Go Type: fs.CollectionConfig
+       */
+      "ReadLayers": (arg1) => {
+        return window.go.main.App.ReadLayers(arg1);
       },
       /**
        * SaveFileDialog
