@@ -28,6 +28,20 @@ type CollectionConfig struct {
 	Layers map[string][]Layer
 }
 
+func GetApplicationDocumentsDirectory() string {
+	dir, _ := os.UserConfigDir()
+
+	docs := fmt.Sprintf("%s/app.varly.varlyapp/Data/Documents", dir)
+
+	err := os.MkdirAll(docs, os.ModePerm);
+
+	if err != nil {
+		return "."
+	}
+
+	return docs;
+}
+
 // ReadLayers reads a directory with images represending collection traits
 // Each directory is considered a trait
 // Each image within a directory is considered a variant of that trait
