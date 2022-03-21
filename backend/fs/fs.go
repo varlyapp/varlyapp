@@ -31,7 +31,7 @@ type CollectionConfig struct {
 func GetApplicationDocumentsDirectory() string {
 	dir, _ := os.UserConfigDir()
 
-	docs := fmt.Sprintf("%s/app.varly.varlyapp/Data/Documents", dir)
+	docs := fmt.Sprintf("%s/%s", os.Getenv("VARLEY_DIR"), dir)
 
 	err := os.MkdirAll(docs, os.ModePerm);
 
@@ -91,7 +91,10 @@ func ReadDirectory(dir string) (CollectionConfig, error) {
 }
 
 func UploadCollection() string {
-	storage := pinata.Pinata{Apikey: "421dfc8596c951b2e35b", Secret: "f780d6362e442ee1441f8c786581c223f81a4d4af6ea5351821ab26b59f520bf"}
+	key := os.Getenv("API_KEY")
+	secret := os.Getenv("API_SECRET")
+
+	storage := pinata.Pinata{Apikey: key, Secret: secret}
 	cid, err := storage.PinFile("/Users/selvinortiz/Downloads/varly-collection.png")
 	if err != nil {
 		return fmt.Sprintln(err)
