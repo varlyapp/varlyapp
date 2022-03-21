@@ -2,11 +2,11 @@
 
 export {};
 
-export class CollectionConfig {
+export class NewCollectionConfig {
 
 
     static createFrom(source: any = {}) {
-        return new CollectionConfig(source);
+        return new NewCollectionConfig(source);
     }
 
     constructor(source: any = {}) {
@@ -14,11 +14,11 @@ export class CollectionConfig {
 
     }
 }
-export class NewCollectionConfig {
+export class CollectionConfig {
 
 
     static createFrom(source: any = {}) {
-        return new NewCollectionConfig(source);
+        return new CollectionConfig(source);
     }
 
     constructor(source: any = {}) {
