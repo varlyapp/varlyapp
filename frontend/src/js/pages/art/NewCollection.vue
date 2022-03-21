@@ -1,23 +1,41 @@
 <template>
     <div
+        v-if="isLoading || hasCompleted"
+        class="h-full flex items-center justify-center flex-col container mx-auto max-w-4xl py-2 px-4"
+    >
+        <div v-if="hasCompleted">
+            <h1 class="text-9xl">👍</h1>
+        </div>
+        <div v-else>
+            <h1 v-if="isLoading && loadingText" class="text-xl">{{ loadingText }} 🚀</h1>
+            <div v-else>Loading...</div>
+        </div>
+    </div>
+    <div
+        v-else
         class="h-full flex flex-col container mx-auto max-w-4xl py-2 px-4"
         :class="hasLayers ? 'justify-start' : 'justify-center'"
     >
-        <section v-if="showWorkspace" class="text-slate-900 dark:text-white">
-            <nav class="flex items-center justify-between">
-                <button class @click="startOver">🡠</button>
-                <button
-                    class="bg-purple-700 text-white px-4 py-2 rounded shadow"
-                    @click="generateCollection"
-                >✓&nbsp;Generate Collection</button>
-                <!-- <button class="pr-2" @click="isCollapsed = !isCollapsed">Expand/Collapse All</button> -->
-            </nav>
+        <section v-if="showWorkspace" class="relative text-slate-900 dark:text-white">
+            <div class="sticky top-0">
+                <nav class="flex items-center justify-between">
+                    <button
+                        class="py-2 px-3 rounded-full text-slate-900 bg-slate-200 shadow"
+                        @click="startOver"
+                    >🡠</button>
+                    <button
+                        class="bg-purple-700 text-white px-4 py-2 rounded shadow"
+                        @click="generateCollection"
+                    >✓&nbsp;Generate Collection</button>
+                    <!-- <button class="pr-2" @click="isCollapsed = !isCollapsed">Expand/Collapse All</button> -->
+                </nav>
+            </div>
 
             <!-- @see :force-fallback -->
             <!-- Solves issue where dragging works first but second drag requires two clicks -->
             <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
             <draggable
-                class
+                class="mt-8"
                 group="trait"
                 v-model="store.traits"
                 :force-fallback="true"
@@ -38,7 +56,7 @@
                                     <span v-if="element.collapsed">⇣</span>
                                     <span v-else>⇡</span>
                                 </button>
-                                <h1 v-text="element.name" class="text-2xl uppercase"></h1>
+                                <h1 v-text="element.name" class="text-2xl"></h1>
                             </div>
                             <h2
                                 class="text-lg font-semibold"
@@ -71,10 +89,6 @@
             </draggable>
         </section>
 
-        <section class="h-full flex items-start justify-center text-center" v-if="isLoading && loadingText">
-            <h1 class="text-xl">{{ loadingText }}</h1>
-        </section>
-
         <section v-if="showOpenFolderPrompt" class="text-center">
             <p
                 class="mt-1 max-w-md mx-auto"
@@ -101,8 +115,9 @@ const router = useRouter()
 const store = useCollectionStore()
 const dialog = useDialog(app)
 
-let isLoading = ref(false)
 let loadingText = ref('')
+let isLoading = ref(false)
+let hasCompleted = ref(false)
 
 const isCollapsed = ref(false)
 const isTraitEnabled = ref(true)
@@ -137,13 +152,13 @@ function toggleCollapsed(element) {
 
 function startOver() {
     store.reset()
-    router.push({ name: 'welcome' })
+    router.push({ name: 'start' })
 }
 
 async function loadLayers() {
     store.directory = await dialog.openDirectoryDialog()
 
-    const config = await app.GenerateCollection(store.directory)
+    const config = await app.ReadLayers(store.directory)
 
     store.layers = { ...config.Layers }
 
@@ -155,6 +170,7 @@ async function loadLayers() {
         }
     }
 
+    console.log(config)
     store.traits = [...traits]
 }
 
@@ -193,13 +209,14 @@ async function generateCollection() {
         Dir: outputDirectory,
         Order: [...store.traits].map((item: any) => item.name),
         Layers: layers,
-        Width: 1500,
-        height: 1500,
+        Width: 512,
+        height: 512,
         Size: 1000
     }
 
     await app.GenerateCollectionFromConfig(config)
 
+    hasCompleted.value = true;
     toggleIsLoading()
 }
 </script>
