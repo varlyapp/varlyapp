@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
+	"io/ioutil"
 
 	"github.com/varlyapp/varlyapp/backend/fs"
 	"github.com/varlyapp/varlyapp/backend/nft"
@@ -53,23 +56,31 @@ func (app *App) SaveFileDialog() string {
 }
 
 func (app *App) GenerateCollectionFromConfig(config nft.NewCollectionConfig) {
-	nft.GenerateCollectionFromConfig(app.ctx, config);
+	nft.GenerateCollectionFromConfig(app.ctx, config)
 }
 
-func (app *App) GenerateCollection(dir string) fs.CollectionConfig {
-	return nft.GenerateCollection(app.ctx, dir, []string{
-		"backgrounds",
-		"shapes",
-		// "Background",
-		// "Eyeball",
-		// "Eye color",
-		// "Iris",
-		// "Shine",
-		// "Bottom lid",
-		// "Top lid",
-	}, 1500, 1500, 10);
+func (app *App) ReadLayers(dir string) fs.CollectionConfig {
+	return nft.ReadLayers(app.ctx, dir)
 }
 
 func (app *App) UploadCollection() string {
-	return fs.UploadCollection();
+	return fs.UploadCollection()
+}
+
+func (app *App) GetApplicationDocumentsDirectory() string {
+	return fs.GetApplicationDocumentsDirectory()
+}
+
+func (app *App) EncodeImage(path string) string {
+	image, err := ioutil.ReadFile(path)
+
+	if err != nil {
+		return fmt.Sprintf("Error: %s", err)
+	}
+
+	encoded := base64.StdEncoding.EncodeToString(image)
+
+	encoded = fmt.Sprintf("data:image/png;base64,%s", encoded)
+
+	return encoded
 }
