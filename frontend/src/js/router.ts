@@ -1,13 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import Welcome from '@pages/Welcome.vue'
+import Start from '@root/pages/Start.vue'
 import NewCollection from '@pages/art/NewCollection.vue'
 
 const routes = [
   {
-    name: 'welcome',
+    name: 'start',
     path: '/',
-    component: Welcome,
+    component: Start,
   },
   {
     name: 'art.collection.new',
