@@ -1,18 +1,10 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import Base64Image from '@root/components/Base64Image.vue'
+import { inject } from 'vue'
+import type { Varly } from '@plugins/varly'
 
 import Icon from '@components/Icon.vue'
 
-const router = useRouter()
-
-function tapped() {
-  window.console.log('Hello')
-}
-
-function open(url) {
-  window.runtime.BrowserOpenURL(url)
-}
+const varly = inject<Varly>('varly')!
 </script>
 
 <template>
@@ -22,13 +14,13 @@ function open(url) {
         class="mx-8"
         name="new"
         text="Start NFT Project"
-        @click="() => router.push({ name: 'art.collection.new' })"
+        @click="() => varly.router.push({ name: 'collections.start' })"
       />
       <Icon
         class="mx-8"
         name="import"
         text="Import Document"
-        @click="() => open('https://twitter.com/varlyapp')"
+        @click="() => varly.runtime.BrowserOpenURL('https://twitter.com/varlyapp')"
       />
     </section>
   </div>
