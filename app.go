@@ -4,21 +4,30 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/varlyapp/varlyapp/backend/fs"
 	"github.com/varlyapp/varlyapp/backend/nft"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+type Config struct{}
+
 // App struct
 type App struct {
-	ctx context.Context
+	name   string
+	docs   string
+	config Config
+	ctx    context.Context
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	return &App{}
+	return &App{
+		name:   "Varly",
+		docs:   "app.varly.varlyapp/Data/Documents",
+		config: Config{},
+	}
 }
 
 // startup is called at application startup
@@ -64,7 +73,7 @@ func (app *App) ReadLayers(dir string) fs.CollectionConfig {
 }
 
 func (app *App) UploadCollection() string {
-	return fs.UploadCollection()
+	panic("Function not implemented yet")
 }
 
 func (app *App) GetApplicationDocumentsDirectory() string {
@@ -72,7 +81,7 @@ func (app *App) GetApplicationDocumentsDirectory() string {
 }
 
 func (app *App) EncodeImage(path string) string {
-	image, err := ioutil.ReadFile(path)
+	image, err := os.ReadFile(path)
 
 	if err != nil {
 		return fmt.Sprintf("Error: %s", err)
@@ -83,4 +92,14 @@ func (app *App) EncodeImage(path string) string {
 	encoded = fmt.Sprintf("data:image/png;base64,%s", encoded)
 
 	return encoded
+}
+
+func (app *App) SaveFile(file string, data string) bool {
+	err := os.WriteFile(file, []byte(data), os.ModePerm)
+
+	if err != nil {
+		return false
+	}
+
+	return true
 }
