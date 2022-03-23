@@ -1,10 +1,18 @@
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
+
+interface Action {
+  type: string
+  title: string
+  onClick: Function
+}
 
 const useStore = defineStore('app', () => {
   const isDark = ref<boolean>(false)
+  const isLoading = ref<boolean>(false)
+  const actions = ref<Array<Action>>([])
 
-  return { isDark }
+  return { isDark, isLoading, actions }
 })
 
 const useCollectionStore = defineStore('collection', () => {
