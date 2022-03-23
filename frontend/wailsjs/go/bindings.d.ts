@@ -7,6 +7,7 @@ export interface go {
 		OpenDirectoryDialog():Promise<string>
 		OpenFileDialog():Promise<string>
 		ReadLayers(arg1:string):Promise<CollectionConfig>
+		Save(arg1:string,arg2:string):Promise<boolean>
 		SaveFileDialog():Promise<string>
 		UploadCollection():Promise<string>
     },
