@@ -1,45 +1,32 @@
 <template>
-  <div class="h-full flex flex-col" :class="getBackgroundClasses()">
+  <div class="h-full flex flex-col bg-slate-50 dark:bg-slate-800">
     <!-- :style="{ backgroundImage: isOnStartScreen ? 'url(assets/images/varly-background.png)' : '' }" -->
-    <header data-wails-drag>
-      <nav class="flex items-center justify-end px-2 py-3">
-        <ul class="flex items-center">
-          <!-- <li>
-            <router-link :to="{ name: 'start' }" class="px-2 py-4 opacity-75 font-semibold">Home</router-link>
-          </li>-->
-          <!-- <li>
-            <button @click="open('https://twitter.com/varlyapp')" class="p-2 opacity-50">Support</button>
-          </li>-->
-        </ul>
-      </nav>
+    <header data-wails-drag class="p-2 bg-slate-100 shadow dark:bg-slate-900 dark:shadow">
+      <h1 class="text-center text-sm font-semibold">Varly v1.0.0</h1>
     </header>
-    <router-view class="flex-1 overflow-auto scrollbar-none"></router-view>
-    <footer class="text-center px-8 py-4">
-      <!-- <slot name="footer">
-        <p class="text-sm opacity-75">&copy;2022 Varly v1.0.0</p>
-      </slot> -->
-    </footer>
+    <router-view class="h-full flex-1 overflow-auto scrollbar-none"></router-view>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from '@root/store'
 
 const router = useRouter()
+const store = useStore()
+
 const isOnStartScreen = ref(false)
+
+onBeforeUnmount(() => store.actions = [])
 
 function setIsOnStartScreen(to) {
   isOnStartScreen.value = to.name === 'start'
 }
 
-function getBackgroundClasses() {
-  if (isOnStartScreen.value) {
-    return 'bg-gradient-to-b from-slate-100 to-slate-200 dark:from-purple-600 dark:to-purple-800'
-  }
+router.beforeResolve((to) => {
+  store.actions = [];
 
-  return 'bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900'
-}
-
-router.beforeResolve(setIsOnStartScreen)
+  setIsOnStartScreen(to)
+})
 </script>
