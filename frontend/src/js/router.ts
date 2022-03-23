@@ -1,7 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Start from '@root/pages/Start.vue'
-import NewCollection from '@pages/art/NewCollection.vue'
+import CollectionStart from '@root/pages/collections/StartCollection.vue'
+import CollectionLoadLayers from './pages/collections/LoadLayers.vue'
+import CollectionGenerate from './pages/collections/GenerateCollection.vue'
 
 const routes = [
   {
@@ -10,9 +12,19 @@ const routes = [
     component: Start,
   },
   {
-    name: 'art.collection.new',
-    path: '/art/collection/new',
-    component: NewCollection,
+    name: 'collections.start',
+    path: '/collections/start',
+    component: CollectionStart,
+  },
+  {
+    name: 'collections.loadLayers',
+    path: '/collections/load-layers',
+    component: CollectionLoadLayers,
+  },
+  {
+    name: 'collections.generate',
+    path: '/collections/generate',
+    component: CollectionGenerate,
   },
 ]
 
