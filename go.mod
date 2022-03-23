@@ -11,7 +11,6 @@ require (
 require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
-	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.9 // indirect
 	github.com/wabarc/helper v0.0.0-20211225065210-3d35291efe54 // indirect
 	github.com/ybbus/httpretry v1.0.1 // indirect
