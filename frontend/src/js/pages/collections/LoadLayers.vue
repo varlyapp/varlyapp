@@ -118,7 +118,7 @@ async function saveProgress() {
 
     const file = await varly.app.SaveFileDialog()
 
-    await varly.app.Save(file, JSON.stringify(config))
+    await varly.app.SaveFile(file, JSON.stringify(config))
     console.log('Done')
 }
 

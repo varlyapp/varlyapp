@@ -226,7 +226,7 @@ async function saveProgress() {
 
     const file = await app.SaveFileDialog()
 
-    await app.Save(file, JSON.stringify(config))
+    await app.SaveFile(file, JSON.stringify(config))
     console.log('Done')
 }
 

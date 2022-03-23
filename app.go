@@ -11,23 +11,14 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-type Config struct{}
-
 // App struct
 type App struct {
-	name   string
-	docs   string
-	config Config
-	ctx    context.Context
+	ctx context.Context
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	return &App{
-		name:   "Varly",
-		docs:   "app.varly.varlyapp/Data/Documents",
-		config: Config{},
-	}
+	return &App{}
 }
 
 // startup is called at application startup

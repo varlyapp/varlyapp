@@ -15,7 +15,6 @@ mix.webpackConfig({
       '@pages': path.resolve(__dirname, 'src/js/pages'),
       '@utils': path.resolve(__dirname, 'src/js/utils'),
       '@plugins': path.resolve(__dirname, 'src/js/plugins'),
-      '@utils': path.resolve(__dirname, 'src/js/utils'),
     }
   }
 })
