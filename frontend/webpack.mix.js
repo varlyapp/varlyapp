@@ -4,6 +4,7 @@ const mix = require('laravel-mix')
 require('laravel-mix-tailwind')
 
 // Set aliases
+// Remember to update paths in tsconfig.json
 mix.webpackConfig({
   resolve: {
     alias: {
@@ -12,6 +13,8 @@ mix.webpackConfig({
       '@layouts': path.resolve(__dirname, 'src/js/layouts'),
       '@components': path.resolve(__dirname, 'src/js/components'),
       '@pages': path.resolve(__dirname, 'src/js/pages'),
+      '@utils': path.resolve(__dirname, 'src/js/utils'),
+      '@plugins': path.resolve(__dirname, 'src/js/plugins'),
       '@utils': path.resolve(__dirname, 'src/js/utils'),
     }
   }
