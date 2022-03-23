@@ -2,6 +2,7 @@ package nft
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"image"
 	"image/png"
@@ -16,6 +17,19 @@ import (
 	"github.com/varlyapp/varlyapp/backend/fs"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
+
+type MetaCollection struct {
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Image       string          `json:"image"`
+	ExternalURL string          `json:"external_url"`
+	Attributes  []MetaAttribute `json:"attributes"`
+}
+
+type MetaAttribute struct {
+	Type  string `json:"trait_type"`
+	Value string `json:"value"`
+}
 
 type NewCollectionConfig struct {
 	Dir    string
@@ -64,17 +78,30 @@ func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfi
 		waitForPngGeneration.Add(1)
 
 		go func(items int) {
-			output := fmt.Sprintf("%s/%d.png", config.Dir, items)
+			pngfile := fmt.Sprintf("%s/%d.png", config.Dir, items)
+			jsonfile := fmt.Sprintf("%s/%d.json", config.Dir, items)
 
 			defer func(file string) {
 				completed++
-				data := map[string]int{"ItemNumber": completed, "CollectionSize": config.Size}
+				data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(config.Size), "ImagePath": pngfile}
 				runtime.EventsEmit(ctx, "collection.item.generated", data)
 				fmt.Printf("Saved %s ☑️\n", file)
 				waitForPngGeneration.Done()
-			}(output)
+			}(pngfile)
 
-			GeneratePNG(images, output, config.Width, config.Height)
+			GenerateMetadata(MetaCollection{
+				Name:        "My Collection",
+				Description: "Description for my collection goes here.",
+				Image:       pngfile,
+				ExternalURL: fmt.Sprintf("https://mynft.com?token=%d", items),
+				Attributes: []MetaAttribute{
+					{Type: "Layer 1", Value: "Some Value"},
+					{Type: "Layer 2", Value: "Some Value"},
+					{Type: "Layer 3", Value: "Some Value"},
+					{Type: "Layer 4", Value: "Some Value"},
+				},
+			}, jsonfile)
+			GeneratePNG(images, pngfile, config.Width, config.Height)
 		}(items)
 
 		items++
@@ -94,7 +121,23 @@ func ReadLayers(ctx context.Context, dir string) fs.CollectionConfig {
 	return config
 }
 
-func GeneratePNG(layers []string, output string, width int, height int) {
+func GenerateMetadata(metadata MetaCollection, output string) bool {
+	b, err := json.Marshal(metadata)
+
+	if err != nil {
+		return false
+	}
+
+	err = os.WriteFile(output, b, os.ModePerm)
+
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+
+func GeneratePNG(layers []string, output string, width int, height int) bool {
 	context := gg.NewContext(width, height)
 
 	for _, img := range layers {
@@ -105,7 +148,10 @@ func GeneratePNG(layers []string, output string, width int, height int) {
 
 	if err != nil {
 		log.Fatalf("Unable to save image %s", err)
+		return false
 	}
+
+	return true
 }
 
 func decode(path string) image.Image {
