@@ -6,17 +6,16 @@ import (
 
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 
-	_ "github.com/joho/godotenv"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
-//go:embed frontend/src
+// go:embed frontend/src
 var assets embed.FS
 
-//go:embed build/appicon.png
+// go:embed build/appicon.png
 var icon []byte
 
 func main() {
