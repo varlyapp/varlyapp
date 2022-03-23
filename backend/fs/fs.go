@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/wabarc/ipfs-pinner/pkg/pinata"
 )
@@ -28,10 +29,10 @@ type CollectionConfig struct {
 	Layers map[string][]Layer
 }
 
-func GetApplicationDocumentsDirectory() string {
+func GetApplicationDocumentsDirectory(paths ...string) string {
 	dir, _ := os.UserConfigDir()
 
-	docs := fmt.Sprintf("%s/%s", os.Getenv("VARLEY_DIR"), dir)
+	docs := fmt.Sprintf("%s/%s", strings.Join(paths, "/"), dir)
 
 	err := os.MkdirAll(docs, os.ModePerm);
 
@@ -90,10 +91,7 @@ func ReadDirectory(dir string) (CollectionConfig, error) {
 	return config, err
 }
 
-func UploadCollection() string {
-	key := os.Getenv("API_KEY")
-	secret := os.Getenv("API_SECRET")
-
+func UploadCollection(key string, secret string) string {
 	storage := pinata.Pinata{Apikey: key, Secret: secret}
 	cid, err := storage.PinFile("/Users/selvinortiz/Downloads/varly-collection.png")
 	if err != nil {
