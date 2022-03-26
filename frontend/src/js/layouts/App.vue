@@ -1,8 +1,8 @@
 <template>
-  <div class="h-full flex flex-col bg-slate-50 dark:bg-slate-800">
+  <div class="h-full flex flex-col bg-slate-50 dark:bg-slate-900">
     <!-- :style="{ backgroundImage: isOnStartScreen ? 'url(assets/images/varly-background.png)' : '' }" -->
-    <header data-wails-drag class="p-2 bg-slate-100 shadow dark:bg-slate-900 dark:shadow">
-      <h1 class="text-center text-sm font-semibold">Varly v1.0.0</h1>
+    <header data-wails-drag class="p-2 bg-slate-50 shadow dark:bg-slate-900 dark:shadow">
+      <h1 class="text-center text-sm font-semibold">✓ Varly</h1>
     </header>
     <router-view class="h-full flex-1 overflow-auto scrollbar-none"></router-view>
   </div>
