@@ -9,11 +9,13 @@ require (
 )
 
 require (
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/mattn/go-sqlite3 v1.14.9 // indirect
 	github.com/wabarc/helper v0.0.0-20211225065210-3d35291efe54 // indirect
 	github.com/ybbus/httpretry v1.0.1 // indirect
+	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	mvdan.cc/xurls/v2 v2.2.0 // indirect
 )
@@ -25,7 +27,6 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/gofiber/fiber/v2 v2.17.0 // indirect
 	github.com/gofiber/websocket/v2 v2.0.8 // indirect
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
@@ -45,7 +46,6 @@ require (
 	github.com/valyala/fasthttp v1.28.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/wabarc/ipfs-pinner v1.1.0
-	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
 	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	gorm.io/driver/sqlite v1.3.1

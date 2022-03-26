@@ -32,7 +32,7 @@ onBeforeMount(() => {
 
 function cancel() {
     collectionStore.reset()
-    varly.router.push({ name: 'start' });
+    varly.router.push({ name: 'start' })
 }
 
 const hasLayers = computed(() => {
@@ -172,7 +172,7 @@ async function generateCollection() {
 <template>
     <div
         v-if="isLoading || hasCompleted"
-        class="h-full flex items-center justify-center flex-col container mx-auto max-w-4xl p-8"
+        class="h-full flex flex-col justify-center container mx-auto p-8"
     >
         <div v-if="hasCompleted">
             <button class="block text-9xl" @click="() => router.back()">👍</button>
@@ -184,73 +184,77 @@ async function generateCollection() {
     </div>
     <div
         v-else
-        class="h-full flex flex-col container mx-auto max-w-4xl py-2 px-4"
+        class="h-full flex justify-center flex-col container mx-auto"
         :class="hasLayers ? 'justify-start' : 'justify-center'"
     >
-        <section v-if="showWorkspace">
-            <h1 class="text-lg">Layers</h1>
-            <p class="opacity-75">You can arrange your layers from botton to top</p>
-            <!-- @see :force-fallback -->
-            <!-- Solves issue where dragging works first but second drag requires two clicks -->
-            <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
-            <draggable
-                class
-                group="trait"
-                v-model="collectionStore.traits"
-                :force-fallback="true"
-                @start="isTraitDragging = true"
-                @end="isTraitDragging = false"
-                item-key="name"
-            >
-                <template #item="{ element }">
-                    <div class="border-t-2 border-t-slate-300 dark:border-t-slate-700 bg-slate-200 dark:bg-slate-900 mt-2 px-4 py-2">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <button
-                                    class="py-1 px-2 mr-2 bg-slate-700 text-slate-100"
-                                    @click="toggleCollapsed(element)"
-                                >
-                                    <span v-if="element.collapsed">⇣</span>
-                                    <span v-else>⇡</span>
-                                </button>
-                                <h1 v-text="element.name" class="text-base"></h1>
-                            </div>
-                            <div>
-                                <input
-                                    class="grow-0 text-right appearance-none bg-transparent border-0"
-                                    type="text"
-                                    :value="`${weightDistributionTotal(collectionStore.layers[element.name])}`"
-                                />
-                            </div>
-                            <!-- <h2
-                                class="text-lg font-semibold"
-                            >{{ weightDistributionTotal(collectionStore.layers[element.name]) }}&percnt;</h2>-->
-                        </div>
-                        <draggable
-                            :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
-                            group="layer"
-                            :force-fallback="true"
-                            :list="collectionStore.layers[element.name]"
-                            @start="isLayerDragging = true"
-                            @end="isLayerDragging = false"
-                            item-key="name"
+        <section v-if="showWorkspace" class="h-full flex flex-col justify-between">
+            <div>
+                <h1 class="text-lg">Layers</h1>
+                <p class="opacity-75">You can arrange your layers from botton to top</p>
+                <!-- @see :force-fallback -->
+                <!-- Solves issue where dragging works first but second drag requires two clicks -->
+                <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
+                <draggable
+                    class="mt-8"
+                    group="trait"
+                    v-model="collectionStore.traits"
+                    :force-fallback="true"
+                    @start="isTraitDragging = true"
+                    @end="isTraitDragging = false"
+                    item-key="name"
+                >
+                    <template #item="{ element }">
+                        <div
+                            class="border-t-2 border-t-slate-300 dark:border-t-slate-700 bg-slate-200 dark:bg-slate-900 mt-2 px-4 py-2"
                         >
-                            <template #item="{ element }">
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="pl-4 font-mono">{{ element.Name }}</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <button
+                                        class="py-1 px-2 mr-2 bg-slate-700 text-slate-100"
+                                        @click="toggleCollapsed(element)"
+                                    >
+                                        <span v-if="element.collapsed">⇣</span>
+                                        <span v-else>⇡</span>
+                                    </button>
+                                    <h1 v-text="element.name" class="text-base"></h1>
+                                </div>
+                                <div>
                                     <input
-                                        class="appearance-none border-none text-center w-1/12"
-                                        v-model="element.Weight"
+                                        class="grow-0 text-right appearance-none bg-transparent border-0"
                                         type="text"
+                                        :value="`${weightDistributionTotal(collectionStore.layers[element.name])}`"
                                     />
                                 </div>
-                            </template>
-                        </draggable>
-                    </div>
-                </template>
-            </draggable>
+                                <!-- <h2
+                                class="text-lg font-semibold"
+                                >{{ weightDistributionTotal(collectionStore.layers[element.name]) }}&percnt;</h2>-->
+                            </div>
+                            <draggable
+                                :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
+                                group="layer"
+                                :force-fallback="true"
+                                :list="collectionStore.layers[element.name]"
+                                @start="isLayerDragging = true"
+                                @end="isLayerDragging = false"
+                                item-key="name"
+                            >
+                                <template #item="{ element }">
+                                    <div class="flex items-center justify-between mt-1">
+                                        <p class="pl-4 font-mono">{{ element.Name }}</p>
+                                        <input
+                                            class="appearance-none dark:text-slate-800 dark:bg-slate-100 border-none text-center w-1/12"
+                                            v-model="element.Weight"
+                                            type="text"
+                                        />
+                                    </div>
+                                </template>
+                            </draggable>
+                        </div>
+                    </template>
+                </draggable>
+            </div>
 
-            <div class="pt-5">
+            <div class="py-8 divide-y divide-slate-100 dark:divide-slate-800">
                 <div class="flex justify-end">
                     <button
                         @click="cancel"

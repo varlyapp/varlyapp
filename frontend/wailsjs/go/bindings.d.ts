@@ -9,7 +9,6 @@ export interface go {
 		ReadLayers(arg1:string):Promise<CollectionConfig>
 		SaveFile(arg1:string,arg2:string):Promise<boolean>
 		SaveFileDialog():Promise<string>
-		UploadCollection():Promise<string>
     },
   }
 
