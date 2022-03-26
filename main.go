@@ -12,10 +12,10 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
-// go:embed frontend/src
+//go:embed frontend/src
 var assets embed.FS
 
-// go:embed build/appicon.png
+//go:embed build/appicon.png
 var icon []byte
 
 func main() {
@@ -52,7 +52,7 @@ func main() {
 			DisableWindowIcon:    false,
 		},
 		Mac: &mac.Options{
-			TitleBar:             mac.TitleBarHiddenInset(),
+			TitleBar:             mac.TitleBarHidden(),
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
