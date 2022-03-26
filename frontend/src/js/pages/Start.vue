@@ -13,13 +13,13 @@ function launch(url: string) {
 </script>
 
 <template>
-  <div class="h-full flex flex-col items-center justify-center">
+  <div class="h-full flex flex-col items-center justify-center p-8">
     <section class="flex items-center justify-center">
       <Icon
         class="mx-8"
         name="new"
         text="Start NFT Project"
-        @click="() => varly.router.push({ name: 'collections.start' })"
+        @click="() => varly.router.push({ name: 'artwork.layers' })"
       />
       <Icon
         class="mx-8"

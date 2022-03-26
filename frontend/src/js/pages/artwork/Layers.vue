@@ -172,7 +172,7 @@ async function generateCollection() {
 <template>
     <div
         v-if="isLoading || hasCompleted"
-        class="h-full flex flex-col justify-center container mx-auto p-8"
+        class="h-full flex flex-col justify-center p-8"
     >
         <div v-if="hasCompleted">
             <button class="block text-9xl" @click="() => router.back()">👍</button>
@@ -184,7 +184,7 @@ async function generateCollection() {
     </div>
     <div
         v-else
-        class="h-full flex justify-center flex-col container mx-auto"
+        class="h-full flex flex-col justify-center p-8"
         :class="hasLayers ? 'justify-start' : 'justify-center'"
     >
         <section v-if="showWorkspace" class="h-full flex flex-col justify-between">
@@ -262,7 +262,7 @@ async function generateCollection() {
                         class="bg-white py-2 px-4 border border-slate-200 rounded-sm shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                     >Cancel</button>
                     <button
-                        @click="() => varly.router.push({ name: 'collections.generate' })"
+                        @click="() => varly.router.push({ name: 'artwork.collection' })"
                         type="submit"
                         class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >Next</button>
@@ -272,12 +272,12 @@ async function generateCollection() {
 
         <section v-if="showOpenFolderPrompt" class="text-center">
             <p
-                class="mt-1 max-w-md mx-auto text-sm"
-            >Select the folder with that has your layers in their own folder.</p>
+                class="mt-1 max-w-md mx-auto text-base"
+            >Select the folder with your artwork layers to get started🎉</p>
             <button
                 @click="loadLayers()"
                 type="button"
-                class="mt-6 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="mt-8 ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >Select Folder</button>
         </section>
     </div>

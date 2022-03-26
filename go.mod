@@ -3,7 +3,6 @@ module github.com/varlyapp/varlyapp
 go 1.17
 
 require (
-	github.com/davidbyttow/govips/v2 v2.11.0
 	github.com/mroth/weightedrand v0.4.1
 	github.com/wailsapp/wails/v2 v2.0.0-beta.33
 )
@@ -21,6 +20,7 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.0.2 // indirect
+	github.com/disintegration/imaging v1.6.2
 	github.com/fasthttp/websocket v0.0.0-20200320073529-1554a54587ab // indirect
 	github.com/gabriel-vasile/mimetype v1.3.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect

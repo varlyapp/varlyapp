@@ -59,7 +59,7 @@ const varly = inject<Varly>('varly')!
                         class="bg-white py-2 px-4 border border-slate-200 rounded-sm shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                     >Cancel</button>
                     <button
-                        @click="() => varly.router.push({ name: 'collections.loadLayers' })"
+                        @click="() => varly.router.push({ name: 'artwork.build' })"
                         type="submit"
                         class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                     >Next</button>
