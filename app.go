@@ -63,10 +63,6 @@ func (app *App) ReadLayers(dir string) fs.CollectionConfig {
 	return nft.ReadLayers(app.ctx, dir)
 }
 
-func (app *App) UploadCollection() string {
-	panic("Function not implemented yet")
-}
-
 func (app *App) GetApplicationDocumentsDirectory() string {
 	return fs.GetApplicationDocumentsDirectory()
 }
