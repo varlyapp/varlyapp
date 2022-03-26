@@ -1,11 +1,13 @@
 <template>
-    <div class="h-full flex flex-col container mx-auto max-w-4xl py-2 px-4 justify-center">
-        <button
-            class="text-base px-4 py-2 bg-purple-600 text-white"
-            @click="generateCollection"
-        >Generate</button>
-        <Progress :steps="steps" :current-step="currentStep" />
+    <div class="h-full flex flex-col container mx-auto justify-center p-8">
+        <Progress :steps="steps" :current-step="currentStep" loading-text="Waiting..." />
         <!-- <img :src="preview" alt="" class="m-0 p-0 max-w-full max-h-full object-cover border-0"> -->
+        <div class="flex justify-end">
+            <button
+                class="text-base px-6 py-4 bg-purple-700 text-white rounded"
+                @click="generateCollection"
+            >✓&nbsp;Generate Collection</button>
+        </div>
     </div>
 </template>
 
@@ -34,6 +36,10 @@ const isTraitEnabled = ref(true)
 const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
 const isLayerEnabled = ref(true)
+
+const WIDTH = 7200
+const HEIGHT = 9200
+const SIZE = 100
 
 function toggleIsLoading() {
     isLoading.value = !isLoading.value
@@ -77,9 +83,9 @@ async function generateCollection() {
         Dir: outputDirectory,
         Order: [...store.traits].map((item: any) => item.name),
         Layers: layers,
-        Width: 3000,
-        height: 3000,
-        Size: 1000
+        Width: WIDTH,
+        height: HEIGHT,
+        Size: SIZE
     }
 
     await app.GenerateCollectionFromConfig(config)

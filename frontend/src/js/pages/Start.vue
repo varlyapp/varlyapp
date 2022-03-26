@@ -5,6 +5,11 @@ import type { Varly } from '@plugins/varly'
 import Icon from '@components/Icon.vue'
 
 const varly = inject<Varly>('varly')!
+
+function launch(url: string) {
+  return varly.runtime.BrowserOpenURL('https://twitter.com/varlyapp')
+}
+
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const varly = inject<Varly>('varly')!
         class="mx-8"
         name="import"
         text="Import Document"
-        @click="() => varly.runtime.BrowserOpenURL('https://twitter.com/varlyapp')"
+        @click="launch('https://twitter.com/varlyapp')"
       />
     </section>
   </div>

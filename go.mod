@@ -3,13 +3,12 @@ module github.com/varlyapp/varlyapp
 go 1.17
 
 require (
-	github.com/fogleman/gg v1.3.0
+	github.com/davidbyttow/govips/v2 v2.11.0
 	github.com/mroth/weightedrand v0.4.1
 	github.com/wailsapp/wails/v2 v2.0.0-beta.33
 )
 
 require (
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/mattn/go-sqlite3 v1.14.9 // indirect

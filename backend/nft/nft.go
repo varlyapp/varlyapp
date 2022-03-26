@@ -16,7 +16,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fogleman/gg"
+	"github.com/davidbyttow/govips/v2/vips"
 	wr "github.com/mroth/weightedrand"
 	"github.com/varlyapp/varlyapp/backend/fs"
 	"github.com/varlyapp/varlyapp/backend/queue"
@@ -45,16 +45,24 @@ type NewCollectionConfig struct {
 	Size   int
 }
 
+var completed = 0
+
 func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfig) {
+	vips.Startup(&vips.Config{
+		ReportLeaks: true,
+		CollectStats: true,
+	})
+	defer vips.Shutdown()
+
 	// Set CPU max to half or 1, whichever is greater
 	// cpu := r.NumCPU()
 	// max := math.Max(float64(1), math.Floor(float64(cpu) / 2))
 	// r.GOMAXPROCS(int(max))
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	// runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": config.Size})
+	runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": config.Size})
 
-	pool := queue.New(10)
+	pool := queue.New(5)
 
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -190,25 +198,26 @@ func GenerateMetadata(metadata MetaCollection, output string) bool {
 }
 
 func GeneratePNG(layers []string, output string, width int, height int) bool {
-	context := gg.NewContext(width, height)
+	img, _ := vips.NewImageFromFile(layers[0])
 
-	for _, img := range layers {
-		context.DrawImage(decode(img), 0, 0)
+	for _, layer := range layers[1:] {
+		i, _ := vips.LoadImageFromFile(layer, vips.NewImportParams())
+		img.Composite(i, vips.BlendModeOver, 0, 0)
 	}
 
-	err := context.SavePNG(output)
+	bytes, _, err := img.ExportPng(vips.NewPngExportParams())
 
 	if err != nil {
 		log.Fatalf("Unable to save image %s", err)
 		return false
 	}
 
+	os.WriteFile(output, bytes, os.ModePerm)
+
 	return true
 }
 
 func testTasks(config NewCollectionConfig) []queue.Task {
-	fmt.Println(config.Size)
-
 	tasks := make([]queue.Task, config.Size)
 	for i := 0; i < config.Size; i++ {
 		tasks[i] = queue.Task{
@@ -264,41 +273,47 @@ func callback(ctx context.Context, t queue.Task) (interface{}, error) {
 	}
 
 	png := fmt.Sprintf("%s/%d.png", t.Metadata.Dir, val)
-	json := fmt.Sprintf("%s/%d.json", t.Metadata.Dir, val)
+	// json := fmt.Sprintf("%s/%d.json", t.Metadata.Dir, val)
 
 	var wg sync.WaitGroup
 
-	wg.Add(2)
+	wg.Add(1)
 
 	go func() {
 		defer func() {
 			wg.Done()
+
+			completed++
+
+			data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(t.Metadata.Size)}
+			runtime.EventsEmit(ctx, "collection.item.generated", data)
+
 			fmt.Printf("%d. %s\n", val, png)
 		}()
 		GeneratePNG(images, png, t.Metadata.Width, t.Metadata.Height)
 	}()
 
-	go func(j string, p string) {
-		defer func() {
-			wg.Done()
-			fmt.Printf("%d. %s\n", val, json)
-		}()
+	// go func(j string, p string) {
+	// 	defer func() {
+	// 		wg.Done()
+	// 		fmt.Printf("%d. %s\n", val, json)
+	// 	}()
 
-		meta := MetaCollection{
-			Name:        "My Collection",
-			Description: "Description for my collection goes here.",
-			Image:       p,
-			ExternalURL: fmt.Sprintf("https://mynft.com?token=%d", val),
-			Attributes: []MetaAttribute{
-				{Type: "Layer 1", Value: "Some Value"},
-				{Type: "Layer 2", Value: "Some Value"},
-				{Type: "Layer 3", Value: "Some Value"},
-				{Type: "Layer 4", Value: "Some Value"},
-			},
-		}
+	// 	meta := MetaCollection{
+	// 		Name:        "My Collection",
+	// 		Description: "Description for my collection goes here.",
+	// 		Image:       p,
+	// 		ExternalURL: fmt.Sprintf("https://mynft.com?token=%d", val),
+	// 		Attributes: []MetaAttribute{
+	// 			{Type: "Layer 1", Value: "Some Value"},
+	// 			{Type: "Layer 2", Value: "Some Value"},
+	// 			{Type: "Layer 3", Value: "Some Value"},
+	// 			{Type: "Layer 4", Value: "Some Value"},
+	// 		},
+	// 	}
 
-		GenerateMetadata(meta, j)
-	}(json, png)
+	// 	GenerateMetadata(meta, j)
+	// }(json, png)
 
 	wg.Wait()
 
