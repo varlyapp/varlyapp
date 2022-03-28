@@ -1,14 +1,32 @@
 <template>
-    <div class="h-full flex flex-col container mx-auto justify-center p-8">
-        <Progress :steps="steps" :current-step="currentStep" loading-text="Waiting..." />
-        <!-- <img :src="preview" alt="" class="m-0 p-0 max-w-full max-h-full object-cover border-0"> -->
-        <div class="flex justify-end">
-            <button
-                class="text-base px-6 py-4 bg-purple-700 text-white rounded"
-                @click="generateCollection"
-            >✓&nbsp;Generate Collection</button>
-        </div>
-    </div>
+    <section class="h-full flex">
+        <Sidebar
+            :links="[
+                { emoji: '🦋', text: 'Support on Twitter', to: 'start', selected: false },
+                { emoji: '', text: '', to: '', selected: false },
+                { emoji: '🏙', text: 'Recent Projects', to: 'start', selected: false },
+                { emoji: '✨', text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { emoji: '', text: '', to: '', selected: false },
+                { emoji: '🥞', text: 'Layer Setup', to: 'artwork.layers', selected: false },
+                { emoji: '📝', text: 'Collection Details', to: 'artwork.collection', selected: false },
+                { emoji: '🧩', text: 'Build Settings', to: 'artwork.build', selected: true },
+                { emoji: '🚀', text: 'Run', to: '', selected: false },
+            ]"
+        />
+
+        <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
+            <div class="h-full flex flex-col container mx-auto justify-center p-8">
+                <Progress :steps="steps" :current-step="currentStep" loading-text="Waiting..." />
+                <!-- <img :src="preview" alt="" class="m-0 p-0 max-w-full max-h-full object-cover border-0"> -->
+                <div class="flex justify-end">
+                    <button
+                        class="text-base px-6 py-4 bg-purple-700 text-white rounded"
+                        @click="generateCollection"
+                    >✓&nbsp;Generate Collection</button>
+                </div>
+            </div>
+        </main>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -16,7 +34,8 @@ import { ref, inject } from 'vue'
 import { useDialog } from '@utils/Dialog'
 import { useCollectionStore } from '@root/store'
 import type { Varly } from '@root/plugins/varly'
-import Progress from '../../components/Progress.vue'
+import Progress from '@components/Progress.vue'
+import Sidebar from '@components/Sidebar.vue'
 
 const varly = inject<Varly>('varly')!
 

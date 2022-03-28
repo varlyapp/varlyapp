@@ -7,6 +7,7 @@ import { useDialog } from '@utils/Dialog'
 import { useStore, useCollectionStore } from '@root/store'
 import draggable from 'vuedraggable'
 import type { Varly } from '@root/plugins/varly'
+import Sidebar from '@components/Sidebar.vue'
 
 const varly = inject<Varly>('varly')!
 
@@ -25,15 +26,8 @@ const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
 const isLayerEnabled = ref(true)
 
-const links = [
-    { icon: '🥞', title: 'Layer Setup', route: { name: 'artwork.layers' } },
-    { icon: '✍️', title: 'Collection Details', route: { name: 'artwork.collection' } },
-    { icon: '🧩', title: 'Build Settings', route: { name: 'artwork.build' } },
-    { icon: '🚀', title: 'Build', route: { name: 'artwork.layers' } },
-]
-
 onBeforeMount(() => {
-    console.log(collectionStore.layers)
+    // console.log(collectionStore.layers)
 })
 
 function cancel() {
@@ -170,67 +164,38 @@ async function generateCollection() {
     hasCompleted.value = true
     toggleIsLoading()
 }
+
+function run(e: any) {
+    console.log('Called run()')
+    console.log(e)
+}
+
 </script>
 
 <template>
-    <div class="h-full flex">
-        <aside
-            class="sticky top-0 h-full flex flex-col justify-between p-4 border-r border-slate-900 border-opacity-10 dark:border-slate-50 dark:border-opacity-10"
-        >
-            <nav
-                class="mt-6 text-left text-base text-slate-900 text-opacity-90 dark:text-slate-50 dark:text-opacity-90"
-            >
-                <ul>
-                    <li>
-                        <router-link
-                            class="flex text-left min-w-full mt-2 py-2 px-4 bg-slate-900 bg-opacity-10 dark:bg-slate-50 dark:bg-opacity-10 rounded"
-                            :to="{ name: 'start' }"
-                        >
-                            <span style="width: 22pt">🏙</span>
-                            <span>Recent Documents</span>
-                        </router-link>
-                    </li>
-                    <li>
-                        <button
-                            type="button"
-                            class="flex items-center justify-start mt-2 py-2 px-4"
-                        >
-                            <span class="text-center" style="width: 24pt">🦋</span>
-                            <span>Connect on Twitter</span>
-                        </button>
-                    </li>
-                    <li
-                        class="my-6 bg-slate-900 bg-opacity-10 dark:bg-slate-50 dark:bg-opacity-10"
-                        style="min-height: 1pt"
-                    ></li>
-                    <li v-for="link in links" :key="link.title">
-                        <router-link
-                            class="flex text-left min-w-full rounded mt-2 py-2 px-4"
-                            :to="link.route"
-                        >
-                            <span class="text-center" style="width: 24pt" v-text="link.icon"/>
-                            <span v-text="link.title"/>
-                        </router-link>
-                    </li>
-                </ul>
-            </nav>
-            <nav
-                class="text-left text-base text-slate-900 text-opacity-90 dark:text-slate-50 dark:text-opacity-90"
-            >
-                <button class="block min-w-full text-center py-2 px-4 rounded bg-purple-700 text-purple-100">✓ Save</button>
-            </nav>
-        </aside>
-        <main
-            class="h-full w-8/12 lg:w-9/12 flex flex-col justify-center p-8"
-            :class="hasLayers ? 'justify-start' : 'justify-center'"
-        >
-            <section v-if="hasLayers" class="h-full my-4 flex flex-col justify-between">
-                <div class="pb-8">
+    <section class="h-full flex">
+        <Sidebar
+            :links="[
+                { emoji: '🦋', text: 'Support on Twitter', to: 'start', selected: false },
+                { emoji: '', text: '', to: '', selected: false },
+                { emoji: '🏙', text: 'Recent Projects', to: 'start', selected: false },
+                { emoji: '✨', text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { emoji: '', text: '', to: '', selected: false },
+                { emoji: '🥞', text: 'Layer Setup', to: 'artwork.layers', selected: true },
+                { emoji: '📝', text: 'Collection Details', to: 'artwork.collection', selected: false },
+                { emoji: '🧩', text: 'Build Settings', to: 'artwork.build', selected: false },
+                { emoji: '🚀', text: 'Run', to: run, selected: false },
+            ]"
+        />
+
+        <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
+            <section v-if="hasLayers" class>
+                <div class="p-8">
                     <!-- @see :force-fallback -->
                     <!-- Solves issue where dragging works first but second drag requires two clicks -->
                     <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
                     <draggable
-                        class="rounded border-dashed border-2 border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
+                        class="rounded bg-slate-50 bg-opacity-20 dark:bg-slate-900 dark:bg-opacity-20 border-dashed border-2 border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
                         group="trait"
                         v-model="collectionStore.traits"
                         :force-fallback="true"
@@ -292,25 +257,10 @@ async function generateCollection() {
                         </template>
                     </draggable>
                 </div>
-
-                <!-- <div class="py-8 divide-y divide-slate-100 dark:divide-slate-800">
-                    <div class="flex justify-end">
-                        <button
-                            @click="cancel"
-                            type="button"
-                            class="bg-white py-2 px-4 border border-slate-200 rounded-sm shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                        >Cancel</button>
-                        <button
-                            @click="() => varly.router.push({ name: 'artwork.collection' })"
-                            type="submit"
-                            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >Next</button>
-                    </div>
-                </div>-->
             </section>
 
             <section v-else>
-                <div class="text-center">
+                <div class="p-4 lg:p-8 text-center">
                     <svg
                         class="mx-auto h-12 w-12 text-gray-400"
                         fill="none"
@@ -340,5 +290,5 @@ async function generateCollection() {
                 </div>
             </section>
         </main>
-    </div>
+    </section>
 </template>

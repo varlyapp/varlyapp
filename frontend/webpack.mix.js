@@ -25,6 +25,7 @@ mix.disableNotifications()
 
 // TS/SCSS compilation
 mix.setPublicPath('src')
+  .sourceMaps()
   .ts('src/js/app.ts', 'app.js').vue({ version: 3 })
   .sass('src/css/app.scss', 'app.css')
   .tailwind()
