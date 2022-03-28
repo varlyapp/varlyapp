@@ -1,0 +1,7 @@
+{
+    "projectName": "Varlyapp",
+    "namespace": "Varlyapp.Contracts",
+    "lang": 0,
+    "autoCodeGen": true,
+    "projectPath": "../"
+}

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, inject } from 'vue'
+import { PlusIcon } from '@heroicons/vue/solid'
+
 import { useRouter } from 'vue-router'
 import { useDialog } from '@utils/Dialog'
 import { useStore, useCollectionStore } from '@root/store'
@@ -23,11 +25,15 @@ const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
 const isLayerEnabled = ref(true)
 
+const links = [
+    { icon: '🥞', title: 'Layer Setup', route: { name: 'artwork.layers' } },
+    { icon: '✍️', title: 'Collection Details', route: { name: 'artwork.collection' } },
+    { icon: '🧩', title: 'Build Settings', route: { name: 'artwork.build' } },
+    { icon: '🚀', title: 'Build', route: { name: 'artwork.layers' } },
+]
+
 onBeforeMount(() => {
-    store.actions = [
-        { title: '← Start Over', onClick: startOver, type: 'SECONDARY' },
-        { title: '✓ Generate', onClick: generateCollection, type: 'PRIMARY' },
-    ]
+    console.log(collectionStore.layers)
 })
 
 function cancel() {
@@ -38,9 +44,6 @@ function cancel() {
 const hasLayers = computed(() => {
     return collectionStore.layers && Object.keys(collectionStore.layers).length
 })
-
-const showWorkspace = computed(() => hasLayers.value && !isLoading.value)
-const showOpenFolderPrompt = computed(() => !hasLayers.value && !isLoading.value)
 
 function weightDistributionTotal(items) {
     let total = 0
@@ -170,115 +173,172 @@ async function generateCollection() {
 </script>
 
 <template>
-    <div
-        v-if="isLoading || hasCompleted"
-        class="h-full flex flex-col justify-center p-8"
-    >
-        <div v-if="hasCompleted">
-            <button class="block text-9xl" @click="() => router.back()">👍</button>
-        </div>
-        <div v-else>
-            <h1 v-if="isLoading && loadingText" class="text-xl">{{ loadingText }} 🚀</h1>
-            <div v-else>Loading...</div>
-        </div>
-    </div>
-    <div
-        v-else
-        class="h-full flex flex-col justify-center p-8"
-        :class="hasLayers ? 'justify-start' : 'justify-center'"
-    >
-        <section v-if="showWorkspace" class="h-full flex flex-col justify-between">
-            <div>
-                <h1 class="text-lg">Layers</h1>
-                <p class="opacity-75">You can arrange your layers from botton to top</p>
-                <!-- @see :force-fallback -->
-                <!-- Solves issue where dragging works first but second drag requires two clicks -->
-                <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
-                <draggable
-                    class="mt-8"
-                    group="trait"
-                    v-model="collectionStore.traits"
-                    :force-fallback="true"
-                    @start="isTraitDragging = true"
-                    @end="isTraitDragging = false"
-                    item-key="name"
-                >
-                    <template #item="{ element }">
-                        <div
-                            class="border-t-2 border-t-slate-300 dark:border-t-slate-700 bg-slate-200 dark:bg-slate-900 mt-2 px-4 py-2"
+    <div class="h-full flex">
+        <aside
+            class="sticky top-0 h-full flex flex-col justify-between p-4 border-r border-slate-900 border-opacity-10 dark:border-slate-50 dark:border-opacity-10"
+        >
+            <nav
+                class="mt-6 text-left text-base text-slate-900 text-opacity-90 dark:text-slate-50 dark:text-opacity-90"
+            >
+                <ul>
+                    <li>
+                        <router-link
+                            class="flex text-left min-w-full mt-2 py-2 px-4 bg-slate-900 bg-opacity-10 dark:bg-slate-50 dark:bg-opacity-10 rounded"
+                            :to="{ name: 'start' }"
                         >
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <button
-                                        class="py-1 px-2 mr-2 bg-slate-700 text-slate-100"
-                                        @click="toggleCollapsed(element)"
-                                    >
-                                        <span v-if="element.collapsed">⇣</span>
-                                        <span v-else>⇡</span>
-                                    </button>
-                                    <h1 v-text="element.name" class="text-base"></h1>
-                                </div>
-                                <div>
-                                    <input
-                                        class="grow-0 text-right appearance-none bg-transparent border-0"
-                                        type="text"
-                                        :value="`${weightDistributionTotal(collectionStore.layers[element.name])}`"
-                                    />
-                                </div>
-                                <!-- <h2
-                                class="text-lg font-semibold"
-                                >{{ weightDistributionTotal(collectionStore.layers[element.name]) }}&percnt;</h2>-->
-                            </div>
-                            <draggable
-                                :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
-                                group="layer"
-                                :force-fallback="true"
-                                :list="collectionStore.layers[element.name]"
-                                @start="isLayerDragging = true"
-                                @end="isLayerDragging = false"
-                                item-key="name"
-                            >
-                                <template #item="{ element }">
-                                    <div class="flex items-center justify-between mt-1">
-                                        <p class="pl-4 font-mono">{{ element.Name }}</p>
+                            <span style="width: 22pt">🏙</span>
+                            <span>Recent Documents</span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <button
+                            type="button"
+                            class="flex items-center justify-start mt-2 py-2 px-4"
+                        >
+                            <span class="text-center" style="width: 24pt">🦋</span>
+                            <span>Connect on Twitter</span>
+                        </button>
+                    </li>
+                    <li
+                        class="my-6 bg-slate-900 bg-opacity-10 dark:bg-slate-50 dark:bg-opacity-10"
+                        style="min-height: 1pt"
+                    ></li>
+                    <li v-for="link in links" :key="link.title">
+                        <router-link
+                            class="flex text-left min-w-full rounded mt-2 py-2 px-4"
+                            :to="link.route"
+                        >
+                            <span class="text-center" style="width: 24pt" v-text="link.icon"/>
+                            <span v-text="link.title"/>
+                        </router-link>
+                    </li>
+                </ul>
+            </nav>
+            <nav
+                class="text-left text-base text-slate-900 text-opacity-90 dark:text-slate-50 dark:text-opacity-90"
+            >
+                <button class="block min-w-full text-center py-2 px-4 rounded bg-purple-700 text-purple-100">✓ Save</button>
+            </nav>
+        </aside>
+        <main
+            class="h-full w-8/12 lg:w-9/12 flex flex-col justify-center p-8"
+            :class="hasLayers ? 'justify-start' : 'justify-center'"
+        >
+            <section v-if="hasLayers" class="h-full my-4 flex flex-col justify-between">
+                <div class="pb-8">
+                    <!-- @see :force-fallback -->
+                    <!-- Solves issue where dragging works first but second drag requires two clicks -->
+                    <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
+                    <draggable
+                        class="rounded border-dashed border-2 border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
+                        group="trait"
+                        v-model="collectionStore.traits"
+                        :force-fallback="true"
+                        @start="isTraitDragging = true"
+                        @end="isTraitDragging = false"
+                        item-key="name"
+                    >
+                        <template #item="{ element }">
+                            <div class="mt-2 px-4 py-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <button
+                                            class="py-1 px-2 mr-2 bg-slate-700 text-slate-100"
+                                            @click="toggleCollapsed(element)"
+                                        >
+                                            <span v-if="element.collapsed">⇣</span>
+                                            <span v-else>⇡</span>
+                                        </button>
+                                        <h1 v-text="element.name" class="text-base"></h1>
+                                    </div>
+                                    <div>
                                         <input
-                                            class="appearance-none dark:text-slate-800 dark:bg-slate-100 border-none text-center w-1/12"
-                                            v-model="element.Weight"
+                                            class="grow-0 text-right appearance-none bg-transparent border-0"
                                             type="text"
+                                            :value="`${weightDistributionTotal(collectionStore.layers[element.name])}`"
                                         />
                                     </div>
-                                </template>
-                            </draggable>
-                        </div>
-                    </template>
-                </draggable>
-            </div>
+                                    <!-- <h2
+                                class="text-lg font-semibold"
+                                    >{{ weightDistributionTotal(collectionStore.layers[element.name]) }}&percnt;</h2>-->
+                                </div>
 
-            <div class="py-8 divide-y divide-slate-100 dark:divide-slate-800">
-                <div class="flex justify-end">
-                    <button
-                        @click="cancel"
-                        type="button"
-                        class="bg-white py-2 px-4 border border-slate-200 rounded-sm shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                    >Cancel</button>
-                    <button
-                        @click="() => varly.router.push({ name: 'artwork.collection' })"
-                        type="submit"
-                        class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >Next</button>
+                                <draggable
+                                    :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
+                                    group="layer"
+                                    :force-fallback="true"
+                                    :list="collectionStore.layers[element.name]"
+                                    @start="isLayerDragging = true"
+                                    @end="isLayerDragging = false"
+                                    item-key="name"
+                                >
+                                    <template #item="{ element }">
+                                        <div
+                                            :key="element.Name"
+                                            class="min-w-full flex justify-between border-dotted border-t border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
+                                        >
+                                            <div
+                                                class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
+                                                v-text="element.Name"
+                                            />
+                                            <div
+                                                class="whitespace-nowrap py-2 px-4 text-sm"
+                                                v-text="element.Weight"
+                                            />
+                                        </div>
+                                    </template>
+                                </draggable>
+                            </div>
+                        </template>
+                    </draggable>
                 </div>
-            </div>
-        </section>
 
-        <section v-if="showOpenFolderPrompt" class="text-center">
-            <p
-                class="mt-1 max-w-md mx-auto text-base"
-            >Select the folder with your artwork layers to get started🎉</p>
-            <button
-                @click="loadLayers()"
-                type="button"
-                class="mt-8 ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >Select Folder</button>
-        </section>
+                <!-- <div class="py-8 divide-y divide-slate-100 dark:divide-slate-800">
+                    <div class="flex justify-end">
+                        <button
+                            @click="cancel"
+                            type="button"
+                            class="bg-white py-2 px-4 border border-slate-200 rounded-sm shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        >Cancel</button>
+                        <button
+                            @click="() => varly.router.push({ name: 'artwork.collection' })"
+                            type="submit"
+                            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >Next</button>
+                    </div>
+                </div>-->
+            </section>
+
+            <section v-else>
+                <div class="text-center">
+                    <svg
+                        class="mx-auto h-12 w-12 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            vector-effect="non-scaling-stroke"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                        />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium">No Projects</h3>
+                    <p class="mt-8 text-sm text-opacity-50">Get started by creating a new one🎉</p>
+                    <div class="mt-6">
+                        <button
+                            type="button"
+                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            @click="loadLayers()"
+                        >
+                            <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />New Project
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 </template>

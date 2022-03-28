@@ -2,7 +2,24 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-a, button, a:link, a:visited, a:hover, a:active {
+@font-face {
+    font-family: "SF Pro";
+    font-style: normal;
+    font-weight: 400;
+    src: local(""), url("assets/fonts/SF-Pro.ttf") format("ttf");
+}
+
+body {
+    font-family: "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overscroll-behavior: none;
+}
+
+a,
+button,
+a:link,
+a:visited,
+a:hover,
+a:active {
     cursor: default;
 }
 
