@@ -5,7 +5,6 @@ import piniaPersistedState from 'pinia-plugin-persistedstate'
 import { useTheme } from '@utils/Theme'
 import router from '@root/router'
 import App from '@layouts/App.vue'
-import varly from '@plugins/varly'
 
 const pinia = createPinia()
 pinia.use(piniaPersistedState)
@@ -16,5 +15,4 @@ theme.run()
 createApp(App)
   .use(router)
   .use(pinia)
-  .use(varly, { router })
   .mount('#app')

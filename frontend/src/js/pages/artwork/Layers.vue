@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, onBeforeMount, inject } from 'vue'
+import { ref, computed } from 'vue'
+import draggable from 'vuedraggable'
+import { useDialog } from '@utils/Dialog'
+import { useCollectionStore } from '@root/store'
+import Sidebar from '@components/Sidebar.vue'
+import { app, navigate, launchTwitter } from '@utils/Varly'
 import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
 
-import { useRouter } from 'vue-router'
-import { useDialog } from '@utils/Dialog'
-import { useStore, useCollectionStore } from '@root/store'
-import draggable from 'vuedraggable'
-import type { Varly } from '@root/plugins/varly'
-import Sidebar from '@components/Sidebar.vue'
-
-const varly = inject<Varly>('varly')!
-
-const dialog = useDialog(varly?.app)
-const router = useRouter()
-const store = useStore()
+const dialog = useDialog(app)
 const collectionStore = useCollectionStore()
 
 let loadingText = ref('')
@@ -26,13 +20,9 @@ const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
 const isLayerEnabled = ref(true)
 
-onBeforeMount(() => {
-    // console.log(collectionStore.layers)
-})
-
 function cancel() {
     collectionStore.reset()
-    varly.router.push({ name: 'start' })
+    navigate('start')
 }
 
 const hasLayers = computed(() => {
@@ -53,13 +43,12 @@ function toggleIsLoading() {
 }
 
 function toggleCollapsed(element) {
-    console.log(element.collapsed)
     element.collapsed = !element.collapsed
 }
 
 function startOver() {
     collectionStore.reset()
-    router.push({ name: 'start' })
+    navigate('start')
 }
 
 async function saveSettings() {
@@ -81,13 +70,13 @@ async function saveSettings() {
         },
     ]
 
-    await varly.app.SaveDocuments(docs)
+    await app.SaveDocuments(docs)
 }
 
 async function loadLayers() {
     collectionStore.directory = await dialog.openDirectoryDialog()
 
-    const config: { Layers?} = await varly.app.ReadLayers(collectionStore.directory)
+    const config: { Layers? } = await app.ReadLayers(collectionStore.directory)
 
     collectionStore.layers = { ...config.Layers }
 
@@ -99,19 +88,15 @@ async function loadLayers() {
         }
     }
 
-    console.log(config)
     collectionStore.traits = [...traits]
 }
 
 async function saveProgress() {
     window.runtime.EventsOn('collection.generation.saved', (data) => {
         loadingText.value = `Preparing collection of ${data.CollectionSize} items`
-        console.log(loadingText.value)
     })
 
     const outputDirectory = await dialog.openDirectoryDialog()
-
-    console.log(outputDirectory)
 
     const layers = { ...collectionStore.layers }
 
@@ -135,10 +120,9 @@ async function saveProgress() {
         Size: 1000
     }
 
-    const file = await varly.app.SaveFileDialog()
+    const file = await app.SaveFileDialog()
 
-    await varly.app.SaveFile(file, JSON.stringify(config))
-    console.log('Done')
+    await app.SaveFile(file, JSON.stringify(config))
 }
 
 async function generateCollection() {
@@ -146,18 +130,13 @@ async function generateCollection() {
 
     window.runtime.EventsOn('collection.generation.started', (data) => {
         loadingText.value = `Preparing collection of ${data.CollectionSize} items`
-        console.log(loadingText.value)
     })
 
     window.runtime.EventsOn('collection.item.generated', (data) => {
-        console.log(data)
         loadingText.value = `Generating collection: ${data.ItemNumber}/${data.CollectionSize}`
-        console.log(loadingText.value)
     })
 
     const outputDirectory = await dialog.openDirectoryDialog()
-
-    console.log(outputDirectory)
 
     const layers = { ...collectionStore.layers }
 
@@ -181,24 +160,18 @@ async function generateCollection() {
         Size: 1000
     }
 
-    await varly.app.GenerateCollectionFromConfig(config)
+    await app.GenerateCollectionFromConfig(config)
 
     hasCompleted.value = true
     toggleIsLoading()
 }
-
-function run(e: any) {
-    console.log('Called run()')
-    console.log(e)
-}
-
 </script>
 
 <template>
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: 'start', selected: false },
+                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
                 { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },

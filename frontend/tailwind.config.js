@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   content: [
     './src/index.html',
     './src/css/app.scss',
