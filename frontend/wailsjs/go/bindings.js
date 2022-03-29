@@ -14,7 +14,7 @@ const go = {
       },
       /**
        * GenerateCollectionFromConfig
-       * @param {NewCollectionConfig} arg1 - Go Type: nft.NewCollectionConfig
+       * @param {models.NewCollectionConfig} arg1 - Go Type: nft.NewCollectionConfig
        * @returns {Promise<void>} 
        */
       "GenerateCollectionFromConfig": (arg1) => {
@@ -26,6 +26,21 @@ const go = {
        */
       "GetApplicationDocumentsDirectory": () => {
         return window.go.main.App.GetApplicationDocumentsDirectory();
+      },
+      /**
+       * GetFileContents
+       * @param {string} arg1 - Go Type: string
+       * @returns {Promise<string>}  - Go Type: string
+       */
+      "GetFileContents": (arg1) => {
+        return window.go.main.App.GetFileContents(arg1);
+      },
+      /**
+       * GetSettings
+       * @returns {Promise<models.Settings>}  - Go Type: *settings.Settings
+       */
+      "GetSettings": () => {
+        return window.go.main.App.GetSettings();
       },
       /**
        * OpenDirectoryDialog
@@ -44,10 +59,18 @@ const go = {
       /**
        * ReadLayers
        * @param {string} arg1 - Go Type: string
-       * @returns {Promise<CollectionConfig>}  - Go Type: fs.CollectionConfig
+       * @returns {Promise<models.CollectionConfig>}  - Go Type: fs.CollectionConfig
        */
       "ReadLayers": (arg1) => {
         return window.go.main.App.ReadLayers(arg1);
+      },
+      /**
+       * SaveDocuments
+       * @param {Array<models.Document>} arg1 - Go Type: []settings.Document
+       * @returns {Promise<void>} 
+       */
+      "SaveDocuments": (arg1) => {
+        return window.go.main.App.SaveDocuments(arg1);
       },
       /**
        * SaveFile
@@ -64,6 +87,14 @@ const go = {
        */
       "SaveFileDialog": () => {
         return window.go.main.App.SaveFileDialog();
+      },
+      /**
+       * SaveSettings
+       * @param {models.Settings} arg1 - Go Type: *settings.Settings
+       * @returns {Promise<void>} 
+       */
+      "SaveSettings": (arg1) => {
+        return window.go.main.App.SaveSettings(arg1);
       },
     },
   },

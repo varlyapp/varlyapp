@@ -4,13 +4,11 @@ go 1.17
 
 require (
 	github.com/mroth/weightedrand v0.4.1
-	github.com/wailsapp/wails/v2 v2.0.0-beta.33
+	github.com/wailsapp/wails/v2 v2.0.0-beta.34
 )
 
 require (
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.4 // indirect
-	github.com/mattn/go-sqlite3 v1.14.9 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/wabarc/helper v0.0.0-20211225065210-3d35291efe54 // indirect
 	github.com/ybbus/httpretry v1.0.1 // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
@@ -32,13 +30,13 @@ require (
 	github.com/klauspost/compress v1.12.2 // indirect
 	github.com/leaanthony/go-ansi-parser v1.0.1 // indirect
 	github.com/leaanthony/go-common-file-dialog v1.0.3 // indirect
-	github.com/leaanthony/go-webview2 v1.0.3-0.20220125181555-00f20a61c17d // indirect
+	github.com/leaanthony/go-webview2 v1.0.3-0.20220314105146-f44268990abe // indirect
 	github.com/leaanthony/gosod v1.0.3 // indirect
 	github.com/leaanthony/slicer v1.5.0 // indirect
 	github.com/leaanthony/typescriptify-golang-structs v0.1.7 // indirect
 	github.com/leaanthony/winc v0.0.0-20220208061147-37b059b9dc3b // indirect
 	github.com/pkg/browser v0.0.0-20210706143420-7d21f8c997e2 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/savsgio/gotils v0.0.0-20200117113501-90175b0fbe3f // indirect
 	github.com/tkrajina/go-reflector v0.5.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
@@ -47,8 +45,6 @@ require (
 	github.com/wabarc/ipfs-pinner v1.1.0
 	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
-	gorm.io/driver/sqlite v1.3.1
-	gorm.io/gorm v1.23.2
 )
 
 // replace github.com/wailsapp/wails/v2 v2.0.0-beta.33 => /Users/selvinortiz/go/pkg/mod/github.com/wailsapp/wails/v2@v2.0.0-beta.33

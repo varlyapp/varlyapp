@@ -29,18 +29,18 @@ type CollectionConfig struct {
 	Layers map[string][]Layer
 }
 
-func GetApplicationDocumentsDirectory(paths ...string) string {
+func GetApplicationDocumentsDirectory(paths ...string) (string, error) {
 	dir, _ := os.UserConfigDir()
 
-	docs := fmt.Sprintf("%s/%s", strings.Join(paths, "/"), dir)
+	path := fmt.Sprintf("%s/varlyapp/Documents/%s", dir, strings.Join(paths, "/"))
 
-	err := os.MkdirAll(docs, os.ModePerm);
+	err := os.MkdirAll(path, os.ModePerm);
 
 	if err != nil {
-		return "."
+		return "", err
 	}
 
-	return docs;
+	return path, nil
 }
 
 // ReadLayers reads a directory with images represending collection traits
@@ -98,4 +98,12 @@ func UploadCollection(key string, secret string) string {
 		return fmt.Sprintln(err)
 	}
 	return cid
+}
+
+func Include(path string) string {
+
+	content, _ := os.ReadFile(fmt.Sprint("/assets/icons", path))
+
+	fmt.Println(string(content))
+	return string(content)
 }

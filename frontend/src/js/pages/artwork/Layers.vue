@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, inject } from 'vue'
-import { PlusIcon } from '@heroicons/vue/solid'
+import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
 
 import { useRouter } from 'vue-router'
 import { useDialog } from '@utils/Dialog'
@@ -62,10 +62,32 @@ function startOver() {
     router.push({ name: 'start' })
 }
 
+async function saveSettings() {
+    const docs = [
+        {
+            title: 'Doodles',
+            path: '/Users/selvinortiz/Desktop/doodles.varly',
+            preview: '',
+        },
+        {
+            title: 'VeeFriends',
+            path: '/Users/selvinortiz/Desktop/vee-friends.varly',
+            preview: '',
+        },
+        {
+            title: 'InvisibleFiends',
+            path: '/Users/selvinortiz/Desktop/invisible-friends.varly',
+            preview: '',
+        },
+    ]
+
+    await varly.app.SaveDocuments(docs)
+}
+
 async function loadLayers() {
     collectionStore.directory = await dialog.openDirectoryDialog()
 
-    const config = await varly.app.ReadLayers(collectionStore.directory)
+    const config: { Layers?} = await varly.app.ReadLayers(collectionStore.directory)
 
     collectionStore.layers = { ...config.Layers }
 
@@ -176,15 +198,15 @@ function run(e: any) {
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { emoji: '🦋', text: 'Support on Twitter', to: 'start', selected: false },
-                { emoji: '', text: '', to: '', selected: false },
-                { emoji: '🏙', text: 'Recent Projects', to: 'start', selected: false },
-                { emoji: '✨', text: 'Start NFT Project', to: 'artwork.layers', selected: false },
-                { emoji: '', text: '', to: '', selected: false },
-                { emoji: '🥞', text: 'Layer Setup', to: 'artwork.layers', selected: true },
-                { emoji: '📝', text: 'Collection Details', to: 'artwork.collection', selected: false },
-                { emoji: '🧩', text: 'Build Settings', to: 'artwork.build', selected: false },
-                { emoji: '🚀', text: 'Run', to: run, selected: false },
+                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: 'start', selected: false },
+                { icon: null, text: '', to: '', selected: false },
+                { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
+                { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { icon: null, text: '', to: '', selected: false },
+                { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: true },
+                { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
+                { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
+                { icon: PlayIcon, text: 'Run', to: saveSettings, selected: false },
             ]"
         />
 

@@ -9,10 +9,10 @@ import (
 )
 
 func TestGetApplicationDocumentsDirectory(t *testing.T) {
-	actual := fs.GetApplicationDocumentsDirectory()
+	actual, _ := fs.GetApplicationDocumentsDirectory()
 
 	fmt.Println(actual)
-	if strings.HasSuffix(actual, "app.varlyapp.app/Documents") != true {
+	if strings.HasSuffix(actual, "varlyapp/Documents") != true {
 		t.Fail()
 	}
 }

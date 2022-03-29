@@ -4,6 +4,7 @@ import Start from '@root/pages/Start.vue'
 import ArtworkLayers from '@root/pages/artwork/Layers.vue'
 import ArtworkCollection from '@root/pages/artwork/Collection.vue'
 import ArtworkBuild from '@root/pages/artwork/Build.vue'
+import ArtworkRun from '@root/pages/artwork/Run.vue'
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     name: 'artwork.build',
     path: '/artwork/build',
     component: ArtworkBuild,
+  },
+  {
+    name: 'artwork.run',
+    path: '/artwork/run',
+    component: ArtworkRun,
   }
 ]
 

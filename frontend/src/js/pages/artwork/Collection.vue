@@ -2,6 +2,7 @@
 import { inject } from 'vue'
 import type { Varly } from '@root/plugins/varly'
 import Sidebar from '@components/Sidebar.vue'
+import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
 
 const varly = inject<Varly>('varly')!
 </script>
@@ -10,24 +11,24 @@ const varly = inject<Varly>('varly')!
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { emoji: '🦋', text: 'Support on Twitter', to: 'start', selected: false },
-                { emoji: '', text: '', to: '', selected: false },
-                { emoji: '🏙', text: 'Recent Projects', to: 'start', selected: false },
-                { emoji: '✨', text: 'Start NFT Project', to: 'artwork.layers', selected: false },
-                { emoji: '', text: '', to: '', selected: false },
-                { emoji: '🥞', text: 'Layer Setup', to: 'artwork.layers', selected: false },
-                { emoji: '📝', text: 'Collection Details', to: 'artwork.collection', selected: true },
-                { emoji: '🧩', text: 'Build Settings', to: 'artwork.build', selected: false },
-                { emoji: '🚀', text: 'Run', to: '', selected: false },
+                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: 'start', selected: false },
+                { icon: null, text: '', to: '', selected: false },
+                { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
+                { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { icon: null, text: '', to: '', selected: false },
+                { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
+                { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: true },
+                { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
+                { icon: PlayIcon, text: 'Run', to: () => {}, selected: false },
             ]"
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
             <form
-                class="p-8 space-y-8 divide-y divide-slate-100 dark:divide-slate-800 flex flex-col justify-between"
+                class="p-8 xl:p-16 flex flex-col justify-between"
             >
                 <div>
-                    <h1 class="text-lg leading-6 font-medium">New Collection</h1>
+                    <h1 class="text-lg leading-6 font-medium">Collection Details</h1>
                     <p
                         class="mt-1 text-sm opacity-75"
                     >Please provide details about your new NFT collection</p>

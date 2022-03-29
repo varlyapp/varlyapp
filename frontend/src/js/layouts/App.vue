@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, onBeforeMount, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@root/store'
 
@@ -11,6 +11,12 @@ const router = useRouter()
 const store = useStore()
 
 const isOnStartScreen = ref(false)
+
+onBeforeMount(() => {
+  window.runtime.EventsOn('shortcut.save', () => {
+    console.log("Called cmd + s")
+  })
+})
 
 onBeforeUnmount(() => store.actions = [])
 
