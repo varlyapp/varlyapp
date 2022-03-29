@@ -23,6 +23,9 @@ a:active {
     cursor: default;
 }
 
+.overscroll-behavior-none {
+    overscroll-behavior: none;
+}
 .scrollbar-none {
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
     scrollbar-width: none; /* for Firefox */
