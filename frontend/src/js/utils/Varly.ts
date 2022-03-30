@@ -52,4 +52,13 @@ function launchTwitter(): void {
     runtime.BrowserOpenURL('https://twitter.com/varlyapp')
 }
 
-export { app, runtime, init, panic, stat, navigate, getSettings, launchTwitter }
+async function showMessageDialog(): Promise<string> {
+    try {
+        return await app.MessageDialog()
+    } catch (error: any) {
+        panic(error)
+        return ''
+    }
+}
+
+export { app, runtime, init, panic, stat, navigate, getSettings, launchTwitter, showMessageDialog }

@@ -2,7 +2,7 @@
 import { reactive, onBeforeMount } from 'vue'
 import Base64Image from '@components/Base64Image.vue'
 import Sidebar from '@components/Sidebar.vue'
-import { getSettings, launchTwitter } from '@utils/Varly'
+import { panic, showMessageDialog, getSettings, launchTwitter } from '@utils/Varly'
 import { BadgeCheckIcon, FolderOpenIcon, DocumentAddIcon } from '@heroicons/vue/solid'
 
 const documents = reactive<any>([])

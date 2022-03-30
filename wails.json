@@ -18,11 +18,11 @@
     "email": "selvin@selvin.dev"
   },
   "Info": {
-    "companyName": "Varly",
+    "companyName": "Varly Labs",
     "productName": "Varly",
     "productVersion": "1.0.0",
-    "copyright": "(c) 2022 Selvin Ortiz",
-    "comments": "Built with ♥️ by Selvin and the Varly team (https://varly.io)"
+    "copyright": "(c) 2022 Varly Labs and Selvin Ortiz",
+    "comments": "Built with love for NFT creatives by Web 3 enthusiasts"
   },
   "debounceMS": 100,
   "devserverurl": "http://localhost:34115",

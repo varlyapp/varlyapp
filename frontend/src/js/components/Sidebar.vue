@@ -32,7 +32,7 @@ const props = defineProps({
                     >
                         <component
                             :is="link.icon"
-                            class="w-6 mr-2 fill-purple-700 dark:fill-purple-500"
+                            class="w-6 mr-2 fill-fuchsia-700 dark:fill-fuchsia-600"
                         />
                     </SidebarButton>
                     <div

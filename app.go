@@ -142,3 +142,15 @@ func (app *App) GetImageStats(path string) f.FileInfo {
 	}
 	return info
 }
+
+func (app *App) MessageDialog() string {
+	res, _ := runtime.MessageDialog(app.ctx, runtime.MessageDialogOptions{
+		Type: runtime.QuestionDialog,
+		Title: "Are you sure?",
+		Message: "This will clear out any unsaved work",
+		Buttons: []string{"Ok", "Cancel"},
+		DefaultButton: "Cancel",
+	})
+
+	return res
+}

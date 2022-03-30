@@ -90,12 +90,9 @@ async function generateCollection() {
                     </div>
                     <div class="mt-16">
                         <button
-                            class="flex items-center text-base px-6 py-4 bg-purple-700 text-slate-50 rounded-full shadow-lg shadow-slat-700 font-semibold"
+                            class="flex items-center text-base px-6 py-4 bg-fuchsia-700 text-slate-50 border border-slate-50 border-opacity-50 rounded-full shadow-lg shadow-fuchsia-200 hover:shadow-fuchsia-400 font-semibold"
                             @click="generateCollection"
                         >
-                            <span class="mr-2">
-                                <PlayIcon class="w-8 fill-purple-500" />
-                            </span>
                             <span>Generate Collection</span>
                         </button>
                     </div>

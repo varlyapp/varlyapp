@@ -8,6 +8,7 @@ export interface go {
 		GetApplicationDocumentsDirectory():Promise<string>
 		GetImageStats(arg1:string):Promise<models.FileInfo>
 		GetSettings():Promise<models.Settings>
+		MessageDialog():Promise<string>
 		OpenDirectoryDialog():Promise<string>
 		OpenFileDialog():Promise<string>
 		ReadLayers(arg1:string):Promise<models.CollectionConfig>

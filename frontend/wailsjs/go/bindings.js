@@ -43,6 +43,13 @@ const go = {
         return window.go.main.App.GetSettings();
       },
       /**
+       * MessageDialog
+       * @returns {Promise<string>}  - Go Type: string
+       */
+      "MessageDialog": () => {
+        return window.go.main.App.MessageDialog();
+      },
+      /**
        * OpenDirectoryDialog
        * @returns {Promise<string>}  - Go Type: string
        */
