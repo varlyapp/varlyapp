@@ -99,11 +99,3 @@ func UploadCollection(key string, secret string) string {
 	}
 	return cid
 }
-
-func Include(path string) string {
-
-	content, _ := os.ReadFile(fmt.Sprint("/assets/icons", path))
-
-	fmt.Println(string(content))
-	return string(content)
-}

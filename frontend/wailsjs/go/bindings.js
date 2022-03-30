@@ -28,12 +28,12 @@ const go = {
         return window.go.main.App.GetApplicationDocumentsDirectory();
       },
       /**
-       * GetFileContents
+       * GetImageStats
        * @param {string} arg1 - Go Type: string
-       * @returns {Promise<string>}  - Go Type: string
+       * @returns {Promise<models.FileInfo>}  - Go Type: fs.FileInfo
        */
-      "GetFileContents": (arg1) => {
-        return window.go.main.App.GetFileContents(arg1);
+      "GetImageStats": (arg1) => {
+        return window.go.main.App.GetImageStats(arg1);
       },
       /**
        * GetSettings

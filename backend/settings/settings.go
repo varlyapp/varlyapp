@@ -58,7 +58,6 @@ func (s *Settings) SaveDocuments(newdocs []Document) {
 
 	for _, newdoc := range newdocs {
 		for i, olddoc := range docs {
-			// remove docs if already present to avoid duplicates
 			if newdoc.Path == olddoc.Path {
 				fmt.Println("deleting ", olddoc.Path)
 				docs = append(docs[:i], docs[i+1:]...)

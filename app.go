@@ -4,13 +4,12 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	f "io/fs"
 	"os"
 
 	"github.com/varlyapp/varlyapp/backend/fs"
 	"github.com/varlyapp/varlyapp/backend/nft"
 	"github.com/varlyapp/varlyapp/backend/settings"
-	"github.com/wailsapp/wails/v2/pkg/menu"
-	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -35,23 +34,23 @@ func NewApp() *App {
 func (app *App) startup(ctx context.Context) {
 	// Perform your setup here
 	app.ctx = ctx
-	menu := menu.NewMenuFromItems(
-		menu.SubMenu("File", menu.NewMenuFromItems(
-			menu.Text("Open", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
-				fmt.Println(cd)
-			}),
-			menu.Text("Save", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
-				runtime.EventsEmit(ctx, "shortcut.save")
-			}),
-			menu.Separator(),
-			menu.Separator(),
-			menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
-				runtime.Quit(ctx)
-			}),
-		)),
-	)
+	// menu := menu.NewMenuFromItems(
+	// 	menu.SubMenu("File", menu.NewMenuFromItems(
+	// 		menu.Text("Open", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
+	// 			fmt.Println(cd)
+	// 		}),
+	// 		menu.Text("Save", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
+	// 			runtime.EventsEmit(ctx, "shortcut.save")
+	// 		}),
+	// 		menu.Separator(),
+	// 		menu.Separator(),
+	// 		menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
+	// 			runtime.Quit(ctx)
+	// 		}),
+	// 	)),
+	// )
 
-	runtime.MenuSetApplicationMenu(ctx, menu)
+	// runtime.MenuSetApplicationMenu(ctx, menu)
 }
 
 // domReady is called after the front-end dom has been loaded
@@ -135,6 +134,11 @@ func (app *App) SaveFile(file string, data string) bool {
 	return true
 }
 
-func (app *App) GetFileContents(path string) string {
-	return fs.Include(path)
+func (app *App) GetImageStats(path string) f.FileInfo {
+	info, err := os.Stat(path)
+
+	if err != nil {
+		fmt.Println("unable to get stat: ", err)
+	}
+	return info
 }

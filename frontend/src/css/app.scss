@@ -35,3 +35,12 @@ a:active {
 .scrollbar-none::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
 }
+
+.field {
+    @apply
+        block w-full
+        shadow-sm rounded-sm
+        text-slate-900 bg-slate-50 border-slate-200
+        dark:text-slate-50 dark:bg-slate-900 dark:bg-opacity-20 dark:border-slate-50 dark:border-opacity-20
+        focus:ring-purple-500 focus:border-purple-500;
+}

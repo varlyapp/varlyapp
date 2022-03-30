@@ -5,7 +5,7 @@ import { useCollectionStore } from '@root/store'
 import Progress from '@components/Progress.vue'
 import Sidebar from '@components/Sidebar.vue'
 import { app, launchTwitter } from '@utils/Varly'
-import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
+import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, PlayIcon, FolderOpenIcon } from '@heroicons/vue/solid'
 
 const store = useCollectionStore()
 const dialog = useDialog(app)
@@ -14,17 +14,6 @@ const steps = ref(0)
 const currentStep = ref(0)
 const isWorking = ref(false)
 const loadingText = ref('Loading')
-const preview = ref('')
-
-const isCollapsed = ref(false)
-const isTraitEnabled = ref(true)
-const isTraitDragging = ref(false)
-const isLayerDragging = ref(false)
-const isLayerEnabled = ref(true)
-
-const WIDTH = 7200
-const HEIGHT = 9200
-const SIZE = 100
 
 function toggleIsWorking() {
     isWorking.value = !isWorking.value
@@ -61,9 +50,9 @@ async function generateCollection() {
         Dir: outputDirectory,
         Order: [...store.traits].map((item: any) => item.name),
         Layers: layers,
-        Width: WIDTH,
-        height: HEIGHT,
-        Size: SIZE
+        Width: parseInt(store.width.toString(), 10),
+        height: parseInt(store.height.toString(), 10),
+        Size: parseInt(store.size.toString(), 10)
     }
 
     await app.GenerateCollectionFromConfig(config)
@@ -93,11 +82,23 @@ async function generateCollection() {
                 <Progress :steps="steps" :current-step="currentStep" loading-text="Waiting..." />
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
-                <div class="flex ">
-                    <button
-                        class="text-base px-6 py-4 bg-purple-700 text-white rounded"
-                        @click="generateCollection"
-                    >✓&nbsp;Generate Collection</button>
+                <div class="flex flex-col items-center">
+                    <div>
+                        <h1
+                            class="text-xl text-center"
+                        >You are ready to generate your beautiful NFT&nbsp;collection🚀</h1>
+                    </div>
+                    <div class="mt-16">
+                        <button
+                            class="flex items-center text-base px-6 py-4 bg-purple-700 text-slate-50 rounded-full shadow-lg shadow-slat-700 font-semibold"
+                            @click="generateCollection"
+                        >
+                            <span class="mr-2">
+                                <PlayIcon class="w-8 fill-purple-500" />
+                            </span>
+                            <span>Generate Collection</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>

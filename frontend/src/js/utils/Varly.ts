@@ -32,6 +32,10 @@ function panic(msg: string, data?: any) {
     runtime.LogError(msg)
 }
 
+async function stat(file: string) {
+    return await app.GetImageStats(file)
+}
+
 async function navigate(name: string): Promise<void> {
     try {
         await router?.push({ name })
@@ -48,4 +52,4 @@ function launchTwitter(): void {
     runtime.BrowserOpenURL('https://twitter.com/varlyapp')
 }
 
-export { app, runtime, init, panic, navigate, getSettings, launchTwitter }
+export { app, runtime, init, panic, stat, navigate, getSettings, launchTwitter }
