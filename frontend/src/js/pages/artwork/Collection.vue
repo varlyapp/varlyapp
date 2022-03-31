@@ -18,7 +18,7 @@ const store = useCollectionStore()
                 { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
-                { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: true },
+                // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: true },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: false },
             ]"

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useDialog } from '@utils/Dialog'
 import { useCollectionStore } from '@root/store'
 import Sidebar from '@components/Sidebar.vue'
 import { app, stat, launchTwitter } from '@utils/Varly'
@@ -43,7 +42,7 @@ onMounted(async () => {
                 { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
-                { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
+                // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: true },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: false },
             ]"
@@ -69,6 +68,25 @@ onMounted(async () => {
                             />
                         </div>
                     </div>
+                    <div class="col-span-12">
+                        <label
+                            for="collection-description"
+                            class="block text-sm opacity-75"
+                        >Collection Description</label>
+                        <div class="mt-1">
+                            <textarea
+                                rows="4"
+                                id="collection-description"
+                                class="field"
+                                name="collection-description"
+                                autocomplete="none"
+                                autofocus
+                                v-model="store.description"
+                            />
+                        </div>
+                    </div>
+
+                    <hr class="col-span-12 opacity-0" />
 
                     <div class="col-span-6">
                         <label for="collection-width" class="block text-sm opacity-75">Layer Width</label>

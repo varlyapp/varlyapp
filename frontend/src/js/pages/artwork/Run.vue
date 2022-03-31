@@ -71,7 +71,7 @@ async function generateCollection() {
                 { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
-                { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
+                // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: true },
             ]"
@@ -90,7 +90,7 @@ async function generateCollection() {
                     </div>
                     <div class="mt-16">
                         <button
-                            class="flex items-center text-base px-6 py-4 bg-fuchsia-700 text-slate-50 border border-slate-50 border-opacity-50 rounded-full shadow-lg shadow-fuchsia-200 hover:shadow-fuchsia-400 font-semibold"
+                            class="flex items-center text-base px-6 py-4 bg-fuchsia-800 text-slate-50 rounded-full font-semibold"
                             @click="generateCollection"
                         >
                             <span>Generate Collection</span>

@@ -1,9 +1,9 @@
 {
   "name": "varly",
-  "frontend:build": "",
-  "frontend:install": "",
+  "frontend:build": "npm run release",
+  "frontend:install": "npm i",
   "frontend:dev": "",
-  "frontend:dev:watcher": "",
+  "frontend:dev:watcher": "npm run dev",
   "wailsjsdir": "./frontend",
   "version": "2",
   "Path": "",
@@ -21,10 +21,10 @@
     "companyName": "Varly Labs",
     "productName": "Varly",
     "productVersion": "1.0.0",
-    "copyright": "(c) 2022 Varly Labs and Selvin Ortiz",
+    "copyright": "(c) 2022 Selvin Ortiz",
     "comments": "Built with love for NFT creatives by Web 3 enthusiasts"
   },
-  "debounceMS": 100,
+  "debounceMS": 200,
   "devserverurl": "http://localhost:34115",
   "appargs": "",
   "nsisType": ""

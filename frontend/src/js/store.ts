@@ -20,6 +20,7 @@ const useCollectionStore = defineStore('collection', () => {
   const layers = ref<Object>({})
   const directory = ref<string>('') // where the layers were loaded from
   const name = ref<string>('')
+  const description = ref<string>('')
   const size = ref<number>(0)
   const width = ref<number>(0)
   const height = ref<number>(0)
@@ -34,7 +35,7 @@ const useCollectionStore = defineStore('collection', () => {
     this.height = 0
   }
 
-  return { reset, traits, layers, directory, name, size, width, height }
+  return { reset, traits, layers, directory, name, description, size, width, height }
 }, { persist: true })
 
 export { useStore, useCollectionStore }

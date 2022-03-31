@@ -176,10 +176,10 @@ async function generateCollection() {
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
                 { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
-                { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: true },
-                { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
+                { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: true },
+                // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
-                { icon: PlayIcon, text: 'Run', to: saveSettings, selected: false },
+                { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: false },
             ]"
         />
 
@@ -276,7 +276,7 @@ async function generateCollection() {
                     <div class="mt-6">
                         <button
                             type="button"
-                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
                             @click="loadLayers()"
                         >
                             <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />New Project
