@@ -4,6 +4,7 @@ import { useDialog } from '@utils/Dialog'
 import { useCollectionStore } from '@root/store'
 import Progress from '@components/Progress.vue'
 import Sidebar from '@components/Sidebar.vue'
+import FloatingButton from '@components/FloatingButton.vue'
 import { app, launchTwitter } from '@utils/Varly'
 import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, PlayIcon, FolderOpenIcon } from '@heroicons/vue/solid'
 
@@ -68,9 +69,9 @@ async function generateCollection() {
                 { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
-                { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
+                { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
                 // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: true },
@@ -83,21 +84,15 @@ async function generateCollection() {
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
-                    <div>
+                    <div class="max-w-xs mx-auto">
                         <h1
-                            class="text-xl text-center"
+                            class="text-base text-center"
                         >You are ready to generate your beautiful NFT&nbsp;collection🚀</h1>
-                    </div>
-                    <div class="mt-16">
-                        <button
-                            class="flex items-center text-base px-6 py-4 bg-fuchsia-800 text-slate-50 rounded-full font-semibold"
-                            @click="generateCollection"
-                        >
-                            <span>Generate Collection</span>
-                        </button>
                     </div>
                 </div>
             </div>
         </main>
+
+        <FloatingButton text="Let&rsquo;s Go" :to="generateCollection"></FloatingButton>
     </section>
 </template>

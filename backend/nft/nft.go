@@ -10,6 +10,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	r "runtime"
 	"strconv"
 	"sync"
 	"time"
@@ -50,7 +51,7 @@ func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfi
 
 	runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": config.Size})
 
-	pool := queue.New(10)
+	pool := queue.New(r.NumCPU())
 
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()

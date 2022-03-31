@@ -64,6 +64,18 @@ export class Settings {
 	    return a;
 	}
 }
+export class MessageDialogOptions {
+
+
+    static createFrom(source: any = {}) {
+        return new MessageDialogOptions(source);
+    }
+
+    constructor(source: any = {}) {
+        if ('string' === typeof source) source = JSON.parse(source);
+
+    }
+}
 export class CollectionConfig {
 
 

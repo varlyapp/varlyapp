@@ -20,7 +20,7 @@ const props = defineProps({
     >
         <nav
             v-if="props.links && props.links.length"
-            class="p-4 mt-4 xl:mt-8 text-left text-base text-slate-900 text-opacity-90 dark:text-slate-50 dark:text-opacity-90;"
+            class="p-4 xl:p-8 mt-8 xl:mt-16 text-left text-sm text-slate-900 text-opacity-80 dark:text-slate-50 dark:text-opacity-80;"
         >
             <ul>
                 <li v-for="(link, i) in props.links" :key="i">

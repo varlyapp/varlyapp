@@ -15,7 +15,7 @@ const store = useCollectionStore()
                 { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
                 // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: true },

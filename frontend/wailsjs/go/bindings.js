@@ -44,10 +44,11 @@ const go = {
       },
       /**
        * MessageDialog
+       * @param {models.MessageDialogOptions} arg1 - Go Type: frontend.MessageDialogOptions
        * @returns {Promise<string>}  - Go Type: string
        */
-      "MessageDialog": () => {
-        return window.go.main.App.MessageDialog();
+      "MessageDialog": (arg1) => {
+        return window.go.main.App.MessageDialog(arg1);
       },
       /**
        * OpenDirectoryDialog

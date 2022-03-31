@@ -43,14 +43,13 @@ func (app *App) startup(ctx context.Context) {
 	// 			runtime.EventsEmit(ctx, "shortcut.save")
 	// 		}),
 	// 		menu.Separator(),
-	// 		menu.Separator(),
 	// 		menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
 	// 			runtime.Quit(ctx)
 	// 		}),
 	// 	)),
 	// )
 
-	// runtime.MenuSetApplicationMenu(ctx, menu)
+	// runtime.MenuUpdateApplicationMenu(ctx)
 }
 
 // domReady is called after the front-end dom has been loaded
@@ -143,13 +142,13 @@ func (app *App) GetImageStats(path string) f.FileInfo {
 	return info
 }
 
-func (app *App) MessageDialog() string {
+func (app *App) MessageDialog(options runtime.MessageDialogOptions) string {
 	res, _ := runtime.MessageDialog(app.ctx, runtime.MessageDialogOptions{
 		Type: runtime.QuestionDialog,
-		Title: "Are you sure?",
-		Message: "This will clear out any unsaved work",
-		Buttons: []string{"Ok", "Cancel"},
-		DefaultButton: "Cancel",
+		Title: options.Title,
+		Message: options.Message,
+		Buttons: options.Buttons,
+		DefaultButton: options.DefaultButton,
 	})
 
 	return res

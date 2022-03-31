@@ -4,7 +4,7 @@ import { init, panic, navigate } from '@utils/Varly'
 
 init({ router: useRouter() })
 
-const props = defineProps(['emoji', 'text', 'selected', 'to', 'path'])
+const props = defineProps(['text', 'selected', 'to', 'path'])
 
 async function handleClick(e: any): Promise<void> {
     if (props.to && typeof props.to === 'string' && props.to.length) {

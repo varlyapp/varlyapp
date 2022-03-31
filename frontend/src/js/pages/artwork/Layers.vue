@@ -5,7 +5,8 @@ import { useDialog } from '@utils/Dialog'
 import { useCollectionStore } from '@root/store'
 import Sidebar from '@components/Sidebar.vue'
 import { app, navigate, launchTwitter } from '@utils/Varly'
-import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
+import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
+import FloatingButton from '@components/FloatingButton.vue'
 
 const dialog = useDialog(app)
 const collectionStore = useCollectionStore()
@@ -76,7 +77,7 @@ async function saveSettings() {
 async function loadLayers() {
     collectionStore.directory = await dialog.openDirectoryDialog()
 
-    const config: { Layers? } = await app.ReadLayers(collectionStore.directory)
+    const config: { Layers?} = await app.ReadLayers(collectionStore.directory)
 
     collectionStore.layers = { ...config.Layers }
 
@@ -174,7 +175,7 @@ async function generateCollection() {
                 { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: true },
                 // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
@@ -184,8 +185,8 @@ async function generateCollection() {
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <section v-if="hasLayers" class>
-                <div class="p-8">
+            <section v-if="hasLayers" class="h-full">
+                <div class="max-w-4xl mx-auto px-8 py-16 xl:py-32">
                     <!-- @see :force-fallback -->
                     <!-- Solves issue where dragging works first but second drag requires two clicks -->
                     <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
@@ -199,11 +200,13 @@ async function generateCollection() {
                         item-key="name"
                     >
                         <template #item="{ element }">
-                            <div class="mt-2 px-4 py-2">
-                                <div class="flex items-center justify-between">
+                            <div class="p-4 lg:p-8">
+                                <div
+                                    class="flex items-center justify-between bg-slate-900 bg-opacity-20 dark:bg-opacity-20"
+                                >
                                     <div class="flex items-center">
                                         <button
-                                            class="py-1 px-2 mr-2 bg-slate-700 text-slate-100"
+                                            class="py-1 px-1 mr-1 text-slate-100"
                                             @click="toggleCollapsed(element)"
                                         >
                                             <span v-if="element.collapsed">⇣</span>
@@ -232,10 +235,11 @@ async function generateCollection() {
                                     @end="isLayerDragging = false"
                                     item-key="name"
                                 >
-                                    <template #item="{ element }">
+                                    <template #item="{ element, index }">
                                         <div
                                             :key="element.Name"
-                                            class="min-w-full flex justify-between border-dotted border-t border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
+                                            class="min-w-full flex justify-between border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
+                                            :class="[index % 2 === 0 ? `bg-slate-900 dark:bg-slate-100 bg-opacity-5 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]"
                                         >
                                             <div
                                                 class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
@@ -254,36 +258,44 @@ async function generateCollection() {
                 </div>
             </section>
 
-            <section v-else>
-                <div class="p-4 lg:p-8 text-center">
-                    <svg
-                        class="mx-auto h-12 w-12 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                    >
-                        <path
-                            vector-effect="non-scaling-stroke"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                        />
-                    </svg>
-                    <h3 class="mt-2 text-sm font-medium">No Projects</h3>
-                    <p class="mt-8 text-sm text-opacity-50">Get started by creating a new one🎉</p>
-                    <div class="mt-6">
-                        <button
-                            type="button"
-                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
-                            @click="loadLayers()"
+            <section v-else class="h-full">
+                <div class="h-full p-4 lg:p-8 flex items-center justify-center text-center">
+                    <div>
+                        <svg
+                            class="mx-auto h-12 w-12 text-gray-400"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            aria-hidden="true"
                         >
-                            <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />New Project
-                        </button>
+                            <path
+                                vector-effect="non-scaling-stroke"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                            />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium">No Projects</h3>
+                        <p class="mt-8 text-sm text-opacity-50">Get started by creating a new one🎉</p>
+                        <div class="mt-6">
+                            <button
+                                type="button"
+                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
+                                @click="loadLayers()"
+                            >
+                                <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />New Project
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
+
+        <FloatingButton
+            v-if="hasLayers"
+            text="Next&nbsp;→"
+            :to="() => $router.push({ name: 'artwork.build' })"
+        ></FloatingButton>
     </section>
 </template>

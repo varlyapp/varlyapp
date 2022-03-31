@@ -20,14 +20,14 @@ onBeforeMount(async () => {
         { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
         { icon: null, text: '', to: '', selected: false },
         { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: true },
-        { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+        { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
       ]"
     />
 
     <main class="h-full flex-1 overflow-auto scrollbar-none">
-      <section class="flex flex-wrap p-8 -mx-8">
+      <section class="grid grid-cols-12 gap-8 px-8 py-16 xl:px-16 xl:py-32">
         <div
-          class="flex flex-col items-center w-4/12 lg:w-2/12 mt-4 px-8 text-center"
+          class="col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 flex flex-col items-center"
           v-for="(document, i) in documents.value"
           :key="i"
         >

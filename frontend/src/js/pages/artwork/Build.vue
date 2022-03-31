@@ -2,14 +2,17 @@
 import { onMounted } from 'vue'
 import { useCollectionStore } from '@root/store'
 import Sidebar from '@components/Sidebar.vue'
-import { app, stat, launchTwitter } from '@utils/Varly'
-import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, FolderOpenIcon, PlayIcon } from '@heroicons/vue/solid'
-
-const store = useCollectionStore()
+import { init, stat, launchTwitter, confirmStartNewProject } from '@utils/Varly'
+import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlayIcon } from '@heroicons/vue/solid'
+import FloatingButton from '@components/FloatingButton.vue'
+import { useRouter } from 'vue-router'
 
 const WIDTH = 1500
 const HEIGHT = 1500
 const SIZE = 100
+
+const store = useCollectionStore()
+init({ collectionStore: store, router: useRouter() })
 
 onMounted(async () => {
     store.size = store.size || SIZE
@@ -39,9 +42,9 @@ onMounted(async () => {
                 { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: 'Start NFT Project', to: 'artwork.layers', selected: false },
+                { icon: DocumentAddIcon, text: 'Start New Project', to: confirmStartNewProject, selected: false },
                 { icon: null, text: '', to: '', selected: false },
-                { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
+                { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
                 // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: true },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: false },
@@ -49,7 +52,7 @@ onMounted(async () => {
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <form class="max-w-4xl mx-auto p-8 lg:p-16 flex flex-col">
+            <form class="max-w-4xl mx-auto flex flex-col px-8 py-16 xl:py-32">
                 <div class="grid grid-cols-12 gap-8">
                     <div class="col-span-12">
                         <label
@@ -138,5 +141,7 @@ onMounted(async () => {
                 </div>
             </form>
         </main>
+
+        <FloatingButton text="Next&nbsp;→" :to="() => $router.push({ name: 'artwork.run' })"></FloatingButton>
     </section>
 </template>

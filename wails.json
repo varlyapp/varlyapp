@@ -1,9 +1,9 @@
 {
   "name": "varly",
-  "frontend:build": "npm run release",
-  "frontend:install": "npm i",
+  "frontend:build": "",
+  "frontend:install": "",
   "frontend:dev": "",
-  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:watcher": "",
   "wailsjsdir": "./frontend",
   "version": "2",
   "Path": "",
