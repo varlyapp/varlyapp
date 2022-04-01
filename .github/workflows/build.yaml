@@ -1,4 +1,4 @@
-name: example combined
+name: Code Signing
 on:
   workflow_dispatch:
   # This Action only starts when you go to Actions and manually run the workflow.
@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
-      - name: setup node
+      - name: Set up node
         uses: actions/setup-node@v2
         with:
           node-version: 14
