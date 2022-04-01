@@ -39,7 +39,7 @@ onMounted(async () => {
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
+                { icon: BadgeCheckIcon, text: 'Follow on Twitter', to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
                 { icon: DocumentAddIcon, text: 'Start New Project', to: confirmStartNewProject, selected: false },

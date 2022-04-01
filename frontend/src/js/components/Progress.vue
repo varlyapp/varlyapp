@@ -15,7 +15,7 @@ const completed = computed(() => {
 </script>
 
 <template>
-    <div class="h-full flex items-center justify-center p-16">
+    <div class="h-full w-full flex items-center justify-center p-16">
         <div class="flex-1 text-center">
             <h1 v-if="completed > 0" class="text-4xl font-mono">{{ currentStep }} of {{ steps }}</h1>
             <h1 v-else class="text-4xl font-mono animate-pulse" v-text="loadingText"></h1>

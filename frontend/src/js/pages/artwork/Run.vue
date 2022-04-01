@@ -78,7 +78,7 @@ async function generateCollection() {
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
+                { icon: BadgeCheckIcon, text: 'Follow on Twitter', to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
                 { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
@@ -91,8 +91,8 @@ async function generateCollection() {
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <div v-if="isWorking" class="h-full flex flex-col container mx-auto justify-center p-8">
-                <Progress :steps="steps" :current-step="currentStep" loading-text="Waiting..." />
+            <div v-if="isWorking" class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8">
+                <Progress :steps="steps" :current-step="currentStep" loading-text="Preparing..." />
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
