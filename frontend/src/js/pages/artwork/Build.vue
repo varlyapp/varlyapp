@@ -6,6 +6,7 @@ import { load, stat, launchTwitter, confirmStartNewProject } from '@utils/Varly'
 import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlayIcon } from '@heroicons/vue/solid'
 import FloatingButton from '@components/FloatingButton.vue'
 import { useRouter } from 'vue-router'
+import Titlebar from '@components/Titlebar.vue'
 
 const WIDTH = 1500
 const HEIGHT = 1500
@@ -52,6 +53,8 @@ onMounted(async () => {
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
+            <Titlebar title="Build Settings" style="z-index: 99;" />
+
             <form class="max-w-4xl mx-auto flex flex-col px-8 py-16 xl:py-32 animate__animated animate__fadeIn">
                 <div class="grid grid-cols-12 gap-8">
                     <div class="col-span-12">

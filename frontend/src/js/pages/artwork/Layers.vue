@@ -8,6 +8,7 @@ import Sidebar from '@components/Sidebar.vue'
 import { app, launchTwitter } from '@utils/Varly'
 import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
 import FloatingButton from '@components/FloatingButton.vue'
+import Titlebar from '@components/Titlebar.vue'
 
 const intl = useI18n({ useScope: 'global' })
 const { t } = intl
@@ -137,7 +138,9 @@ async function saveProgress() {
             ]"
         />
 
-        <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
+        <main class="relative h-full flex-1 overflow-y-scroll scrollbar-none">
+            <Titlebar title="Layer Setup" style="z-index: 99;" />
+
             <section v-if="hasLayers" class="h-full animate__animated animate__fadeIn">
                 <div class="max-w-4xl mx-auto px-8 py-16 xl:py-32">
                     <!-- @see :force-fallback -->

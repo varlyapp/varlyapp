@@ -22,7 +22,12 @@ mix.webpackConfig({
 
 // Disable notifications
 mix.disableNotifications()
-
+mix.webpackConfig({
+  watchOptions: {
+    aggregateTimeout: 1000,
+    ignored: ['**/node_modules', '**/wailsjs']
+  }
+})
 // TS/SCSS compilation
 mix.setPublicPath('src')
   .sourceMaps()

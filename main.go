@@ -24,7 +24,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:             "",
+		Title:             "🦄 Varly",
 		Width:             720,
 		Height:            640,
 		MinWidth:          720,
@@ -63,7 +63,7 @@ func main() {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
-				Title:   "Varly",
+				Title:   "🦄 Varly",
 				Message: "Varly is an app designed for NFT creators by Selvin Ortiz",
 				Icon:    icon,
 			},
