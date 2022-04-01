@@ -109,7 +109,7 @@ func (pool Pool) Results() <-chan Result {
 
 func (pool Pool) GenerateFrom(tasks []Task) {
 	defer close(pool.TasksChannel)
-	for i, _ := range tasks {
+	for i := range tasks {
 		pool.TasksChannel <- tasks[i]
 	}
 }

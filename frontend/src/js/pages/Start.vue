@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { reactive, onBeforeMount } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { reactive, onBeforeMount, onMounted } from 'vue'
 import Base64Image from '@components/Base64Image.vue'
 import Sidebar from '@components/Sidebar.vue'
-import { panic, showMessageDialog, getSettings, launchTwitter } from '@utils/Varly'
+import { getSettings, launchTwitter } from '@utils/Varly'
 import { BadgeCheckIcon, FolderOpenIcon, DocumentAddIcon } from '@heroicons/vue/solid'
+
+const intl = useI18n({ useScope: 'global' })
+const { t } = intl
 
 const documents = reactive<any>([])
 
 onBeforeMount(async () => {
   const settings = await getSettings()
   documents.value = settings.documents
+  intl.locale.value = 'es'
 })
 </script>
 
@@ -17,10 +22,10 @@ onBeforeMount(async () => {
   <section class="h-full flex">
     <Sidebar
       :links="[
-        { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
+        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: launchTwitter, selected: false },
         { icon: null, text: '', to: '', selected: false },
-        { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: true },
-        { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
+        { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: true },
+        { icon: DocumentAddIcon, text: t('start_new_project'), to: 'artwork.layers', selected: false },
       ]"
     />
 

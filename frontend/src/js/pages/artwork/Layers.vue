@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { ref, computed, onBeforeMount } from 'vue'
 import draggable from 'vuedraggable'
 import { useDialog } from '@utils/Dialog'
 import { useCollectionStore } from '@root/store'
 import Sidebar from '@components/Sidebar.vue'
-import { app, navigate, launchTwitter } from '@utils/Varly'
+import { app, launchTwitter } from '@utils/Varly'
 import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
 import FloatingButton from '@components/FloatingButton.vue'
+
+const intl = useI18n({ useScope: 'global' })
+const { t } = intl
 
 const dialog = useDialog(app)
 const collectionStore = useCollectionStore()
@@ -21,10 +25,9 @@ const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
 const isLayerEnabled = ref(true)
 
-function cancel() {
-    collectionStore.reset()
-    navigate('start')
-}
+onBeforeMount(() => {
+    intl.locale.value = 'es'
+})
 
 const hasLayers = computed(() => {
     return collectionStore.layers && Object.keys(collectionStore.layers).length
@@ -45,11 +48,6 @@ function toggleIsLoading() {
 
 function toggleCollapsed(element) {
     element.collapsed = !element.collapsed
-}
-
-function startOver() {
-    collectionStore.reset()
-    navigate('start')
 }
 
 async function saveSettings() {
@@ -125,62 +123,21 @@ async function saveProgress() {
 
     await app.SaveFile(file, JSON.stringify(config))
 }
-
-async function generateCollection() {
-    toggleIsLoading()
-
-    window.runtime.EventsOn('collection.generation.started', (data) => {
-        loadingText.value = `Preparing collection of ${data.CollectionSize} items`
-    })
-
-    window.runtime.EventsOn('collection.item.generated', (data) => {
-        loadingText.value = `Generating collection: ${data.ItemNumber}/${data.CollectionSize}`
-    })
-
-    const outputDirectory = await dialog.openDirectoryDialog()
-
-    const layers = { ...collectionStore.layers }
-
-    for (const trait in Object.keys(layers)) {
-        if (layers.hasOwnProperty(trait)) {
-            layers[trait] = layers[trait].map((layer) => {
-                return {
-                    ...layer,
-                    Weight: parseInt(layer.Weight)
-                }
-            })
-        }
-    }
-
-    const config = {
-        Dir: outputDirectory,
-        Order: [...collectionStore.traits].map((item: any) => item.name),
-        Layers: layers,
-        Width: 512,
-        height: 512,
-        Size: 1000
-    }
-
-    await app.GenerateCollectionFromConfig(config)
-
-    hasCompleted.value = true
-    toggleIsLoading()
-}
 </script>
 
 <template>
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
+                { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
-                { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
+                { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: false },
+                { icon: DocumentAddIcon, text: t('start_new_project'), to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
-                { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: true },
+                { icon: CollectionIcon, text: t('layer_setup'), to: 'artwork.layers', selected: true },
                 // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
-                { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
-                { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: false },
+                { icon: CogIcon, text: t('build_settings'), to: 'artwork.build', selected: false },
+                { icon: PlayIcon, text: t('run'), to: 'artwork.run', selected: false },
             ]"
         />
 

@@ -8,12 +8,17 @@ interface Action {
 }
 
 const useStore = defineStore('app', () => {
+  const locale = ref<string>('en')
   const isDark = ref<boolean>(false)
   const isLoading = ref<boolean>(false)
   const actions = ref<Array<Action>>([])
 
-  return { isDark, isLoading, actions }
-})
+  function setLocale(_locale: string) {
+    locale.value = _locale
+  }
+
+  return { locale, isDark, isLoading, actions, setLocale }
+}, { persist: true })
 
 const useCollectionStore = defineStore('collection', () => {
   const traits = ref<Object[]>([])

@@ -60,7 +60,6 @@ func main() {
 				UseToolbar:                 true,
 				HideToolbarSeparator:       false,
 			},
-			Appearance:           mac.NSAppearanceNameDarkAqua,
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{

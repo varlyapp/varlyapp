@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { init, panic, navigate } from '@utils/Varly'
+import { init, runtime, navigate } from '@utils/Varly'
 
 init({ router: useRouter() })
 
@@ -14,7 +14,7 @@ async function handleClick(e: any): Promise<void> {
     try {
         return Promise.resolve(props.to())
     } catch (error) {
-        panic(`unable to handle click: ${error}`)
+        runtime.LogError(`unable to handle click: ${error}`)
     }
 }
 </script>

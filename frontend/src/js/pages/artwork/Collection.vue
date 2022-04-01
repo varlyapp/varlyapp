@@ -2,7 +2,7 @@
 import Sidebar from '@components/Sidebar.vue'
 import { useCollectionStore } from '@root/store'
 import { launchTwitter } from '@utils/Varly'
-import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, DocumentDuplicateIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
+import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlayIcon } from '@heroicons/vue/solid'
 
 const store = useCollectionStore()
 
@@ -17,7 +17,7 @@ const store = useCollectionStore()
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
                 { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
                 { icon: null, text: '', to: '', selected: false },
-                { icon: DocumentDuplicateIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
+                { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
                 // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: true },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: false },

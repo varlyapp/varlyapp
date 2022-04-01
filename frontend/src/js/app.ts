@@ -6,9 +6,11 @@ import piniaPersistedState from 'pinia-plugin-persistedstate'
 
 import { useTheme } from '@utils/Theme'
 import router from '@root/router'
+import lang from '@root/lang'
 import App from '@layouts/App.vue'
 
-const i18n = createI18n()
+const intl = createI18n(lang)
+
 const pinia = createPinia()
 pinia.use(piniaPersistedState)
 
@@ -16,7 +18,7 @@ const theme = useTheme()
 theme.run()
 
 createApp(App)
-  .use(i18n)
+  .use(intl)
   .use(router)
   .use(pinia)
   .mount('#app')

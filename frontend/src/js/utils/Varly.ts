@@ -1,15 +1,16 @@
 import type { Settings } from '@wails/go/models'
-import type { runtime } from '@wails/runtime'
-import type { Store } from 'pinia'
 import type { Router } from 'vue-router'
-
-const app = window.go.main.App
-const runtime: runtime = window.runtime
+import type { Store } from 'pinia'
+import type { go } from '@wails/go'
+import type { runtime as Runtime } from '@wails/runtime'
 
 let router: Router | null | any
 let appStore: Store | null | any
 let collectionStore: Store | null | any
 let initialized: boolean
+
+const app: go['main']['App'] = window.go.main.App
+const runtime: Runtime = window.runtime
 
 type Params = {
     router: Router | null | any
@@ -24,14 +25,6 @@ function init(params: Params|any) {
         collectionStore = params.collectionStore || null
         initialized = true
     }
-}
-
-function panic(msg: string, data?: any) {
-    if (data) {
-        msg = `${msg}: ${JSON.stringify(data)}`
-    }
-
-    runtime.LogError(msg)
 }
 
 async function stat(file: string) {
@@ -72,9 +65,9 @@ async function showMessageDialog(options: any): Promise<string> {
     try {
         return await app.MessageDialog(options)
     } catch (error: any) {
-        panic(error)
+        runtime.LogError(JSON.stringify(error))
         return ''
     }
 }
 
-export { app, runtime, init, panic, stat, navigate, getSettings, launchTwitter, confirmStartNewProject, showMessageDialog }
+export { app, runtime, init, stat, navigate, getSettings, launchTwitter, confirmStartNewProject, showMessageDialog }
