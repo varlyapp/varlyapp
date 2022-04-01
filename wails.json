@@ -24,7 +24,7 @@
     "copyright": "(c) 2022 Selvin Ortiz",
     "comments": "Built with love for NFT creatives by Web 3 enthusiasts"
   },
-  "debounceMS": 200,
+  "debounceMS": 100,
   "devserverurl": "http://localhost:34115",
   "appargs": "",
   "nsisType": ""

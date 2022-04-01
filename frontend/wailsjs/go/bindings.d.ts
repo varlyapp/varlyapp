@@ -5,6 +5,7 @@ export interface go {
     "App": {
 		EncodeImage(arg1:string):Promise<string>
 		GenerateCollectionFromConfig(arg1:models.NewCollectionConfig):Promise<void>
+		GenerateNewCollectionFromConfig(arg1:models.NewCollectionConfig):Promise<void>
 		GetApplicationDocumentsDirectory():Promise<string>
 		GetImageStats(arg1:string):Promise<models.FileInfo>
 		GetSettings():Promise<models.Settings>

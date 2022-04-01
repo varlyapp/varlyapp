@@ -44,7 +44,19 @@ type NewCollectionConfig struct {
 	Size   int
 }
 
-var completed = 0
+type Job struct {
+	Id     int
+	Config NewCollectionConfig
+}
+
+type JobResult struct {
+	Output string
+}
+
+var (
+	completed = 0
+	// numberOfWorkers = 10
+)
 
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -82,6 +94,92 @@ func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfi
 		default:
 		}
 	}
+}
+
+func GenerateNewCollectionFromConfig(ctx context.Context, config NewCollectionConfig) {
+	runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": config.Size})
+
+	start := time.Now()
+	// Create fake jobs for testing purposes
+	var jobs []Job
+
+	// for i := 0; i < 1000; i++ {
+	// 	jobs = append(jobs, Job{Id: i})
+	// }
+
+	for i := 0; i < config.Size; i++ {
+		jobs = append(jobs, Job{Id: i, Config: config})
+	}
+
+	var (
+		wg              sync.WaitGroup
+		jobChannel      = make(chan Job)
+		numberOfWorkers = 160
+	)
+
+	runtime.LogInfo(ctx, fmt.Sprintf("%v", numberOfWorkers))
+	wg.Add(numberOfWorkers)
+
+	// Start the workers
+	for i := 0; i < numberOfWorkers; i++ {
+		go worker(i, &wg, jobChannel, ctx)
+	}
+
+	// Send jobs to worker
+	for _, job := range jobs {
+		jobChannel <- job
+	}
+
+	close(jobChannel)
+	wg.Wait()
+	fmt.Printf("Took %s\n", time.Since(start))
+}
+
+func worker(id int, wg *sync.WaitGroup, jobChannel <-chan Job, ctx context.Context) {
+	defer wg.Done()
+	for job := range jobChannel {
+		generateNewArtwork(id, job, ctx)
+	}
+}
+
+func generateNewArtwork(workerId int, job Job, ctx context.Context) {
+	var images []string
+
+	for _, trait := range job.Config.Order {
+		files := job.Config.Layers[trait]
+
+		if len(files) > 0 {
+			var choices []wr.Choice
+
+			for _, layer := range files {
+				choices = append(choices, wr.Choice{Item: layer.Item, Weight: uint(layer.Weight)})
+			}
+
+			chooser, err := wr.NewChooser(choices...)
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			pick := chooser.Pick().(string)
+
+			images = append(images, pick)
+		}
+	}
+
+	png := fmt.Sprintf("%s/%d.png", job.Config.Dir, job.Id)
+	// fmt.Printf("Worker #%d Running job #%d\n", workerId, job.Id)
+	// time.Sleep(500 * time.Millisecond)
+	// return JobResult{Output: "Success"}
+	defer func() {
+		completed++
+
+		data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(job.Config.Size)}
+		runtime.EventsEmit(ctx, "collection.item.generated", data)
+
+		fmt.Printf("%d. %s\n", job.Id, png)
+	}()
+	GeneratePNG(images, png, job.Config.Width, job.Config.Height)
 }
 
 func ReadLayers(ctx context.Context, dir string) fs.CollectionConfig {

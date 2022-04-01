@@ -7,7 +7,6 @@ import type { runtime as Runtime } from '@wails/runtime'
 let router: Router | null | any
 let appStore: Store | null | any
 let collectionStore: Store | null | any
-let initialized: boolean
 
 const app: go['main']['App'] = window.go.main.App
 const runtime: Runtime = window.runtime
@@ -18,13 +17,11 @@ type Params = {
     collectionStore: Store | null | any
 }
 
-function init(params: Params|any) {
-    if (!initialized) {
-        router = params.router || null
-        appStore = params.appStore || null
-        collectionStore = params.collectionStore || null
-        initialized = true
-    }
+function load(params: Params | any) {
+    runtime.LogInfo(JSON.stringify(Object.keys(params)))
+    router = params.router || router || null
+    appStore = params.appStore || appStore || null
+    collectionStore = params.collectionStore || collectionStore || null
 }
 
 async function stat(file: string) {
@@ -48,6 +45,7 @@ function launchTwitter(): void {
 }
 
 async function confirmStartNewProject() {
+    runtime.LogInfo('Trying to prompt')
     const response = await showMessageDialog({
         Title: "Are you sure you want to start a new project?",
         Message: "Starting a new project without saving your current one, will tell Varly to discard your progress",
@@ -55,8 +53,10 @@ async function confirmStartNewProject() {
         DefaultButton: "Ok"
     })
 
+    runtime.LogInfo(response)
+
     if (response.toLowerCase() === 'ok') {
-        collectionStore ? collectionStore.reset() : ''
+        collectionStore.reset()
         navigate('artwork.layers')
     }
 }
@@ -70,4 +70,4 @@ async function showMessageDialog(options: any): Promise<string> {
     }
 }
 
-export { app, runtime, init, stat, navigate, getSettings, launchTwitter, confirmStartNewProject, showMessageDialog }
+export { app, runtime, load, stat, navigate, getSettings, launchTwitter, confirmStartNewProject, showMessageDialog }

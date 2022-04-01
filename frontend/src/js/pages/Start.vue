@@ -14,7 +14,7 @@ const documents = reactive<any>([])
 onBeforeMount(async () => {
   const settings = await getSettings()
   documents.value = settings.documents
-  intl.locale.value = 'es'
+  intl.locale.value = 'en'
 })
 </script>
 
@@ -38,7 +38,7 @@ onBeforeMount(async () => {
         >
           <div class="w-32 h-32 rounded-full">
             <Base64Image
-              class="w-full h-full m-0 p-0 object-cover border-4 border-opacity-50 shadow-md"
+              class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover border-4 border-opacity-50 shadow-md"
               :path="document.preview"
             />
           </div>

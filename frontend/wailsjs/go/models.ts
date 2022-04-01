@@ -14,6 +14,7 @@ export class NewCollectionConfig {
 
     }
 }
+
 export class Document {
     title: string;
     path: string;

@@ -21,6 +21,14 @@ const go = {
         return window.go.main.App.GenerateCollectionFromConfig(arg1);
       },
       /**
+       * GenerateNewCollectionFromConfig
+       * @param {models.NewCollectionConfig} arg1 - Go Type: nft.NewCollectionConfig
+       * @returns {Promise<void>} 
+       */
+      "GenerateNewCollectionFromConfig": (arg1) => {
+        return window.go.main.App.GenerateNewCollectionFromConfig(arg1);
+      },
+      /**
        * GetApplicationDocumentsDirectory
        * @returns {Promise<string>}  - Go Type: string
        */

@@ -9,6 +9,8 @@ import router from '@root/router'
 import lang from '@root/lang'
 import App from '@layouts/App.vue'
 
+import 'animate.css'
+
 const intl = createI18n(lang)
 
 const pinia = createPinia()

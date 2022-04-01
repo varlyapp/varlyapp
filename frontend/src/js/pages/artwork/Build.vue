@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { useCollectionStore } from '@root/store'
 import Sidebar from '@components/Sidebar.vue'
-import { init, stat, launchTwitter, confirmStartNewProject } from '@utils/Varly'
+import { load, stat, launchTwitter, confirmStartNewProject } from '@utils/Varly'
 import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlayIcon } from '@heroicons/vue/solid'
 import FloatingButton from '@components/FloatingButton.vue'
 import { useRouter } from 'vue-router'
@@ -12,7 +12,7 @@ const HEIGHT = 1500
 const SIZE = 100
 
 const store = useCollectionStore()
-init({ collectionStore: store, router: useRouter() })
+load({ collectionStore: store, router: useRouter() })
 
 onMounted(async () => {
     store.size = store.size || SIZE
@@ -52,7 +52,7 @@ onMounted(async () => {
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <form class="max-w-4xl mx-auto flex flex-col px-8 py-16 xl:py-32">
+            <form class="max-w-4xl mx-auto flex flex-col px-8 py-16 xl:py-32 animate__animated animate__fadeIn">
                 <div class="grid grid-cols-12 gap-8">
                     <div class="col-span-12">
                         <label

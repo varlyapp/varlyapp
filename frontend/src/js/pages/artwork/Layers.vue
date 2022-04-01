@@ -25,10 +25,6 @@ const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
 const isLayerEnabled = ref(true)
 
-onBeforeMount(() => {
-    intl.locale.value = 'es'
-})
-
 const hasLayers = computed(() => {
     return collectionStore.layers && Object.keys(collectionStore.layers).length
 })
@@ -142,7 +138,7 @@ async function saveProgress() {
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <section v-if="hasLayers" class="h-full">
+            <section v-if="hasLayers" class="h-full animate__animated animate__fadeIn">
                 <div class="max-w-4xl mx-auto px-8 py-16 xl:py-32">
                     <!-- @see :force-fallback -->
                     <!-- Solves issue where dragging works first but second drag requires two clicks -->
@@ -215,7 +211,7 @@ async function saveProgress() {
                 </div>
             </section>
 
-            <section v-else class="h-full">
+            <section v-else class="h-full animate__animated animate__fadeIn">
                 <div class="h-full p-4 lg:p-8 flex items-center justify-center text-center">
                     <div>
                         <svg

@@ -99,6 +99,10 @@ func (app *App) GenerateCollectionFromConfig(config nft.NewCollectionConfig) {
 	nft.GenerateCollectionFromConfig(app.ctx, config)
 }
 
+func (app *App) GenerateNewCollectionFromConfig(config nft.NewCollectionConfig) {
+	nft.GenerateNewCollectionFromConfig(app.ctx, config)
+}
+
 func (app *App) ReadLayers(dir string) fs.CollectionConfig {
 	return nft.ReadLayers(app.ctx, dir)
 }

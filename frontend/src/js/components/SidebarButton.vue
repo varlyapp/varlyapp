@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { init, runtime, navigate } from '@utils/Varly'
+import { load, runtime, navigate } from '@utils/Varly'
 
-init({ router: useRouter() })
+load({ router: useRouter() })
 
 const props = defineProps(['text', 'selected', 'to', 'path'])
 
