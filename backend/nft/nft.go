@@ -46,9 +46,11 @@ type NewCollectionConfig struct {
 
 var completed = 0
 
-func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfig) {
+func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
+}
 
+func GenerateCollectionFromConfig(ctx context.Context, config NewCollectionConfig) {
 	runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": config.Size})
 
 	pool := queue.New(r.NumCPU())
