@@ -9,3 +9,6 @@ launch: build
 
 test:
 	go test ./... -v
+
+dev:
+	wails dev & npm --prefix ./frontend run dev
