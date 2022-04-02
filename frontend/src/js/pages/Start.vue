@@ -1,33 +1,20 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { reactive, onBeforeMount, onMounted } from 'vue'
+import { reactive, onBeforeMount } from 'vue'
 import Base64Image from '@components/Base64Image.vue'
 import Sidebar from '@components/Sidebar.vue'
-import { getSettings, launchTwitter } from '@utils/Varly'
-import { BadgeCheckIcon, FolderOpenIcon, DocumentAddIcon } from '@heroicons/vue/solid'
-
-const intl = useI18n({ useScope: 'global' })
-const { t } = intl
+import { getSettings } from '@root/utils/Varly'
 
 const documents = reactive<any>([])
 
 onBeforeMount(async () => {
   const settings = await getSettings()
   documents.value = settings.documents
-  intl.locale.value = 'en'
 })
 </script>
 
 <template>
   <section class="h-full flex">
-    <Sidebar
-      :links="[
-        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: launchTwitter, selected: false },
-        { icon: null, text: '', to: '', selected: false },
-        { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: true },
-        { icon: DocumentAddIcon, text: t('start_new_project'), to: 'artwork.layers', selected: false },
-      ]"
-    />
+    <Sidebar />
 
     <main class="h-full flex-1 overflow-auto scrollbar-none">
       <section class="grid grid-cols-12 gap-8 px-8 py-16 xl:px-16 xl:py-32">

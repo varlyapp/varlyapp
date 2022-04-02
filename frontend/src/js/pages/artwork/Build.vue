@@ -2,11 +2,10 @@
 import { onMounted } from 'vue'
 import { useCollectionStore } from '@root/store'
 import Sidebar from '@components/Sidebar.vue'
-import { load, stat, launchTwitter, confirmStartNewProject } from '@utils/Varly'
-import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlayIcon } from '@heroicons/vue/solid'
+import { load, stat } from '@utils/Varly'
+import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import FloatingButton from '@components/FloatingButton.vue'
 import { useRouter } from 'vue-router'
-import Titlebar from '@components/Titlebar.vue'
 
 const WIDTH = 1500
 const HEIGHT = 1500
@@ -40,21 +39,13 @@ onMounted(async () => {
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: 'Follow on Twitter', to: launchTwitter, selected: false },
-                { icon: null, text: '', to: '', selected: false },
-                { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: 'Start New Project', to: confirmStartNewProject, selected: false },
-                { icon: null, text: '', to: '', selected: false },
                 { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
-                // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: true },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: false },
             ]"
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <Titlebar title="Build Settings" style="z-index: 99;" />
-
             <form class="max-w-4xl mx-auto flex flex-col px-8 py-16 xl:py-32 animate__animated animate__fadeIn">
                 <div class="grid grid-cols-12 gap-8">
                     <div class="col-span-12">

@@ -5,10 +5,9 @@ import draggable from 'vuedraggable'
 import { useDialog } from '@utils/Dialog'
 import { useCollectionStore } from '@root/store'
 import Sidebar from '@components/Sidebar.vue'
-import { app, launchTwitter } from '@utils/Varly'
-import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
+import { app } from '@utils/Varly'
+import { CogIcon, CollectionIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
 import FloatingButton from '@components/FloatingButton.vue'
-import Titlebar from '@components/Titlebar.vue'
 
 const intl = useI18n({ useScope: 'global' })
 const { t } = intl
@@ -18,7 +17,6 @@ const collectionStore = useCollectionStore()
 
 let loadingText = ref('')
 let isLoading = ref(false)
-let hasCompleted = ref(false)
 
 const isCollapsed = ref(false)
 const isTraitEnabled = ref(true)
@@ -126,21 +124,13 @@ async function saveProgress() {
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: launchTwitter, selected: false },
-                { icon: null, text: '', to: '', selected: false },
-                { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: t('start_new_project'), to: 'artwork.layers', selected: false },
-                { icon: null, text: '', to: '', selected: false },
                 { icon: CollectionIcon, text: t('layer_setup'), to: 'artwork.layers', selected: true },
-                // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: t('build_settings'), to: 'artwork.build', selected: false },
                 { icon: PlayIcon, text: t('run'), to: 'artwork.run', selected: false },
             ]"
         />
 
         <main class="relative h-full flex-1 overflow-y-scroll scrollbar-none">
-            <Titlebar title="Layer Setup" style="z-index: 99;" />
-
             <section v-if="hasLayers" class="h-full animate__animated animate__fadeIn">
                 <div class="max-w-4xl mx-auto px-8 py-16 xl:py-32">
                     <!-- @see :force-fallback -->

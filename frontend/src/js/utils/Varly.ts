@@ -18,7 +18,6 @@ type Params = {
 }
 
 function load(params: Params | any) {
-    runtime.LogInfo(JSON.stringify(Object.keys(params)))
     router = params.router || router || null
     appStore = params.appStore || appStore || null
     collectionStore = params.collectionStore || collectionStore || null
@@ -45,15 +44,12 @@ function launchTwitter(): void {
 }
 
 async function confirmStartNewProject() {
-    runtime.LogInfo('Trying to prompt')
     const response = await showMessageDialog({
         Title: "Are you sure you want to start a new project?",
         Message: "Starting a new project without saving your current one, will tell Varly to discard your progress",
         Buttons: ["Ok", "Cancel"],
         DefaultButton: "Ok"
     })
-
-    runtime.LogInfo(response)
 
     if (response.toLowerCase() === 'ok') {
         collectionStore.reset()

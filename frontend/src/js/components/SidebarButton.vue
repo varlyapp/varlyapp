@@ -4,7 +4,7 @@ import { load, runtime, navigate } from '@utils/Varly'
 
 load({ router: useRouter() })
 
-const props = defineProps(['text', 'selected', 'to', 'path'])
+const props = defineProps(['icon', 'text', 'selected', 'to', 'path'])
 
 async function handleClick(e: any): Promise<void> {
     if (props.to && typeof props.to === 'string' && props.to.length) {
@@ -26,7 +26,12 @@ async function handleClick(e: any): Promise<void> {
         :class="[props.selected ? 'bg-slate-900 bg-opacity-10 dark:bg-slate-50 dark:bg-opacity-5' : '']"
         @click="handleClick"
     >
-        <span><slot></slot></span>
+        <span>
+            <component
+                :is="props.icon"
+                class="w-6 mr-2 fill-fuchsia-700 dark:fill-fuchsia-500"
+            />
+        </span>
         <span v-text="text" />
     </button>
 </template>

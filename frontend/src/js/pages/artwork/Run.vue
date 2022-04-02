@@ -5,9 +5,9 @@ import { useCollectionStore } from '@root/store'
 import Progress from '@components/Progress.vue'
 import Sidebar from '@components/Sidebar.vue'
 import FloatingButton from '@components/FloatingButton.vue'
-import { app, launchTwitter, runtime } from '@utils/Varly'
+import { app, runtime } from '@utils/Varly'
 import Confetti from 'vue-confetti-explosion'
-import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, PlayIcon, FolderOpenIcon } from '@heroicons/vue/solid'
+import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 
 const store = useCollectionStore()
 const dialog = useDialog(app)
@@ -78,13 +78,7 @@ async function generateCollection() {
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: 'Follow on Twitter', to: launchTwitter, selected: false },
-                { icon: null, text: '', to: '', selected: false },
-                { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
-                { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
-                { icon: null, text: '', to: '', selected: false },
                 { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
-                // { icon: CollectionIcon, text: 'Collection Details', to: 'artwork.collection', selected: false },
                 { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
                 { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: true },
             ]"
