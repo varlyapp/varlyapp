@@ -16,3 +16,4 @@ frontend/src/*.css
 frontend/src/*.js
 frontend/src/*.json
 frontend/src/*.txt
+frontend/src/*.map
