@@ -66,4 +66,34 @@ async function showMessageDialog(options: any): Promise<string> {
     }
 }
 
-export { app, runtime, load, stat, navigate, getSettings, launchTwitter, confirmStartNewProject, showMessageDialog }
+async function getPreview(): Promise<string> {
+    return await app.GetPreview(getConfig())
+}
+
+function getConfig(): any {
+    const layers = { ...collectionStore.layers }
+
+    for (const trait in Object.keys(layers)) {
+        if (layers.hasOwnProperty(trait)) {
+            layers[trait] = layers[trait].map((layer) => {
+                return {
+                    ...layer,
+                    Weight: parseInt(layer.Weight)
+                }
+            })
+        }
+    }
+
+    const config = {
+        Dir: '',
+        Order: [...collectionStore.traits].map((item: any) => item.name),
+        Layers: layers,
+        Width: parseInt(collectionStore.width.toString(), 10),
+        height: parseInt(collectionStore.height.toString(), 10),
+        Size: parseInt(collectionStore.size.toString(), 10)
+    }
+
+    return config
+}
+
+export { app, runtime, load, stat, navigate, getSettings, launchTwitter, confirmStartNewProject, getPreview, showMessageDialog }

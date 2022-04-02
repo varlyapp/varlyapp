@@ -44,6 +44,14 @@ const go = {
         return window.go.main.App.GetImageStats(arg1);
       },
       /**
+       * GetPreview
+       * @param {models.NewCollectionConfig} arg1 - Go Type: nft.NewCollectionConfig
+       * @returns {Promise<string>}  - Go Type: string
+       */
+      "GetPreview": (arg1) => {
+        return window.go.main.App.GetPreview(arg1);
+      },
+      /**
        * GetSettings
        * @returns {Promise<models.Settings>}  - Go Type: *settings.Settings
        */

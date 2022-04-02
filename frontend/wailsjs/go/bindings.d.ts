@@ -8,6 +8,7 @@ export interface go {
 		GenerateNewCollectionFromConfig(arg1:models.NewCollectionConfig):Promise<void>
 		GetApplicationDocumentsDirectory():Promise<string>
 		GetImageStats(arg1:string):Promise<models.FileInfo>
+		GetPreview(arg1:models.NewCollectionConfig):Promise<string>
 		GetSettings():Promise<models.Settings>
 		MessageDialog(arg1:models.MessageDialogOptions):Promise<string>
 		OpenDirectoryDialog():Promise<string>

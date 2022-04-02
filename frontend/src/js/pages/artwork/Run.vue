@@ -1,22 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useDialog } from '@utils/Dialog'
 import { useCollectionStore } from '@root/store'
 import Progress from '@components/Progress.vue'
 import Sidebar from '@components/Sidebar.vue'
 import FloatingButton from '@components/FloatingButton.vue'
-import { app, runtime } from '@utils/Varly'
+import { app, runtime, load, getPreview } from '@utils/Varly'
 import Confetti from 'vue-confetti-explosion'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 
 const store = useCollectionStore()
 const dialog = useDialog(app)
 
+load({ collectionStore: store })
+
 const steps = ref(0)
 const currentStep = ref(0)
 const isWorking = ref(false)
 const isDone = ref(false)
 const loadingText = ref('Loading')
+const preview = ref('')
+
+onBeforeMount(async () => {
+    preview.value = await getPreview()
+})
 
 function queueConfetti() {
     isDone.value = true
@@ -91,6 +98,9 @@ async function generateCollection() {
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
                     <div class="max-w-xs mx-auto">
+                        <div v-if="preview">
+                            <img :src="preview" alt="">
+                        </div>
                         <h1
                             v-if="!isDone"
                             class="animate__animated animate__fadeIn text-base text-center"
