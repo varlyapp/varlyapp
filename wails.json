@@ -1,10 +1,11 @@
 {
   "name": "Varly",
+  "assetdir": "./frontend/dist",
+  "wailsjsdir": "./frontend/src",
   "frontend:build": "",
   "frontend:install": "",
   "frontend:dev": "",
-  "frontend:dev:watcher": "",
-  "wailsjsdir": "./frontend",
+  "frontend:dev:watcher": "npm run dev",
   "version": "2",
   "Path": "",
   "BuildDir": "",
@@ -24,7 +25,7 @@
     "copyright": "(c) 2022 Selvin Ortiz",
     "comments": "Built with love for NFT creatives"
   },
-  "debounceMS": 100,
+  "debounceMS": 1000,
   "devserverurl": "http://localhost:34115",
   "appargs": "",
   "nsisType": ""

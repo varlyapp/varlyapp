@@ -64,7 +64,7 @@ func main() {
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
 				Title:   "🦄 Varly",
-				Message: "Varly is an app designed for NFT creators by Selvin Ortiz",
+				Message: "Varly is an app designed for NFT creators by @selvindev",
 				Icon:    icon,
 			},
 		},

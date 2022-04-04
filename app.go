@@ -175,7 +175,7 @@ func (app *App) GetImageStats(path string) f.FileInfo {
 	info, err := os.Stat(path)
 
 	if err != nil {
-		fmt.Println("unable to get stat: ", err)
+		fmt.Println("unable to get stat(): ", err)
 	}
 	return info
 }
