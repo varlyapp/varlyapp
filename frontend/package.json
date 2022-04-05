@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "//dev": "vite",
-    "dev": "vite build --mode development --watch",
+    "dev": "vite build --watch",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },
@@ -28,6 +28,6 @@
     "vue-i18n": "^9.1.9",
     "vue-router": "^4.0.14",
     "vue-tsc": "^0.29.8",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^4.1.0"
   }
 }
