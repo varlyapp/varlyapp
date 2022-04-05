@@ -5,10 +5,10 @@ dev:
 	wails dev & npm --prefix ./frontend run dev
 
 build: clean
-	npm --prefix ./frontend run release && wails build -clean
+	npm --prefix ./frontend run build && wails build -clean
 
 launch: build
-	open ./build/bin/varly.app/Contents/MacOS/Varly
+	open ./build/bin/Varly.app/Contents/MacOS/Varly
 
 test:
 	go test ./... -v
