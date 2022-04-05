@@ -27,9 +27,8 @@ class Varly {
     vue: App
     app: go['main']['App']
     runtime: Runtime
-    router: Router
-    appStore: Store
-    collectionStore: Store
+    appStore: Store | any
+    collectionStore: Store | any
     isDark: boolean
 
     constructor(vue: App) {
@@ -40,7 +39,7 @@ class Varly {
         this.appStore = useStore()
         this.collectionStore = useCollectionStore()
 
-        this.isDark  = false
+        this.isDark = false
 
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             this.setIsDark(false)
@@ -74,15 +73,6 @@ class Varly {
         return await this.app.GetImageStats(file)
     }
 
-    async navigate(name: string): Promise<void> {
-        try {
-            console.log('Navigating', this.router)
-            await this.router.push({ name })
-        } catch (error) {
-            console.error(`unable to navigate: ${error}`)
-        }
-    }
-
     async getSettings(): Promise<Settings> {
         return await this.app.GetSettings()
     }
@@ -99,10 +89,7 @@ class Varly {
             DefaultButton: `OK`
         })
 
-        if (response.toLowerCase() === 'ok') {
-            this.collectionStore.reset()
-            this.navigate('artwork.layers')
-        }
+        return response.toLowerCase() === 'ok'
     }
 
     async showMessageDialog(options: any): Promise<string> {
