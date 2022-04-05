@@ -2,20 +2,18 @@
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
-import { useDialog } from '@/utils/Dialog'
-import { app } from '@/utils/Varly'
 import Sidebar from '@/components/Sidebar.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
 import { useCollectionStore } from '@/store'
 import { CogIcon, CollectionIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
+import { useVarly } from '@/Varly'
+
+const varly = useVarly()
 
 const intl = useI18n({ useScope: 'global' })
 const { t } = intl
 
-const dialog = useDialog(app)
 const collectionStore = useCollectionStore()
-
-let loadingText = ref('')
 
 const isCollapsed = ref(false)
 const isTraitEnabled = ref(true)
@@ -36,32 +34,10 @@ function toggleCollapsed(element: any) {
     element.collapsed = !element.collapsed
 }
 
-async function saveSettings() {
-    const docs = [
-        {
-            title: 'Doodles',
-            path: '/Users/selvinortiz/Desktop/doodles.varly',
-            preview: '',
-        },
-        {
-            title: 'VeeFriends',
-            path: '/Users/selvinortiz/Desktop/vee-friends.varly',
-            preview: '',
-        },
-        {
-            title: 'InvisibleFiends',
-            path: '/Users/selvinortiz/Desktop/invisible-friends.varly',
-            preview: '',
-        },
-    ]
-
-    await app.SaveDocuments(docs)
-}
-
 async function loadLayers() {
-    collectionStore.directory = await dialog.openDirectoryDialog()
+    collectionStore.directory = await varly.openDirectoryDialog()
 
-    const config: { Layers? } = await app.ReadLayers(collectionStore.directory)
+    const config: { Layers? } = await varly.app.ReadLayers(collectionStore.directory)
 
     collectionStore.layers = { ...config.Layers }
 
@@ -74,40 +50,6 @@ async function loadLayers() {
     }
 
     collectionStore.traits = [...traits]
-}
-
-async function saveProgress() {
-    window.runtime.EventsOn('collection.generation.saved', (data) => {
-        loadingText.value = `Preparing collection of ${data.CollectionSize} items`
-    })
-
-    const outputDirectory = await dialog.openDirectoryDialog()
-
-    const layers = { ...collectionStore.layers }
-
-    for (const trait in Object.keys(layers)) {
-        if (layers.hasOwnProperty(trait)) {
-            layers[trait] = layers[trait].map((layer) => {
-                return {
-                    ...layer,
-                    Weight: parseInt(layer.Weight)
-                }
-            })
-        }
-    }
-
-    const config = {
-        Dir: outputDirectory,
-        Order: [...collectionStore.traits].map((item: any) => item.name),
-        Layers: layers,
-        Width: 512,
-        height: 512,
-        Size: 1000
-    }
-
-    const file = await app.SaveFileDialog()
-
-    await app.SaveFile(file, JSON.stringify(config))
 }
 </script>
 

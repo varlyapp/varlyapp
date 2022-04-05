@@ -6,6 +6,7 @@ export default {
         en: {
             varly: 'Varly',
             // nav
+            switch_language: 'Switch Language',
             follow_on_twitter: 'Follow on Twitter',
             recent_projects: 'Recent Projects',
             start_new_project: 'Start New Project',
@@ -28,6 +29,7 @@ export default {
         es: {
             varly: 'Varly',
             // nav
+            switch_language: 'Cambia Idioma',
             follow_on_twitter: 'Síguenos en Twitter',
             recent_projects: 'Proyectos Recientes',
             start_new_project: 'Crear Proyecto Nuevo',

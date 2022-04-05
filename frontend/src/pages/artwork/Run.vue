@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
-import { useDialog } from '@/utils/Dialog'
-import { useCollectionStore } from '@/store'
+import { ref } from 'vue'
+import Confetti from 'vue-confetti-explosion'
+import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
-import { app, runtime, load, getPreview } from '@/utils/Varly'
-import Confetti from 'vue-confetti-explosion'
-import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
+import { useCollectionStore } from '@/store'
+import { useVarly } from '@/Varly'
 
+const varly = useVarly()
 const store = useCollectionStore()
-const dialog = useDialog(app)
-
-load({ collectionStore: store })
 
 const steps = ref(0)
 const currentStep = ref(0)
@@ -21,18 +18,12 @@ const isDone = ref(false)
 const loadingText = ref('Loading')
 const preview = ref('')
 
-onBeforeMount(async () => {
-    if (store.layers) {
-        // preview.value = await getPreview()
-    }
-})
-
 function queueConfetti() {
     isDone.value = true
-    runtime.LogInfo('Setting isDone to true')
+    varly.runtime.LogInfo('Setting isDone to true')
     setTimeout(() => {
         isDone.value = false
-        runtime.LogInfo('Setting isDone to false')
+        varly.runtime.LogInfo('Setting isDone to false')
     }, 5000)
 }
 
@@ -52,7 +43,7 @@ async function generateCollection() {
         currentStep.value = data.ItemNumber
     })
 
-    const outputDirectory = await dialog.openDirectoryDialog()
+    const outputDirectory = await varly.openDirectoryDialog()
 
     const layers = { ...store.layers }
 
@@ -76,7 +67,7 @@ async function generateCollection() {
         Size: parseInt(store.size.toString(), 10)
     }
 
-    await app.GenerateNewCollectionFromConfig(config)
+    await varly.app.GenerateNewCollectionFromConfig(config)
 
     toggleIsWorking()
     queueConfetti()

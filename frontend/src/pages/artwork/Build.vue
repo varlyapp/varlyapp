@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import { useCollectionStore } from '@/store'
-import { load, stat } from '@/utils/Varly'
 import FloatingButton from '@/components/FloatingButton.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import { useVarly } from '@/Varly'
 
 const WIDTH = 1500
 const HEIGHT = 1500
 const SIZE = 100
 
+const varly = useVarly()
 const store = useCollectionStore()
-load({ collectionStore: store, router: useRouter() })
 
 onMounted(async () => {
     store.size = store.size || SIZE
@@ -25,7 +24,7 @@ onMounted(async () => {
                 if (store.layers[trait] && store.layers[trait].length) {
                     const image = store.layers[trait][0]
                     if (image) {
-                        const stats = await stat(image)
+                        const stats = await varly.stat(image)
                         console.log(stats)
                     }
                 }

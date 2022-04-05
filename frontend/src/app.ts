@@ -1,27 +1,26 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
+import { createVarly } from '@/varly'
 
 import piniaPersistedState from 'pinia-plugin-persistedstate'
 
-import { useTheme } from '@/utils/Theme'
 import router from '@/router'
 import lang from '@/lang'
 import App from '@/layouts/App.vue'
 
 import 'animate.css'
-import './app.css'
-
-const intl = createI18n(lang)
+import '@/app.css'
 
 const pinia = createPinia()
 pinia.use(piniaPersistedState)
 
-const theme = useTheme()
-theme.run()
+const intl = createI18n(lang)
+const varly = createVarly()
 
 createApp(App)
-  .use(intl)
   .use(router)
   .use(pinia)
+  .use(intl)
+  .use(varly)
   .mount('#app')

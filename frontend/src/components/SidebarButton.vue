@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { load, runtime, navigate } from '../utils/Varly'
 
-load({ router: useRouter() })
-
+const router = useRouter()
 const props = defineProps(['icon', 'text', 'selected', 'to', 'path'])
 
 async function handleClick(e: any): Promise<void> {
     if (props.to && typeof props.to === 'string' && props.to.length) {
-        return navigate(props.to)
+        router.push({ name: props.to })
+        return
     }
 
     try {

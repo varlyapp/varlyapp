@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, type FunctionalComponent, type PropType } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, type FunctionalComponent, type PropType } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useStore } from '@/store'
-import SidebarButton from '../components/SidebarButton.vue'
 import { BadgeCheckIcon, DocumentAddIcon, FolderOpenIcon, TranslateIcon } from '@heroicons/vue/solid'
-import { load, launchTwitter, switchLanguage, confirmStartNewProject } from '@/utils/Varly'
+import SidebarButton from '@/components/SidebarButton.vue'
+import { useStore } from '@/store'
+import { useVarly } from '@/varly'
+
+const varly = useVarly()
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
 
 const intl = useI18n({ useScope: 'global' })
 const { t } = intl
 
-const route = useRoute()
-const appStore = useStore()
 
 type Links = Array<{
     text: string
@@ -24,23 +27,22 @@ const props = defineProps({
     links: Array as PropType<Links>,
 })
 
-onBeforeMount(() => {
-    load({ t, appStore })
-})
-
 const startNewProjectAction = () => {
     if (route.name === 'start') {
         return 'artwork.layers'
     }
 
-    return () => confirmStartNewProject(t(`confirm_start_new_project_title`), t(`confirm_start_new_project_message`))
+    return () => varly.confirmStartNewProject(t(`confirm_start_new_project_title`), t(`confirm_start_new_project_message`))
 }
 
 const presets = {
     links: [
         { icon: null, text: 'Support', to: '', selected: false },
-        { icon: TranslateIcon, text: t('switch_language'), to: switchLanguage, selected: false },
-        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: launchTwitter, selected: false },
+        { icon: TranslateIcon, text: t('switch_language'), to: () => {
+            console.log('Setting language')
+            store.setLocale('es')
+        }, selected: false },
+        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: varly.launchTwitter, selected: false },
         { icon: null, text: 'Workspace', to: '', selected: false },
         { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: route.name === 'start' },
         { icon: DocumentAddIcon, text: t('start_new_project'), to: startNewProjectAction(), selected: false },

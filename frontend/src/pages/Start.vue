@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { reactive, onBeforeMount } from 'vue'
+import { onBeforeMount, reactive } from 'vue'
 import Base64Image from '@/components/Base64Image.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import { getSettings } from '@/utils/Varly'
+import { useVarly } from '@/Varly'
 
-const documents = reactive<any>([])
+const varly = useVarly()
+const documents = reactive<any>({})
 
 onBeforeMount(async () => {
-  const settings = await getSettings()
+  const settings = await varly.getSettings()
   documents.value = settings.documents
 })
 </script>

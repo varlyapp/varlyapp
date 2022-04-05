@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { BadgeCheckIcon, CogIcon, CollectionIcon, DocumentAddIcon, FolderOpenIcon, PlayIcon } from '@heroicons/vue/solid'
 import { useCollectionStore } from '@/store'
-import { launchTwitter } from '@/utils/Varly'
 import Sidebar from '@/components/Sidebar.vue'
+import { useVarly } from '@/Varly'
 
+const varly = useVarly()
 const store = useCollectionStore()
 </script>
 
@@ -11,7 +12,7 @@ const store = useCollectionStore()
     <section class="h-full flex">
         <Sidebar
             :links="[
-                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: launchTwitter, selected: false },
+                { icon: BadgeCheckIcon, text: 'Support on Twitter', to: varly.launchTwitter, selected: false },
                 { icon: null, text: '', to: '', selected: false },
                 { icon: FolderOpenIcon, text: 'Recent Projects', to: 'start', selected: false },
                 { icon: DocumentAddIcon, text: 'Start New Project', to: 'artwork.layers', selected: false },
