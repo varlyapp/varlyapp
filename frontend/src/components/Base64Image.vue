@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
-
-const image = ref('')
+import { api } from '@/utils/backend'
 
 const props = defineProps(['path'])
+const image = ref('')
 
 onBeforeMount(async () => {
-    image.value = await window.go.main.App.EncodeImage(props.path)
+    image.value = await api().EncodeImage(props.path)
 })
 </script>
 
