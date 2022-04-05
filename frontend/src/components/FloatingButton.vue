@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { runtime } from '@/utils/backend'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -13,7 +14,7 @@ async function handleClick(e: any): Promise<void> {
     try {
         return Promise.resolve(props.to())
     } catch (error) {
-        runtime.LogError(`unable to handle click: ${error}`)
+        runtime().LogError(`unable to handle click: ${error}`)
     }
 }
 </script>
