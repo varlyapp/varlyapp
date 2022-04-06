@@ -13102,6 +13102,9 @@ function log(msg, type) {
 function launch(url) {
   runtime().BrowserOpenURL(url);
 }
+async function getPreview(config) {
+  return await api().GetPreview(config);
+}
 const _hoisted_1$a = ["src"];
 const _sfc_main$b = /* @__PURE__ */ defineComponent({
   props: ["path"],
@@ -20483,7 +20486,10 @@ const _hoisted_4 = {
 };
 const _hoisted_5 = { class: "flex flex-col items-center" };
 const _hoisted_6 = { class: "max-w-xs mx-auto" };
-const _hoisted_7 = { key: 0 };
+const _hoisted_7 = {
+  key: 0,
+  class: "p-8"
+};
 const _hoisted_8 = ["src"];
 const _hoisted_9 = { key: 1 };
 const _hoisted_10 = /* @__PURE__ */ createBaseVNode("h1", { class: "animate__animated animate__fadeIn text-base text-center" }, "You are ready to generate your beautiful NFT\xA0collection\u{1F680}", -1);
@@ -20501,6 +20507,29 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const isDone = ref(false);
     const loadingText = ref("Loading");
     const preview = ref("");
+    onMounted(() => {
+      const layers = __spreadValues({}, store.layers);
+      for (const trait in Object.keys(layers)) {
+        if (layers.hasOwnProperty(trait)) {
+          layers[trait] = layers[trait].map((layer) => {
+            return __spreadProps(__spreadValues({}, layer), {
+              Weight: parseInt(layer.Weight)
+            });
+          });
+        }
+      }
+      const config = {
+        Dir: "",
+        Order: [...store.traits].map((item) => item.name),
+        Layers: layers,
+        Width: parseInt(store.width.toString(), 10),
+        height: parseInt(store.height.toString(), 10),
+        Size: parseInt(store.size.toString(), 10)
+      };
+      getPreview(config).then((base64Image) => {
+        preview.value = base64Image;
+      }).catch(console.error);
+    });
     function queueConfetti() {
       isDone.value = true;
       varly2.runtime.LogInfo("Setting isDone to true");
@@ -20569,6 +20598,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
                 preview.value ? (openBlock(), createElementBlock("div", _hoisted_7, [
                   createBaseVNode("img", {
                     src: preview.value,
+                    class: "w-full animate__animated animate__fadeIn",
                     alt: "Preview"
                   }, null, 8, _hoisted_8)
                 ])) : createCommentVNode("", true),

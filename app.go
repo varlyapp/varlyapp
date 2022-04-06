@@ -26,10 +26,10 @@ type App struct {
 // NewApp creates a new App application struct
 func NewApp() *App {
 	dir, _ := fs.GetApplicationDocumentsDirectory()
-	settings, _ := settings.LoadSettings(fmt.Sprint(dir, "settings.json"))
+	config, _ := settings.LoadSettings(fmt.Sprint(dir, "settings.json"))
 
 	return &App{
-		Settings: settings,
+		Settings: config,
 	}
 }
 
@@ -82,7 +82,7 @@ func (app *App) SaveDocuments(documents []settings.Document) {
 
 func (app *App) OpenDirectoryDialog() string {
 	path, _ := runtime.OpenDirectoryDialog(app.ctx, runtime.OpenDialogOptions{
-		CanCreateDirectories: true,
+		CanCreateDirectories:       true,
 		TreatPackagesAsDirectories: true,
 	})
 
@@ -135,7 +135,7 @@ func (app *App) GetPreview(config nft.NewCollectionConfig) string {
 		}
 	}
 
-	str, _ := img.MakePreview(images)
+	str, _ := img.MakePreview(images, config.Width, config.Height)
 
 	return str
 }
@@ -180,6 +180,7 @@ func (app *App) GetImageStats(path string) f.FileInfo {
 	if err != nil {
 		fmt.Println("unable to get stat(): ", err)
 	}
+
 	return info
 }
 

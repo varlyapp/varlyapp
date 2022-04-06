@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Confetti from 'vue-confetti-explosion'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import Progress from '@/components/Progress.vue'
@@ -8,6 +8,7 @@ import FloatingButton from '@/components/FloatingButton.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
 import { useCollectionStore } from '@/store'
 import { useVarly } from '@/Varly'
+import { getPreview, getFileInfo } from '@/utils/backend'
 
 const varly = useVarly()
 const store = useCollectionStore()
@@ -18,6 +19,36 @@ const isWorking = ref(false)
 const isDone = ref(false)
 const loadingText = ref('Loading')
 const preview = ref('')
+
+onMounted(() => {
+    const layers = { ...store.layers }
+
+    for (const trait in Object.keys(layers)) {
+        if (layers.hasOwnProperty(trait)) {
+            layers[trait] = layers[trait].map((layer) => {
+                return {
+                    ...layer,
+                    Weight: parseInt(layer.Weight)
+                }
+            })
+        }
+    }
+
+    const config = {
+        Dir: '',
+        Order: [...store.traits].map((item: any) => item.name),
+        Layers: layers,
+        Width: parseInt(store.width.toString(), 10),
+        height: parseInt(store.height.toString(), 10),
+        Size: parseInt(store.size.toString(), 10)
+    }
+
+    getPreview(config)
+        .then((base64Image) => {
+            preview.value = base64Image
+        })
+        .catch(console.error)
+})
 
 function queueConfetti() {
     isDone.value = true
@@ -99,8 +130,8 @@ async function generateCollection() {
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
                     <div class="max-w-xs mx-auto">
-                        <div v-if="preview">
-                            <img :src="preview" alt="Preview" />
+                        <div v-if="preview" class="p-8">
+                            <img :src="preview" class="w-full animate__animated animate__fadeIn" alt="Preview" />
                         </div>
                         <div v-if="!isDone">
                             <h1
