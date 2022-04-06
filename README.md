@@ -1,4 +1,4 @@
-![Varly.app](https://s3.us-west-2.amazonaws.com/cdn.selvin.dev/Varly.png)
+![Varly.app](https://s3.us-west-2.amazonaws.com/cdn.selvin.dev/varly-preview.png)
 
 # Varly.app
 > A delightful **desktop app** for busy NFT artists and creators who don't want to spend valueable time downloading sketchy software, stressing over configuration files, and watching hours of YouTube videos.
