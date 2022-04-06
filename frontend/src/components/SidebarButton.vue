@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { log } from '@/utils/backend'
+import { LoggerType } from '@/types'
 
 const router = useRouter()
 const props = defineProps(['icon', 'text', 'selected', 'to', 'path'])
@@ -13,7 +15,7 @@ async function handleClick(e: any): Promise<void> {
     try {
         return Promise.resolve(props.to())
     } catch (error) {
-        runtime.LogError(`unable to handle click: ${error}`)
+        log(`unable to handle click: ${error}`, LoggerType.Error)
     }
 }
 </script>

@@ -5,6 +5,7 @@ import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
+import SubmitButton from '@/components/SubmitButton.vue'
 import { useCollectionStore } from '@/store'
 import { useVarly } from '@/Varly'
 
@@ -32,7 +33,7 @@ function toggleIsWorking() {
 }
 
 async function generateCollection() {
-    toggleIsWorking()
+    currentStep.value = 0 // reset each time this method is called
 
     window.runtime.EventsOn('collection.generation.started', (data) => {
         loadingText.value = `Preparing collection of ${data.CollectionSize} items`
@@ -44,6 +45,10 @@ async function generateCollection() {
     })
 
     const outputDirectory = await varly.openDirectoryDialog()
+
+    if (!outputDirectory) return
+
+    toggleIsWorking()
 
     const layers = { ...store.layers }
 
@@ -85,19 +90,24 @@ async function generateCollection() {
         />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <div v-if="isWorking" class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8">
+            <div
+                v-if="isWorking"
+                class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8"
+            >
                 <Progress :steps="steps" :current-step="currentStep" loading-text="Preparing..." />
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
                     <div class="max-w-xs mx-auto">
                         <div v-if="preview">
-                            <img :src="preview" alt="">
+                            <img :src="preview" alt="Preview" />
                         </div>
-                        <h1
-                            v-if="!isDone"
-                            class="animate__animated animate__fadeIn text-base text-center"
-                        >You are ready to generate your beautiful NFT&nbsp;collection🚀</h1>
+                        <div v-if="!isDone">
+                            <h1
+                                class="animate__animated animate__fadeIn text-base text-center"
+                            >You are ready to generate your beautiful NFT&nbsp;collection🚀</h1>
+                            <SubmitButton :icon="PlayIcon" text="Run" @tap="generateCollection" />
+                        </div>
                         <h1
                             v-else
                             class="animate__animated animate__fadeIn text-6xl text-center font-bold"
@@ -109,11 +119,11 @@ async function generateCollection() {
 
         <Confetti
             v-if="isDone"
-            :particle-count="1000"
-            :particle-size="8"
+            :particle-count="200"
+            :particle-size="10"
             :duration="5000"
             class="absolute w-screen h-screen top-0 right-0 bottom-0 left-0"
         />
-        <FloatingButton v-if="!isWorking" text="Let&rsquo;s Go" :to="generateCollection"></FloatingButton>
+        <!-- <FloatingButton v-if="!isWorking" text="Let&rsquo;s Go" :to="generateCollection"></FloatingButton> -->
     </section>
 </template>

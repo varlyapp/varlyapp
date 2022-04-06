@@ -73,7 +73,7 @@ async function loadLayers() {
                         class="rounded bg-slate-50 bg-opacity-20 dark:bg-slate-900 dark:bg-opacity-20 border-dashed border-2 border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
                         group="trait"
                         v-model="collectionStore.traits"
-                        :force-fallback="false"
+                        :force-fallback="true"
                         @start="isTraitDragging = true"
                         @end="isTraitDragging = false"
                         item-key="name"

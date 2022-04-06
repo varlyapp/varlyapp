@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { useVarly } from '@/varly'
+
+const varly = useVarly()
+const props = defineProps(['name', 'text', 'click', 'size'])
+
+const src = `assets/icons/${varly.isDark ? 'dark/' : 'light/'}${props.name}.svg`
+</script>
+
 <template>
     <div class="text-center">
         <button @click="$emit('click')" type="button">
@@ -6,12 +15,3 @@
         <h1 v-if="text" v-text="text" class="mt-4 text-sm"></h1>
     </div>
 </template>
-
-<script setup lang="ts">
-import { useTheme } from '../utils/Theme'
-
-const props = defineProps(['name', 'text', 'click', 'size'])
-const theme = useTheme()
-
-const src = `assets/icons/${theme.isDark ? 'dark/' : 'light/'}${props.name}.svg`
-</script>

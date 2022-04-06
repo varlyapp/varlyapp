@@ -6,6 +6,7 @@ import { BadgeCheckIcon, DocumentAddIcon, FolderOpenIcon, TranslateIcon } from '
 import SidebarButton from '@/components/SidebarButton.vue'
 import { useStore } from '@/store'
 import { useVarly } from '@/varly'
+import { launch } from '@/utils/backend'
 
 const varly = useVarly()
 const store = useStore()
@@ -32,17 +33,26 @@ const startNewProjectAction = () => {
         return 'artwork.layers'
     }
 
-    return () => varly.confirmStartNewProject(t(`confirm_start_new_project_title`), t(`confirm_start_new_project_message`))
+    return async function () {
+        if (await varly.confirmStartNewProject(t(`confirm_start_new_project_title`), t(`confirm_start_new_project_message`))) {
+            varly.collectionStore.reset()
+            router.push({ name: 'artwork.layers' })
+        } else {
+            console.log('user cancelled event')
+        }
+    }
 }
 
 const presets = {
     links: [
         { icon: null, text: 'Support', to: '', selected: false },
-        { icon: TranslateIcon, text: t('switch_language'), to: () => {
-            console.log('Setting language')
-            store.setLocale('es')
-        }, selected: false },
-        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: varly.launchTwitter, selected: false },
+        {
+            icon: TranslateIcon, text: t('switch_language'), to: () => {
+                console.log('Setting language')
+                store.setLocale('es')
+            }, selected: false
+        },
+        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: () => launch('https://twitter.com/varlyapp'), selected: false },
         { icon: null, text: 'Workspace', to: '', selected: false },
         { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: route.name === 'start' },
         { icon: DocumentAddIcon, text: t('start_new_project'), to: startNewProjectAction(), selected: false },
@@ -51,7 +61,14 @@ const presets = {
 
 const buttons = computed(() => {
     if (props.links?.length) {
-        presets.links.push({ icon: null, text: 'Project', to: '', selected: false },)
+        let added = false
+        presets.links.map((link) => {
+            if (link.text === 'Project') {
+                added = true
+            }
+        })
+
+        if (!added) presets.links.push({ icon: null, text: 'Project', to: '', selected: false })
     }
 
     return [...presets.links, ...(props.links || [])]
@@ -75,7 +92,10 @@ const buttons = computed(() => {
                         :selected="link.selected"
                         :icon="link.icon"
                     />
-                    <h2 v-else class="mt-8 text-xs opacity-60 dark:opacity-40 font-bold uppercase">{{ link.text }}</h2>
+                    <h2
+                        v-else
+                        class="mt-8 text-xs opacity-60 dark:opacity-40 font-bold uppercase"
+                    >{{ link.text }}</h2>
                 </li>
             </ul>
         </nav>

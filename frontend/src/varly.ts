@@ -4,9 +4,9 @@ import type { go } from '@/wailsjs/go'
 import type { runtime as Runtime } from '@/wailsjs/runtime'
 import type { Settings } from '@/wailsjs/go/models'
 import { useStore, useCollectionStore } from '@/store'
+import { log } from '@/utils/backend'
 
 const VarlySymbol = '__VARLY__'
-
 export { VarlySymbol, createVarly, useVarly }
 
 function useVarly(): Varly {
@@ -126,6 +126,12 @@ class Varly {
         return config
     }
     async openDirectoryDialog(): Promise<string> {
-        return await this.app.OpenDirectoryDialog()
+        const directory = await this.app.OpenDirectoryDialog()
+
+        if (directory && directory.length) {
+            return directory
+        }
+
+        return ''
     }
 }

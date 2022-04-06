@@ -81,7 +81,10 @@ func (app *App) SaveDocuments(documents []settings.Document) {
 }
 
 func (app *App) OpenDirectoryDialog() string {
-	path, _ := runtime.OpenDirectoryDialog(app.ctx, runtime.OpenDialogOptions{})
+	path, _ := runtime.OpenDirectoryDialog(app.ctx, runtime.OpenDialogOptions{
+		CanCreateDirectories: true,
+		TreatPackagesAsDirectories: true,
+	})
 
 	return path
 }

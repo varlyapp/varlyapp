@@ -114,7 +114,7 @@ func GenerateNewCollectionFromConfig(ctx context.Context, config NewCollectionCo
 	var (
 		wg              sync.WaitGroup
 		jobChannel      = make(chan Job)
-		numberOfWorkers = 160
+		numberOfWorkers = 16
 	)
 
 	runtime.LogInfo(ctx, fmt.Sprintf("%v", numberOfWorkers))
