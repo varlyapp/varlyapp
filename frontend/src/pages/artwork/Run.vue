@@ -9,6 +9,7 @@ import SubmitButton from '@/components/SubmitButton.vue'
 import { useCollectionStore } from '@/store'
 import { useVarly } from '@/Varly'
 import { getPreview, getFileInfo } from '@/utils/backend'
+import Preview from '@/components/Preview.vue'
 
 const varly = useVarly()
 const store = useCollectionStore()
@@ -129,15 +130,15 @@ async function generateCollection() {
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
+                    <div v-if="preview" class="p-8">
+                        <Preview :source="preview" caption="Generated Preview" />
+                    </div>
                     <div class="max-w-xs mx-auto">
-                        <div v-if="preview" class="p-8">
-                            <img :src="preview" class="w-full animate__animated animate__fadeIn" alt="Preview" />
-                        </div>
                         <div v-if="!isDone">
                             <h1
                                 class="animate__animated animate__fadeIn text-base text-center"
-                            >You are ready to generate your beautiful NFT&nbsp;collection🚀</h1>
-                            <SubmitButton :icon="PlayIcon" text="Run" @tap="generateCollection" />
+                            >Ready to generate your collection?</h1>
+                            <SubmitButton :icon="PlayIcon" text="Let's Do It" @tap="generateCollection" />
                         </div>
                         <h1
                             v-else

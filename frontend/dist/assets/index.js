@@ -13105,8 +13105,8 @@ function launch(url) {
 async function getPreview(config) {
   return await api().GetPreview(config);
 }
-const _hoisted_1$a = ["src"];
-const _sfc_main$b = /* @__PURE__ */ defineComponent({
+const _hoisted_1$b = ["src"];
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
   props: ["path"],
   setup(__props) {
     const props = __props;
@@ -13118,7 +13118,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
       return openBlock(), createElementBlock("img", {
         src: image.value,
         alt: "Base64 Encoded Image"
-      }, null, 8, _hoisted_1$a);
+      }, null, 8, _hoisted_1$b);
     };
   }
 });
@@ -13240,8 +13240,8 @@ var LoggerType = /* @__PURE__ */ ((LoggerType2) => {
   LoggerType2["Warning"] = "Warning";
   return LoggerType2;
 })(LoggerType || {});
-const _hoisted_1$9 = ["textContent"];
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
+const _hoisted_1$a = ["textContent"];
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   props: ["icon", "text", "selected", "to", "path"],
   setup(__props) {
     const props = __props;
@@ -13268,13 +13268,13 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
         ]),
         createBaseVNode("span", {
           textContent: toDisplayString$1(__props.text)
-        }, null, 8, _hoisted_1$9)
+        }, null, 8, _hoisted_1$a)
       ], 2);
     };
   }
 });
-const _hoisted_1$8 = { class: "h-full overflow-auto scrollbar-none border-r border-slate-900 border-opacity-10 dark:border-slate-50 dark:border-opacity-10" };
-const _hoisted_2$8 = {
+const _hoisted_1$9 = { class: "h-full overflow-auto scrollbar-none border-r border-slate-900 border-opacity-10 dark:border-slate-50 dark:border-opacity-10" };
+const _hoisted_2$9 = {
   key: 0,
   class: "p-4 xl:p-8 mt-4 xl:mt-8 text-left text-sm text-slate-900 text-opacity-80 dark:text-slate-50 dark:text-opacity-80;"
 };
@@ -13282,7 +13282,7 @@ const _hoisted_3$7 = {
   key: 1,
   class: "mt-8 text-xs opacity-60 dark:opacity-40 font-bold uppercase"
 };
-const _sfc_main$9 = /* @__PURE__ */ defineComponent({
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   props: {
     links: Array
   },
@@ -13340,12 +13340,12 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
       return [...presets.links, ...props.links || []];
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("aside", _hoisted_1$8, [
-        unref(buttons) ? (openBlock(), createElementBlock("nav", _hoisted_2$8, [
+      return openBlock(), createElementBlock("aside", _hoisted_1$9, [
+        unref(buttons) ? (openBlock(), createElementBlock("nav", _hoisted_2$9, [
           createBaseVNode("ul", null, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(buttons), (link, i) => {
               return openBlock(), createElementBlock("li", { key: i }, [
-                link.icon ? (openBlock(), createBlock(_sfc_main$a, {
+                link.icon ? (openBlock(), createBlock(_sfc_main$b, {
                   key: 0,
                   text: link.text,
                   to: link.to,
@@ -13364,12 +13364,12 @@ const VarlySymbol = "__VARLY__";
 function useVarly() {
   return inject(VarlySymbol);
 }
-const _hoisted_1$7 = { class: "h-full flex" };
-const _hoisted_2$7 = { class: "h-full flex-1 overflow-auto scrollbar-none" };
+const _hoisted_1$8 = { class: "h-full flex" };
+const _hoisted_2$8 = { class: "h-full flex-1 overflow-auto scrollbar-none" };
 const _hoisted_3$6 = { class: "grid grid-cols-12 gap-8 px-8 py-16 xl:px-16 xl:py-32" };
 const _hoisted_4$5 = { class: "w-32 h-32 rounded-full" };
 const _hoisted_5$5 = { class: "mt-2 lg:mt-4 py-2 px-4" };
-const _sfc_main$8 = /* @__PURE__ */ defineComponent({
+const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const varly2 = useVarly();
     const documents = reactive({});
@@ -13378,9 +13378,9 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
       documents.value = settings.documents;
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("section", _hoisted_1$7, [
-        createVNode(_sfc_main$9),
-        createBaseVNode("main", _hoisted_2$7, [
+      return openBlock(), createElementBlock("section", _hoisted_1$8, [
+        createVNode(_sfc_main$a),
+        createBaseVNode("main", _hoisted_2$8, [
           createBaseVNode("section", _hoisted_3$6, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(documents).value, (document2, i) => {
               return openBlock(), createElementBlock("div", {
@@ -13388,7 +13388,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                 key: i
               }, [
                 createBaseVNode("div", _hoisted_4$5, [
-                  createVNode(_sfc_main$b, {
+                  createVNode(_sfc_main$c, {
                     class: "animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover border-4 border-opacity-50 shadow-md",
                     path: document2.preview
                   }, null, 8, ["path"])
@@ -19729,9 +19729,9 @@ var require$$1 = /* @__PURE__ */ getAugmentedNamespace(sortable_esm);
   });
 })(vuedraggable_umd);
 var draggable = /* @__PURE__ */ getDefaultExportFromCjs(vuedraggable_umd.exports);
-const _hoisted_1$6 = { class: "absolute z-auto bottom-8 right-8" };
-const _hoisted_2$6 = ["innerHTML"];
-const _sfc_main$7 = /* @__PURE__ */ defineComponent({
+const _hoisted_1$7 = { class: "absolute z-auto bottom-8 right-8" };
+const _hoisted_2$7 = ["innerHTML"];
+const _sfc_main$8 = /* @__PURE__ */ defineComponent({
   props: ["emoji", "text", "to", "path"],
   setup(__props) {
     const props = __props;
@@ -19748,7 +19748,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
       }
     }
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$6, [
+      return openBlock(), createElementBlock("div", _hoisted_1$7, [
         createBaseVNode("button", {
           type: "button",
           class: "select-none flex min-w-full mt-2 py-2 px-4 items-center rounded-full uppercase text-slate-50 bg-fuchsia-700 shadow-lg shadow-fuchsia-900 hover:bg-opacity-90 font-bold",
@@ -19757,14 +19757,14 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
           createBaseVNode("span", null, [
             renderSlot(_ctx.$slots, "default")
           ]),
-          createBaseVNode("span", { innerHTML: __props.text }, null, 8, _hoisted_2$6)
+          createBaseVNode("span", { innerHTML: __props.text }, null, 8, _hoisted_2$7)
         ])
       ]);
     };
   }
 });
-const _hoisted_1$5 = { class: "h-full flex" };
-const _hoisted_2$5 = { class: "relative h-full flex-1 overflow-y-scroll scrollbar-none" };
+const _hoisted_1$6 = { class: "h-full flex" };
+const _hoisted_2$6 = { class: "relative h-full flex-1 overflow-y-scroll scrollbar-none" };
 const _hoisted_3$5 = {
   key: 0,
   class: "h-full animate__animated animate__fadeIn"
@@ -19776,7 +19776,7 @@ const _hoisted_7$4 = { class: "flex items-center" };
 const _hoisted_8$2 = ["onClick"];
 const _hoisted_9$2 = { key: 0 };
 const _hoisted_10$2 = { key: 1 };
-const _hoisted_11$2 = ["textContent"];
+const _hoisted_11$1 = ["textContent"];
 const _hoisted_12$1 = ["value"];
 const _hoisted_13$1 = ["textContent"];
 const _hoisted_14$1 = ["textContent"];
@@ -19804,7 +19804,7 @@ const _hoisted_18$1 = /* @__PURE__ */ createBaseVNode("h3", { class: "mt-2 text-
 const _hoisted_19$1 = /* @__PURE__ */ createBaseVNode("p", { class: "mt-8 text-sm text-opacity-50" }, "Get started by creating a new one\u{1F389}", -1);
 const _hoisted_20$1 = { class: "mt-6" };
 const _hoisted_21$1 = /* @__PURE__ */ createTextVNode("New Project ");
-const _sfc_main$6 = /* @__PURE__ */ defineComponent({
+const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const varly2 = useVarly();
     const intl2 = useI18n({ useScope: "global" });
@@ -19838,15 +19838,15 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
       collectionStore.traits = [...traits];
     }
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("section", _hoisted_1$5, [
-        createVNode(_sfc_main$9, {
+      return openBlock(), createElementBlock("section", _hoisted_1$6, [
+        createVNode(_sfc_main$a, {
           links: [
             { icon: unref(render$6), text: unref(t)("layer_setup"), to: "artwork.layers", selected: true },
             { icon: unref(render$7), text: unref(t)("build_settings"), to: "artwork.build", selected: false },
             { icon: unref(render$3), text: unref(t)("run"), to: "artwork.run", selected: false }
           ]
         }, null, 8, ["links"]),
-        createBaseVNode("main", _hoisted_2$5, [
+        createBaseVNode("main", _hoisted_2$6, [
           unref(collectionStore) && unref(collectionStore).layers && Object.keys(unref(collectionStore).layers).length ? (openBlock(), createElementBlock("section", _hoisted_3$5, [
             createBaseVNode("div", _hoisted_4$4, [
               createVNode(unref(draggable), {
@@ -19872,7 +19872,7 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
                         createBaseVNode("h1", {
                           textContent: toDisplayString$1(element.name),
                           class: "text-base"
-                        }, null, 8, _hoisted_11$2)
+                        }, null, 8, _hoisted_11$1)
                       ]),
                       createBaseVNode("div", null, [
                         createBaseVNode("input", {
@@ -19936,7 +19936,7 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
             ])
           ]))
         ]),
-        unref(collectionStore) && unref(collectionStore).layers && Object.keys(unref(collectionStore).layers).length ? (openBlock(), createBlock(_sfc_main$7, {
+        unref(collectionStore) && unref(collectionStore).layers && Object.keys(unref(collectionStore).layers).length ? (openBlock(), createBlock(_sfc_main$8, {
           key: 0,
           text: "Next\xA0\u2192",
           to: () => _ctx.$router.push({ name: "artwork.build" })
@@ -19945,8 +19945,8 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _hoisted_1$4 = { class: "h-full flex" };
-const _hoisted_2$4 = { class: "h-full flex-1 overflow-y-scroll scrollbar-none" };
+const _hoisted_1$5 = { class: "h-full flex" };
+const _hoisted_2$5 = { class: "h-full flex-1 overflow-y-scroll scrollbar-none" };
 const _hoisted_3$4 = { class: "max-w-4xl mx-auto p-8 lg:p-16 flex flex-col" };
 const _hoisted_4$3 = { class: "grid grid-cols-12 gap-8" };
 const _hoisted_5$3 = { class: "col-span-12" };
@@ -19955,13 +19955,13 @@ const _hoisted_6$3 = /* @__PURE__ */ createBaseVNode("label", {
   class: "block text-sm opacity-75"
 }, "Collection Name", -1);
 const _hoisted_7$3 = { class: "mt-1" };
-const _sfc_main$5 = /* @__PURE__ */ defineComponent({
+const _sfc_main$6 = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const varly2 = useVarly();
     const store = useCollectionStore();
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("section", _hoisted_1$4, [
-        createVNode(_sfc_main$9, {
+      return openBlock(), createElementBlock("section", _hoisted_1$5, [
+        createVNode(_sfc_main$a, {
           links: [
             { icon: unref(render$8), text: "Support on Twitter", to: unref(varly2).launchTwitter, selected: false },
             { icon: null, text: "", to: "", selected: false },
@@ -19973,7 +19973,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
             { icon: unref(render$3), text: "Run", to: "artwork.run", selected: false }
           ]
         }, null, 8, ["links"]),
-        createBaseVNode("main", _hoisted_2$4, [
+        createBaseVNode("main", _hoisted_2$5, [
           createBaseVNode("form", _hoisted_3$4, [
             createBaseVNode("div", _hoisted_4$3, [
               createBaseVNode("div", _hoisted_5$3, [
@@ -19999,8 +19999,8 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _hoisted_1$3 = { class: "h-full flex" };
-const _hoisted_2$3 = { class: "h-full flex-1 overflow-y-scroll scrollbar-none" };
+const _hoisted_1$4 = { class: "h-full flex" };
+const _hoisted_2$4 = { class: "h-full flex-1 overflow-y-scroll scrollbar-none" };
 const _hoisted_3$3 = { class: "max-w-4xl mx-auto flex flex-col px-8 py-16 xl:py-32 animate__animated animate__fadeIn" };
 const _hoisted_4$2 = { class: "grid grid-cols-12 gap-8" };
 const _hoisted_5$2 = { class: "col-span-12" };
@@ -20015,7 +20015,7 @@ const _hoisted_9$1 = /* @__PURE__ */ createBaseVNode("label", {
   class: "block text-sm opacity-75"
 }, "Collection Description", -1);
 const _hoisted_10$1 = { class: "mt-1" };
-const _hoisted_11$1 = /* @__PURE__ */ createBaseVNode("hr", { class: "col-span-12 opacity-0" }, null, -1);
+const _hoisted_11 = /* @__PURE__ */ createBaseVNode("hr", { class: "col-span-12 opacity-0" }, null, -1);
 const _hoisted_12 = { class: "col-span-6" };
 const _hoisted_13 = /* @__PURE__ */ createBaseVNode("label", {
   for: "collection-width",
@@ -20035,7 +20035,7 @@ const _hoisted_19 = /* @__PURE__ */ createBaseVNode("label", {
 }, "Collection Size", -1);
 const _hoisted_20 = { class: "mt-1" };
 const _hoisted_21 = /* @__PURE__ */ createBaseVNode("div", { class: "col-span-6" }, null, -1);
-const _sfc_main$4 = /* @__PURE__ */ defineComponent({
+const _sfc_main$5 = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const WIDTH = 1500;
     const HEIGHT = 1500;
@@ -20061,15 +20061,15 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       }
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("section", _hoisted_1$3, [
-        createVNode(_sfc_main$9, {
+      return openBlock(), createElementBlock("section", _hoisted_1$4, [
+        createVNode(_sfc_main$a, {
           links: [
             { icon: unref(render$6), text: "Layer Setup", to: "artwork.layers", selected: false },
             { icon: unref(render$7), text: "Build Settings", to: "artwork.build", selected: true },
             { icon: unref(render$3), text: "Run", to: "artwork.run", selected: false }
           ]
         }, null, 8, ["links"]),
-        createBaseVNode("main", _hoisted_2$3, [
+        createBaseVNode("main", _hoisted_2$4, [
           createBaseVNode("form", _hoisted_3$3, [
             createBaseVNode("div", _hoisted_4$2, [
               createBaseVNode("div", _hoisted_5$2, [
@@ -20104,7 +20104,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
                   ])
                 ])
               ]),
-              _hoisted_11$1,
+              _hoisted_11,
               createBaseVNode("div", _hoisted_12, [
                 _hoisted_13,
                 createBaseVNode("div", _hoisted_14, [
@@ -20157,7 +20157,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
             ])
           ])
         ]),
-        createVNode(_sfc_main$7, {
+        createVNode(_sfc_main$8, {
           text: "Next\xA0\u2192",
           to: () => _ctx.$router.push({ name: "artwork.run" })
         }, null, 8, ["to"])
@@ -20406,8 +20406,8 @@ var entry_esm = /* @__PURE__ */ (() => {
   };
   return installable;
 })();
-const _hoisted_1$2 = { class: "h-full w-full flex items-center justify-center p-16" };
-const _hoisted_2$2 = { class: "flex-1 text-center" };
+const _hoisted_1$3 = { class: "h-full w-full flex items-center justify-center p-16" };
+const _hoisted_2$3 = { class: "flex-1 text-center" };
 const _hoisted_3$2 = {
   key: 0,
   class: "text-4xl"
@@ -20421,7 +20421,7 @@ const _hoisted_6$1 = [
   _hoisted_5$1
 ];
 const _hoisted_7$1 = { class: "flex flex-1 mt-8 xl:mt-16 h-4 bg-fuchsia-600 bg-opacity-20 rounded-full" };
-const _sfc_main$3 = /* @__PURE__ */ defineComponent({
+const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   props: ["steps", "currentStep", "loadingText"],
   setup(__props) {
     const props = __props;
@@ -20433,8 +20433,8 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
       return parseInt(completed2.toString(), 10);
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$2, [
-        createBaseVNode("div", _hoisted_2$2, [
+      return openBlock(), createElementBlock("div", _hoisted_1$3, [
+        createBaseVNode("div", _hoisted_2$3, [
           unref(completed) > 0 ? (openBlock(), createElementBlock("h1", _hoisted_3$2, toDisplayString$1(__props.currentStep) + "/" + toDisplayString$1(__props.steps), 1)) : (openBlock(), createElementBlock("h1", _hoisted_4$1, _hoisted_6$1)),
           createBaseVNode("div", _hoisted_7$1, [
             createBaseVNode("div", {
@@ -20447,29 +20447,51 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _hoisted_1$1 = { class: "mt-8 text-center mx-auto" };
-const _hoisted_2$1 = { class: "flex items-center" };
+const _hoisted_1$2 = { class: "mt-4 text-center mx-auto" };
+const _hoisted_2$2 = { class: "flex items-center" };
 const _hoisted_3$1 = ["textContent"];
-const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+const _sfc_main$3 = /* @__PURE__ */ defineComponent({
   props: ["icon", "text"],
   setup(__props) {
     const props = __props;
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$1, [
+      return openBlock(), createElementBlock("div", _hoisted_1$2, [
         createBaseVNode("button", {
           type: "button",
           class: "select-none text-base py-2 px-6 text-center rounded-full uppercase text-slate-50 bg-fuchsia-700 shadow-lg shadow-fuchsia-900 hover:bg-opacity-90 font-bold",
           onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("tap", $event))
         }, [
-          createBaseVNode("span", _hoisted_2$1, [
+          createBaseVNode("span", _hoisted_2$2, [
             createBaseVNode("span", null, [
-              (openBlock(), createBlock(resolveDynamicComponent(props.icon), { class: "w-6 mr-2 fill-slate-800 dark:fill-slate-100" }))
+              (openBlock(), createBlock(resolveDynamicComponent(props.icon), { class: "w-6 mr-2 fill-fuchsia-100" }))
             ]),
             createBaseVNode("span", {
               textContent: toDisplayString$1(__props.text)
             }, null, 8, _hoisted_3$1)
           ])
         ])
+      ]);
+    };
+  }
+});
+const _hoisted_1$1 = ["textContent"];
+const _hoisted_2$1 = ["src"];
+const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+  props: ["source", "caption"],
+  setup(__props) {
+    const props = __props;
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", null, [
+        __props.caption ? (openBlock(), createElementBlock("p", {
+          key: 0,
+          class: "py-2 text-center text-slate-900 opacity-50 font-semibold",
+          textContent: toDisplayString$1(__props.caption)
+        }, null, 8, _hoisted_1$1)) : createCommentVNode("", true),
+        createBaseVNode("img", {
+          src: props.source,
+          class: "w-full m-1 animate__animated animate__fadeIn shadow-lg border-2 border-opacity-50",
+          alt: "Preview"
+        }, null, 8, _hoisted_2$1)
       ]);
     };
   }
@@ -20485,16 +20507,15 @@ const _hoisted_4 = {
   class: "h-full flex flex-col items-center justify-center p-8"
 };
 const _hoisted_5 = { class: "flex flex-col items-center" };
-const _hoisted_6 = { class: "max-w-xs mx-auto" };
-const _hoisted_7 = {
+const _hoisted_6 = {
   key: 0,
   class: "p-8"
 };
-const _hoisted_8 = ["src"];
-const _hoisted_9 = { key: 1 };
-const _hoisted_10 = /* @__PURE__ */ createBaseVNode("h1", { class: "animate__animated animate__fadeIn text-base text-center" }, "You are ready to generate your beautiful NFT\xA0collection\u{1F680}", -1);
-const _hoisted_11 = {
-  key: 2,
+const _hoisted_7 = { class: "max-w-xs mx-auto" };
+const _hoisted_8 = { key: 0 };
+const _hoisted_9 = /* @__PURE__ */ createBaseVNode("h1", { class: "animate__animated animate__fadeIn text-base text-center" }, "Ready to generate your collection?", -1);
+const _hoisted_10 = {
+  key: 1,
   class: "animate__animated animate__fadeIn text-6xl text-center font-bold"
 };
 const _sfc_main$1 = /* @__PURE__ */ defineComponent({
@@ -20578,7 +20599,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     }
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("section", _hoisted_1, [
-        createVNode(_sfc_main$9, {
+        createVNode(_sfc_main$a, {
           links: [
             { icon: unref(render$6), text: "Layer Setup", to: "artwork.layers", selected: false },
             { icon: unref(render$7), text: "Build Settings", to: "artwork.build", selected: false },
@@ -20587,29 +20608,28 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
         }, null, 8, ["links"]),
         createBaseVNode("main", _hoisted_2, [
           isWorking.value ? (openBlock(), createElementBlock("div", _hoisted_3, [
-            createVNode(_sfc_main$3, {
+            createVNode(_sfc_main$4, {
               steps: steps.value,
               "current-step": currentStep.value,
               "loading-text": "Preparing..."
             }, null, 8, ["steps", "current-step"])
           ])) : (openBlock(), createElementBlock("div", _hoisted_4, [
             createBaseVNode("div", _hoisted_5, [
-              createBaseVNode("div", _hoisted_6, [
-                preview.value ? (openBlock(), createElementBlock("div", _hoisted_7, [
-                  createBaseVNode("img", {
-                    src: preview.value,
-                    class: "w-full animate__animated animate__fadeIn",
-                    alt: "Preview"
-                  }, null, 8, _hoisted_8)
-                ])) : createCommentVNode("", true),
-                !isDone.value ? (openBlock(), createElementBlock("div", _hoisted_9, [
-                  _hoisted_10,
-                  createVNode(_sfc_main$2, {
+              preview.value ? (openBlock(), createElementBlock("div", _hoisted_6, [
+                createVNode(_sfc_main$2, {
+                  source: preview.value,
+                  caption: "Generated Preview"
+                }, null, 8, ["source"])
+              ])) : createCommentVNode("", true),
+              createBaseVNode("div", _hoisted_7, [
+                !isDone.value ? (openBlock(), createElementBlock("div", _hoisted_8, [
+                  _hoisted_9,
+                  createVNode(_sfc_main$3, {
                     icon: unref(render$3),
-                    text: "Run",
+                    text: "Let's Do It",
                     onTap: generateCollection
                   }, null, 8, ["icon"])
-                ])) : (openBlock(), createElementBlock("h1", _hoisted_11, "Yay \u{1F389}"))
+                ])) : (openBlock(), createElementBlock("h1", _hoisted_10, "Yay \u{1F389}"))
               ])
             ])
           ]))
@@ -20629,22 +20649,22 @@ const routes = [
   {
     name: "start",
     path: "/",
-    component: _sfc_main$8
+    component: _sfc_main$9
   },
   {
     name: "artwork.layers",
     path: "/artwork/layers",
-    component: _sfc_main$6
+    component: _sfc_main$7
   },
   {
     name: "artwork.collection",
     path: "/artwork/collection",
-    component: _sfc_main$5
+    component: _sfc_main$6
   },
   {
     name: "artwork.build",
     path: "/artwork/build",
-    component: _sfc_main$4
+    component: _sfc_main$5
   },
   {
     name: "artwork.run",

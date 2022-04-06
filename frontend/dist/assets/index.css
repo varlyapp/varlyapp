@@ -4710,6 +4710,9 @@ select {
 .m-0 {
   margin: 0px;
 }
+.m-1 {
+  margin: 0.25rem;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -4938,6 +4941,12 @@ select {
 .fill-slate-800 {
   fill: #1e293b;
 }
+.fill-slate-100 {
+  fill: #f1f5f9;
+}
+.fill-fuchsia-100 {
+  fill: #fae8ff;
+}
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -4984,6 +4993,10 @@ select {
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 .text-left {
   text-align: left;
@@ -5064,6 +5077,9 @@ select {
 }
 .opacity-0 {
   opacity: 0;
+}
+.opacity-50 {
+  opacity: 0.5;
 }
 .shadow-lg {
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
