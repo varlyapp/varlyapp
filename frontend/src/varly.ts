@@ -1,12 +1,11 @@
-import { reactive, App, inject } from 'vue'
-import { Router, useRouter } from 'vue-router'
+import { App, inject, reactive } from 'vue'
 import type { Store } from 'pinia'
 import type { go } from '@/wailsjs/go'
 import type { runtime as Runtime } from '@/wailsjs/runtime'
 import type { Settings } from '@/wailsjs/go/models'
 import { useStore, useCollectionStore } from '@/store'
 
-const VarlySymbol = '__Varly__'
+const VarlySymbol = '__VARLY__'
 
 export { VarlySymbol, createVarly, useVarly }
 
@@ -63,10 +62,6 @@ class Varly {
             this.isDark = false
             document.querySelector('html')?.classList.remove('dark')
         }
-    }
-
-    getIsDark(): boolean {
-        return this.isDark
     }
 
     async stat(file: string) {
