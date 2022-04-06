@@ -2,7 +2,7 @@ clean:
 	rm -rf build/bin
 
 dev:
-	wails dev & npm --prefix ./frontend run dev
+	npm --prefix ./frontend run build && wails dev
 
 build: clean
 	npm --prefix ./frontend run build && wails build -clean
