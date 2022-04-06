@@ -64,7 +64,7 @@ async function loadLayers() {
         />
 
         <main class="relative h-full flex-1 overflow-y-scroll scrollbar-none">
-            <section v-if="collectionStore && collectionStore.hasLayers" class="h-full animate__animated animate__fadeIn">
+            <section v-if="collectionStore && collectionStore.layers && Object.keys(collectionStore.layers).length" class="h-full animate__animated animate__fadeIn">
                 <div class="max-w-4xl mx-auto px-8 py-16 xl:py-32">
                     <!-- @see :force-fallback -->
                     <!-- Solves issue where dragging works first but second drag requires two clicks -->
@@ -73,7 +73,7 @@ async function loadLayers() {
                         class="rounded bg-slate-50 bg-opacity-20 dark:bg-slate-900 dark:bg-opacity-20 border-dashed border-2 border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
                         group="trait"
                         v-model="collectionStore.traits"
-                        :force-fallback="true"
+                        :force-fallback="false"
                         @start="isTraitDragging = true"
                         @end="isTraitDragging = false"
                         item-key="name"
@@ -100,9 +100,6 @@ async function loadLayers() {
                                             :value="`${weightDistributionTotal(collectionStore.layers[element.name])}`"
                                         />
                                     </div>
-                                    <!-- <h2
-                                class="text-lg font-semibold"
-                                    >{{ weightDistributionTotal(collectionStore.layers[element.name]) }}&percnt;</h2>-->
                                 </div>
 
                                 <draggable
@@ -118,7 +115,7 @@ async function loadLayers() {
                                         <div
                                             :key="element.Name"
                                             class="min-w-full flex justify-between border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
-                                            :class="[index % 2 === 0 ? `bg-slate-900 dark:bg-slate-100 bg-opacity-5 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]"
+                                            :class="[index % 2 === 0 ? `bg-slate-900 dark:bg-slate-100 bg-opacity-10 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]"
                                         >
                                             <div
                                                 class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
@@ -172,7 +169,7 @@ async function loadLayers() {
         </main>
 
         <FloatingButton
-            v-if="collectionStore && collectionStore.hasLayers"
+            v-if="collectionStore && collectionStore.layers && Object.keys(collectionStore.layers).length"
             text="Next&nbsp;→"
             :to="() => $router.push({ name: 'artwork.build' })"
         ></FloatingButton>
