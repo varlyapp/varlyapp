@@ -13,6 +13,7 @@ build/*
 node_modules
 
 frontend/dist
+frontend/wailsjs
 
 frontend/src/*.js
 frontend/src/*.json
