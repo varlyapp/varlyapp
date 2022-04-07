@@ -5,10 +5,9 @@ import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
-import SubmitButton from '@/components/SubmitButton.vue'
 import { useCollectionStore } from '@/store'
 import { useVarly } from '@/Varly'
-import { getPreview, getFileInfo } from '@/utils/backend'
+import { log, getPreview } from '@/utils/backend'
 import Preview from '@/components/Preview.vue'
 
 const varly = useVarly()
@@ -104,6 +103,11 @@ async function generateCollection() {
         Size: parseInt(store.size.toString(), 10)
     }
 
+    const data = JSON.stringify(config)
+    const saved = await varly.app.SaveFile('collection1.json', data)
+
+    log(saved.toString())
+
     await varly.app.GenerateNewCollectionFromConfig(config)
 
     toggleIsWorking()
@@ -130,18 +134,12 @@ async function generateCollection() {
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
-                    <div v-if="preview" class="p-8">
+                    <div v-if="preview && !isDone" class="p-8">
                         <Preview :source="preview" caption="Generated Preview" />
                     </div>
                     <div class="max-w-xs mx-auto">
-                        <div v-if="!isDone">
-                            <h1
-                                class="animate__animated animate__fadeIn text-base text-center"
-                            >Ready to generate your collection?</h1>
-                            <SubmitButton :icon="PlayIcon" text="Let's Do It" @tap="generateCollection" />
-                        </div>
                         <h1
-                            v-else
+                            v-if="isDone"
                             class="animate__animated animate__fadeIn text-6xl text-center font-bold"
                         >Yay 🎉</h1>
                     </div>
@@ -156,6 +154,6 @@ async function generateCollection() {
             :duration="5000"
             class="absolute w-screen h-screen top-0 right-0 bottom-0 left-0"
         />
-        <!-- <FloatingButton v-if="!isWorking" text="Let&rsquo;s Go" :to="generateCollection"></FloatingButton> -->
+        <FloatingButton v-if="!isDone" :icon="PlayIcon" text="Let&rsquo;s Do It" :to="generateCollection" />
     </section>
 </template>

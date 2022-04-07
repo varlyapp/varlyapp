@@ -101,10 +101,6 @@ func (app *App) SaveFileDialog() string {
 	return path
 }
 
-func (app *App) GenerateCollectionFromConfig(config nft.NewCollectionConfig) {
-	nft.GenerateCollectionFromConfig(app.ctx, config)
-}
-
 func (app *App) GenerateNewCollectionFromConfig(config nft.NewCollectionConfig) {
 	nft.GenerateNewCollectionFromConfig(app.ctx, config)
 }
@@ -140,8 +136,8 @@ func (app *App) GetPreview(config nft.NewCollectionConfig) string {
 	return str
 }
 
-func (app *App) GetApplicationDocumentsDirectory() string {
-	path, _ := fs.GetApplicationDocumentsDirectory()
+func (app *App) GetApplicationDocumentsDirectory(paths ...string) string {
+	path, _ := fs.GetApplicationDocumentsDirectory(paths...)
 
 	return path
 }
@@ -165,7 +161,11 @@ func (app *App) EncodeImage(path string) string {
 }
 
 func (app *App) SaveFile(file string, data string) bool {
-	err := os.WriteFile(file, []byte(data), os.ModePerm)
+	docs := app.GetApplicationDocumentsDirectory()
+	path := fmt.Sprintf("%s%s", docs, file)
+
+	fmt.Println(path)
+	err := os.WriteFile(path, []byte(data), os.ModePerm)
 
 	if err != nil {
 		return false
