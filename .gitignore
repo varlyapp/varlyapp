@@ -12,7 +12,8 @@ build/*
 
 node_modules
 
-frontend/dist/*
+frontend/dist
+
 frontend/src/*.js
 frontend/src/*.json
 frontend/src/*.txt
