@@ -1,0 +1,126 @@
+{
+    "Dir": "/Users/selvinortiz/Desktop/Hashlips Output/New",
+    "Order": [
+        "Background",
+        "Eyeball",
+        "Eye color",
+        "Iris",
+        "Shine",
+        "Bottom lid",
+        "Top lid"
+    ],
+    "Layers": {
+        "Background": [
+            {
+                "Name": "Black#1.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Background/Black#1.png",
+                "Weight": 1
+            }
+        ],
+        "Bottom lid": [
+            {
+                "Name": "High#20.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Bottom lid/High#20.png",
+                "Weight": 20
+            },
+            {
+                "Name": "Low#40.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Bottom lid/Low#40.png",
+                "Weight": 40
+            },
+            {
+                "Name": "Middle#40.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Bottom lid/Middle#40.png",
+                "Weight": 40
+            }
+        ],
+        "Eye color": [
+            {
+                "Name": "Cyan#1.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Cyan#1.png",
+                "Weight": 1
+            },
+            {
+                "Name": "Green#1.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Green#1.png",
+                "Weight": 1
+            },
+            {
+                "Name": "Pink#1.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Pink#1.png",
+                "Weight": 1
+            },
+            {
+                "Name": "Purple#1.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Purple#1.png",
+                "Weight": 1
+            },
+            {
+                "Name": "Red#1.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Red#1.png",
+                "Weight": 1
+            },
+            {
+                "Name": "Yellow#10.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Yellow#10.png",
+                "Weight": 10
+            }
+        ],
+        "Eyeball": [
+            {
+                "Name": "Red#50.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eyeball/Red#50.png",
+                "Weight": 50
+            },
+            {
+                "Name": "White#50.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eyeball/White#50.png",
+                "Weight": 50
+            }
+        ],
+        "Iris": [
+            {
+                "Name": "Large#20.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Iris/Large#20.png",
+                "Weight": 20
+            },
+            {
+                "Name": "Medium#20.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Iris/Medium#20.png",
+                "Weight": 20
+            },
+            {
+                "Name": "Small#60.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Iris/Small#60.png",
+                "Weight": 60
+            }
+        ],
+        "Shine": [
+            {
+                "Name": "Shapes#100.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Shine/Shapes#100.png",
+                "Weight": 100
+            }
+        ],
+        "Top lid": [
+            {
+                "Name": "High#30.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Top lid/High#30.png",
+                "Weight": 30
+            },
+            {
+                "Name": "Low#20.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Top lid/Low#20.png",
+                "Weight": 20
+            },
+            {
+                "Name": "Middle#50.png",
+                "Item": "/Users/selvinortiz/Desktop/Hashlips/Top lid/Middle#50.png",
+                "Weight": 50
+            }
+        ]
+    },
+    "Width": 512,
+    "height": 512,
+    "Size": 100
+}
