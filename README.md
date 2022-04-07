@@ -1,34 +1,31 @@
 ![Varly.app](https://s3.us-west-2.amazonaws.com/cdn.selvin.dev/varly-preview.png)
 
 # Varly.app
-> A delightful **desktop app** for busy NFT artists and creators who don't want to spend valueable time downloading sketchy software, stressing over configuration files, and watching hours of YouTube videos.
+> A delightful **desktop app** for NFT creatives who value their time and care about the quality of their work.
+> Varly aims to create an end-to-end workflow for generating, uploading, and launching your NFT collection.
+> All from a lighting fast Mac/Windows/Linux app with a small memory and CPU footprint.
 
----
+## Roadmap
 
-## Roadmap (In Phase 1)
-
-### Phase 1
+### Phase 1 (Generate it) 🥞
   - Generative art engine (_in progress_)
-    - Generate artwork based on layers/traits provided
-    - Rarity weight distribution
-    - Artwork DNA
+    - Generate artwork based on **traits** and **variants** ✅
+    - Easy configuration of **rarity weight distribution** ✅
+    - Smart formulas for calculating uniqueness and creating NFT DNA IDs
 
-### Phase 2
+### Phase 2 (Codify it) ✍️
   - Smart Contracts
     - Customizable ERC721 and ERC721A templates
     - Customizable ERC1155 template
     - Smart contract deployment to Ethereum and Polygon
 
-### Phase 3
+### Phase 3 (Lunch it) 🚀
   - Minting Website or Widget
-    - Generate minting website from collection assets
-    - Generate minting widget from collection assets to embed on your own website
+    - Generate minting website or embedable widget from collection assets
     - Deploy minting website to Netlify or Heroku
 
 ### Phase 4
-  - Generative art engine 2.0
-    - Improved art generation
-    - Trait distribution verification
+> The community will decide where we go from here.
 
 ---
 
@@ -50,4 +47,4 @@
 
 Thank you🙏
 
--**Selvin**
+&mdash;**Selvin**
