@@ -12,7 +12,7 @@
     - Generate artwork based on **traits** and **variants** ✅
     - Easy configuration of **rarity weight distribution** ✅
     - Smart formulas for calculating uniqueness and creating NFT DNA IDs
-
+    - Upload assets to IPFS pinning service (Piñata)
 ### Phase 2 (Codify it) ✍️
   - Smart Contracts
     - Customizable ERC721 and ERC721A templates
