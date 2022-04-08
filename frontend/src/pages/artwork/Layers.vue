@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
 import Sidebar from '@/components/Sidebar.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
@@ -35,13 +35,13 @@ function toggleCollapsed(element: any) {
 }
 
 async function loadLayers() {
-    const directory = await varly.openDirectoryDialog()
+    const sourceDirectory = await varly.openDirectoryDialog()
 
-    if (!directory) return
+    if (!sourceDirectory) return
 
-    collectionStore.directory = directory
+    collectionStore.sourceDirectory = sourceDirectory
 
-    const config: { Layers? } = await varly.app.ReadLayers(collectionStore.directory)
+    const config: { Layers? } = await varly.app.ReadLayers(collectionStore.sourceDirectory)
 
     collectionStore.layers = { ...config.Layers }
 

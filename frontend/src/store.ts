@@ -13,26 +13,42 @@ const useStore = defineStore('app', () => {
 }, { persist: true })
 
 const useCollectionStore = defineStore('collection', () => {
-  const traits      = ref<Object[]>([])
-  const layers      = ref<Object>({})
-  const directory   = ref<string>('')    // where the layers were loaded from
-  const name        = ref<string>('')
+  const sourceDirectory = ref<string>('')
+  const outputDirectory = ref<string>('')
+  const name = ref<string>('')
   const description = ref<string>('')
-  const size        = ref<number>(0)
-  const width       = ref<number>(0)
-  const height      = ref<number>(0)
+  const traits = ref<Object[]>([])
+  const layers = ref<Object>({})
+  const size = ref<number>(0)
+  const width = ref<number>(0)
+  const height = ref<number>(0)
 
-  function reset(this: any) {
-    this.traits = []
-    this.layers = {}
-    this.directory = ''
-    this.name = ''
-    this.size = 0
-    this.width = 0
-    this.height = 0
+  function hydrate(this: any, collection: any) {
+    this.reset()
+    this.sourceDirectory = collection.sourceDirectory || ''
+    this.outputDirectory = collection.outputDirectory || ''
+    this.name = collection.name || ''
+    this.descrption = collection.descrption || ''
+    this.traits = collection.traits || []
+    this.layers = collection.layers || {}
+    this.width = collection.width || 0
+    this.height = collection.height || 0
+    this.size = collection.size || 0
   }
 
-  return { reset, traits, layers, directory, name, description, size, width, height }
+  function reset(this: any) {
+    this.sourceDirectory = ''
+    this.outputDirectory = ''
+    this.name = ''
+    this.description = ''
+    this.traits = []
+    this.layers = {}
+    this.width = 0
+    this.height = 0
+    this.size = 0
+  }
+
+  return { hydrate, reset, traits, layers, sourceDirectory, outputDirectory, name, description, width, height, size }
 }, { persist: true })
 
 export { useStore, useCollectionStore }

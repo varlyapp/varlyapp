@@ -44,6 +44,9 @@ func main() {
 		OnShutdown:        app.shutdown,
 		Bind: []interface{}{
 			app,
+			app.SettingsService,
+			app.FileSystemService,
+			app.CollectionService,
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{

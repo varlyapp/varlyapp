@@ -7,29 +7,39 @@ import (
 	f "io/fs"
 	"log"
 	"os"
+	"path/filepath"
 
 	wr "github.com/mroth/weightedrand"
 	"github.com/varlyapp/varlyapp/backend/fs"
 	"github.com/varlyapp/varlyapp/backend/img"
 	"github.com/varlyapp/varlyapp/backend/nft"
-	"github.com/varlyapp/varlyapp/backend/settings"
+	"github.com/varlyapp/varlyapp/backend/services"
+	"github.com/wailsapp/wails/v2/pkg/menu"
+	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+)
+
+var (
+	userdir, _ = os.UserConfigDir()
+	basedir    = filepath.Join(userdir, "varlyapp")
+	docsdir    = filepath.Join(basedir, "Documents")
 )
 
 // App struct
 type App struct {
-	ctx      context.Context
-	Docs     map[string]interface{}
-	Settings *settings.Settings
+	ctx               context.Context
+	Docs              map[string]interface{}
+	SettingsService   *services.SettingsService
+	FileSystemService *services.FileSystemService
+	CollectionService *services.CollectionService
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	dir, _ := fs.GetApplicationDocumentsDirectory()
-	config, _ := settings.LoadSettings(fmt.Sprint(dir, "settings.json"))
-
 	return &App{
-		Settings: config,
+		SettingsService:   services.NewSettingsService(docsdir),
+		FileSystemService: services.NewFileSystemService(),
+		CollectionService: services.NewCollectionService(),
 	}
 }
 
@@ -37,22 +47,22 @@ func NewApp() *App {
 func (app *App) startup(ctx context.Context) {
 	// Perform your setup here
 	app.ctx = ctx
-	// menu := menu.NewMenuFromItems(
-	// 	menu.SubMenu("File", menu.NewMenuFromItems(
-	// 		menu.Text("Open", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
-	// 			fmt.Println(cd)
-	// 		}),
-	// 		menu.Text("Save", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
-	// 			runtime.EventsEmit(ctx, "shortcut.save")
-	// 		}),
-	// 		menu.Separator(),
-	// 		menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
-	// 			runtime.Quit(ctx)
-	// 		}),
-	// 	)),
-	// )
+	app.FileSystemService.Ctx = ctx
+	app.CollectionService.Ctx = ctx
+	m := menu.NewMenuFromItems(
+		menu.AppMenu(),
+		menu.SubMenu("File", menu.NewMenuFromItems(
+			menu.Text("Open Collection", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
+				runtime.EventsEmit(ctx, "shortcut.collection.open")
+			}),
+			menu.Text("Save Collection", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
+				runtime.EventsEmit(ctx, "shortcut.collection.save")
+			}),
+		)),
+		menu.EditMenu(),
+	)
 
-	// runtime.MenuUpdateApplicationMenu(ctx)
+	runtime.MenuSetApplicationMenu(ctx, m)
 }
 
 // domReady is called after the front-end dom has been loaded
@@ -63,21 +73,6 @@ func (app *App) domReady(ctx context.Context) {
 // shutdown is called at application termination
 func (app *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
-}
-
-func (app *App) GetSettings() *settings.Settings {
-	return app.Settings
-}
-
-func (app *App) SaveSettings(settings *settings.Settings) {
-	app.Settings.Documents = append(app.Settings.Documents, settings.Documents...)
-	fmt.Println(app.Settings.Documents)
-
-	app.Settings.Save()
-}
-
-func (app *App) SaveDocuments(documents []settings.Document) {
-	app.Settings.SaveDocuments(documents)
 }
 
 func (app *App) OpenDirectoryDialog() string {
@@ -194,4 +189,8 @@ func (app *App) MessageDialog(options runtime.MessageDialogOptions) string {
 	})
 
 	return res
+}
+
+func (app *App) GetFileContents(file string) string {
+	return fs.GetFileContents(file)
 }

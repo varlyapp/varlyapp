@@ -36,4 +36,23 @@ async function getFileInfo(file: string) {
     return await api().GetImageStats(file)
 }
 
-export { api, runtime, log, launch, getPreview, getFileInfo }
+async function openFile(): Promise<string> {
+    return await api().OpenFileDialog()
+}
+
+async function openFileContents(): Promise<string> {
+    const path = await api().OpenFileDialog()
+
+    if (path) {
+        const contents = await api().GetFileContents(path)
+
+        console.log(contents)
+
+        return contents
+    }
+    console.log(path)
+
+    return ''
+}
+
+export { api, runtime, log, launch, getPreview, getFileInfo, openFile, openFileContents }

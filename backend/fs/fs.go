@@ -2,6 +2,7 @@ package fs
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -98,4 +99,15 @@ func UploadCollection(key string, secret string) string {
 		return fmt.Sprintln(err)
 	}
 	return cid
+}
+
+func GetFileContents(path string) string {
+	contents, err := os.ReadFile(path)
+
+	if err != nil {
+		log.Fatal(err)
+		return ""
+	}
+
+	return string(contents)
 }

@@ -68,10 +68,6 @@ class Varly {
         return await this.app.GetImageStats(file)
     }
 
-    async getSettings(): Promise<Settings> {
-        return await this.app.GetSettings()
-    }
-
     launchTwitter(): void {
         this.runtime.BrowserOpenURL('https://twitter.com/varlyapp')
     }

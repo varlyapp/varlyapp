@@ -2,13 +2,12 @@
 import { onBeforeMount, reactive } from 'vue'
 import Base64Image from '@/components/Base64Image.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import { useVarly } from '@/Varly'
+import rpc from '@/rpc'
 
-const varly = useVarly()
 const documents = reactive<any>({})
 
 onBeforeMount(async () => {
-  const settings = await varly.getSettings()
+  const settings = await rpc.SettingsService.GetSettings()
   documents.value = settings.documents
 })
 </script>
