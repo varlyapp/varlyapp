@@ -12,6 +12,8 @@ import (
 	"sync"
 	"time"
 
+	r "runtime"
+
 	"github.com/disintegration/imaging"
 	wr "github.com/mroth/weightedrand"
 	"github.com/varlyapp/varlyapp/backend/fs"
@@ -59,10 +61,10 @@ func init() {
 }
 
 func GenerateNewCollectionFromConfig(ctx context.Context, config NewCollectionConfig) {
+	start := time.Now()
+
 	runtime.EventsEmit(ctx, "collection.generation.started", map[string]int{"CollectionSize": config.Size})
 
-	start := time.Now()
-	// Create fake jobs for testing purposes
 	var jobs []Job
 
 	for i := 0; i < config.Size; i++ {
@@ -72,10 +74,9 @@ func GenerateNewCollectionFromConfig(ctx context.Context, config NewCollectionCo
 	var (
 		wg              sync.WaitGroup
 		jobChannel      = make(chan Job)
-		numberOfWorkers = 16
+		numberOfWorkers = r.NumCPU()
 	)
 
-	runtime.LogInfo(ctx, fmt.Sprintf("%v", numberOfWorkers))
 	wg.Add(numberOfWorkers)
 
 	// Start the workers
@@ -91,44 +92,6 @@ func GenerateNewCollectionFromConfig(ctx context.Context, config NewCollectionCo
 	close(jobChannel)
 	wg.Wait()
 	fmt.Printf("Took %s\n", time.Since(start))
-}
-
-func MakeNFT(workerId int, job Job, ctx context.Context) {
-	var images []string
-
-	for _, trait := range job.Config.Order {
-		files := job.Config.Layers[trait]
-
-		if len(files) > 0 {
-			var choices []wr.Choice
-
-			for _, layer := range files {
-				choices = append(choices, wr.Choice{Item: layer.Item, Weight: uint(layer.Weight)})
-			}
-
-			chooser, err := wr.NewChooser(choices...)
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			pick := chooser.Pick().(string)
-
-			images = append(images, pick)
-		}
-	}
-
-	png := fmt.Sprintf("%s/%d.png", job.Config.Dir, job.Id)
-
-	defer func() {
-		completed++
-
-		data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(job.Config.Size)}
-		runtime.EventsEmit(ctx, "collection.item.generated", data)
-
-		fmt.Printf("%d. %s\n", job.Id, png)
-	}()
-	GeneratePNG(images, png, job.Config.Width, job.Config.Height)
 }
 
 func ReadLayers(ctx context.Context, dir string) fs.CollectionConfig {
@@ -173,9 +136,47 @@ func GenerateMetadata(metadata MetaCollection, output string) bool {
 	return true
 }
 
+func makeNFT(workerId int, job Job, ctx context.Context) {
+	var images []string
+
+	for _, trait := range job.Config.Order {
+		files := job.Config.Layers[trait]
+
+		if len(files) > 0 {
+			var choices []wr.Choice
+
+			for _, layer := range files {
+				choices = append(choices, wr.Choice{Item: layer.Item, Weight: uint(layer.Weight)})
+			}
+
+			chooser, err := wr.NewChooser(choices...)
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			pick := chooser.Pick().(string)
+
+			images = append(images, pick)
+		}
+	}
+
+	png := fmt.Sprintf("%s/%d.png", job.Config.Dir, job.Id)
+
+	defer func() {
+		completed++
+
+		data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(job.Config.Size)}
+		runtime.EventsEmit(ctx, "collection.item.generated", data)
+
+		fmt.Printf("%d. %s\n", job.Id, png)
+	}()
+	GeneratePNG(images, png, job.Config.Width, job.Config.Height)
+}
+
 func nftWorker(id int, wg *sync.WaitGroup, jobChannel <-chan Job, ctx context.Context) {
 	defer wg.Done()
 	for job := range jobChannel {
-		MakeNFT(id, job, ctx)
+		makeNFT(id, job, ctx)
 	}
 }

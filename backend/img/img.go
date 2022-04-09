@@ -14,6 +14,7 @@ import (
 func MakePreview(layers []string, width int, height int) (string, error) {
 	preview := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
 
+	// @todo this can fail if file doesn't exist, add error check
 	for _, layer := range layers {
 		img, _ := imaging.Open(layer)
 		preview = imaging.Overlay(preview, img, image.Pt(0, 0), 1)

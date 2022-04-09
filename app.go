@@ -159,7 +159,6 @@ func (app *App) SaveFile(file string, data string) bool {
 	docs := app.GetApplicationDocumentsDirectory()
 	path := fmt.Sprintf("%s%s", docs, file)
 
-	fmt.Println(path)
 	err := os.WriteFile(path, []byte(data), os.ModePerm)
 
 	if err != nil {
