@@ -18,6 +18,16 @@ func ReadFileContents(path string) (string, error) {
 	return string(contents), nil
 }
 
+func WriteFileContents(path string, contents []byte) error {
+	err := os.WriteFile(path, contents, os.ModePerm)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func OpenFileContents(ctx context.Context) (string, error) {
 	path, err := runtime.OpenFileDialog(ctx, runtime.OpenDialogOptions{
 		Filters: []runtime.FileFilter{
