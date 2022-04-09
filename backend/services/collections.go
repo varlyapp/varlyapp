@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/pkg/errors"
 	"github.com/varlyapp/varlyapp/backend/lib"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type LayerType string
@@ -16,12 +18,12 @@ const (
 )
 
 type Layer struct {
-	Name   string
-	Path   string
-	Width  float64
-	Height float64
-	Weight float64
-	Type   LayerType
+	Name   string    `json:"name"`
+	Path   string    `json:"path"`
+	Width  float64   `json:"width"`
+	Height float64   `json:"height"`
+	Weight float64   `json:"weight"`
+	Type   LayerType `json:"type"`
 }
 
 type Trait struct {
@@ -38,8 +40,8 @@ type Collection struct {
 	OutputDirectory string             `json:"outputDirectory"`
 	Traits          []Trait            `json:"traits"`
 	Layers          map[string][]Layer `json:"layers"`
-	Width           int                `json:"width"`
-	Height          int                `json:"height"`
+	Width           float64            `json:"width"`
+	Height          float64            `json:"height"`
 	Size            int                `json:"size"`
 }
 
@@ -91,6 +93,36 @@ func (c *CollectionService) LoadCollection() *Collection {
 	}
 }
 func (c *CollectionService) SaveCollection(collection *Collection) error {
+	path, err := runtime.SaveFileDialog(c.Ctx, runtime.SaveDialogOptions{
+		Title: "Save Varly collection as a file",
+		DefaultFilename: collection.Name,
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "Varly Collection Files (*.json, *.varly)",
+				Pattern:     "*.json;*.varly",
+			},
+		},
+	})
+	if err != nil {
+		return err
+	}
+	if path == "" {
+		return errors.New("path to file was empty")
+	}
+
+	contents, err := json.Marshal(collection)
+
+	if err != nil {
+		return err
+	}
+
+	err = lib.WriteFileContents(path, contents)
+
+	if err != nil {
+		lib.ShowErrorModal(c.Ctx, "Collection cannot be saved", "Collection data may be corrupted")
+		return nil
+	}
+
 	return nil
 }
 func (c *CollectionService) ValidateCollection() error {
