@@ -46,12 +46,12 @@ const startNewProjectAction = () => {
 const presets = {
     links: [
         { icon: null, text: 'Support', to: '', selected: false },
-        {
-            icon: TranslateIcon, text: t('switch_language'), to: () => {
-                console.log('Setting language')
-                store.setLocale('es')
-            }, selected: false
-        },
+        // {
+        //     icon: TranslateIcon, text: t('switch_language'), to: () => {
+        //         console.log('Setting language')
+        //         store.setLocale('es')
+        //     }, selected: false
+        // },
         { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: () => launch('https://twitter.com/varlyapp'), selected: false },
         { icon: null, text: 'Workspace', to: '', selected: false },
         { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: route.name === 'start' },
