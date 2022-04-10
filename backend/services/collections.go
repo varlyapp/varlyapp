@@ -110,7 +110,7 @@ func (c *CollectionService) SaveCollection(collection *Collection) error {
 		return errors.New("path to file was empty")
 	}
 
-	contents, err := json.Marshal(collection)
+	contents, err := json.MarshalIndent(collection, "", "  ")
 
 	if err != nil {
 		return err
