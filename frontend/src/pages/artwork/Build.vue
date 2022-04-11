@@ -4,13 +4,11 @@ import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import { useCollectionStore } from '@/store'
 import FloatingButton from '@/components/FloatingButton.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import { useVarly } from '@/Varly'
 
 const WIDTH = 1500
 const HEIGHT = 1500
 const SIZE = 100
 
-const varly = useVarly()
 const store = useCollectionStore()
 
 onMounted(async () => {
@@ -24,7 +22,7 @@ onMounted(async () => {
                 if (store.layers[trait] && store.layers[trait].length) {
                     const image = store.layers[trait][0]
                     if (image) {
-                        const stats = await varly.stat(image)
+                        const stats = {} // await varly.stat(image)
                         console.log(stats)
                     }
                 }

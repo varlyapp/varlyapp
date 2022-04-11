@@ -3,11 +3,26 @@ package lib
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+func GetApplicationDocumentsDirectory(paths ...string) (string, error) {
+	dir, _ := os.UserConfigDir()
+
+	path := fmt.Sprintf("%s/varlyapp/Documents/%s", dir, strings.Join(paths, "/"))
+
+	err := os.MkdirAll(path, os.ModePerm);
+
+	if err != nil {
+		return "", err
+	}
+
+	return path, nil
+}
 func ReadFileContents(path string) (string, error) {
 	contents, err := os.ReadFile(path)
 

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
 import Sidebar from '@/components/Sidebar.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
 import { useCollectionStore } from '@/store'
 import { CogIcon, CollectionIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
-import { useVarly } from '@/Varly'
-
-const varly = useVarly()
+import rpc from '@/rpc'
+import { Collection } from '@/wailsjs/go/models'
 
 const intl = useI18n({ useScope: 'global' })
 const { t } = intl
@@ -24,7 +23,7 @@ const isLayerEnabled = ref(true)
 function weightDistributionTotal(items: any) {
     let total = 0
     items.forEach((item) => {
-        total += parseInt(item.Weight.toString(), 10)
+        total += parseInt(item.weight.toString(), 10)
     })
 
     return total
@@ -34,19 +33,27 @@ function toggleCollapsed(element: any) {
     element.collapsed = !element.collapsed
 }
 
-async function loadLayers() {
-    const sourceDirectory = await varly.openDirectoryDialog()
+onMounted(() => {
+    console.log({ state: collectionStore.$state })
+})
 
-    if (!sourceDirectory) return
+async function loadLayers() {
+    const sourceDirectory = await rpc.app.OpenDirectoryDialog('Open Collection Folder')
+
+    if (!sourceDirectory) {
+        console.error('source directory is empty')
+    }
 
     collectionStore.sourceDirectory = sourceDirectory
 
-    const config: { Layers? } = await varly.app.ReadLayers(collectionStore.sourceDirectory)
+    const collection: Collection = await rpc.CollectionService.LoadCollectionFromDirectory(sourceDirectory)
+    console.log({ collection })
 
-    collectionStore.layers = { ...config.Layers }
+    collectionStore.layers = { ...collection.layers }
 
     const traits: Object[] = []
 
+    console.log( collectionStore.$state )
     for (const trait in collectionStore.layers) {
         if (Object.hasOwnProperty.call(collectionStore.layers, trait)) {
             traits.push({ name: trait, collapsed: false })
@@ -123,11 +130,11 @@ async function loadLayers() {
                                         >
                                             <div
                                                 class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
-                                                v-text="element.Name"
+                                                v-text="element.name"
                                             />
                                             <div
                                                 class="whitespace-nowrap py-2 px-4 text-sm"
-                                                v-text="element.Weight"
+                                                v-text="element.weight"
                                             />
                                         </div>
                                     </template>

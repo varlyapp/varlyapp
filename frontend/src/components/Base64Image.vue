@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import rpc from '@/rpc'
 import { ref, onBeforeMount } from 'vue'
-import { api } from '@/utils/backend'
 
 const props = defineProps(['path'])
 const image = ref('')
 
 onBeforeMount(async () => {
-    image.value = await api().EncodeImage(props.path)
+    image.value = await rpc.app.EncodeImage(props.path)
 })
 </script>
 

@@ -6,11 +6,10 @@ import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
 import { useCollectionStore } from '@/store'
-import { useVarly } from '@/Varly'
-import { log, getPreview } from '@/utils/backend'
 import Preview from '@/components/Preview.vue'
+import rpc from '@/rpc'
+import { Collection } from '@/wailsjs/go/models'
 
-const varly = useVarly()
 const store = useCollectionStore()
 
 const steps = ref(0)
@@ -34,16 +33,17 @@ onMounted(() => {
         }
     }
 
-    const config = {
-        Dir: '',
-        Order: [...store.traits].map((item: any) => item.name),
-        Layers: layers,
-        Width: parseInt(store.width.toString(), 10),
+    const collection = Collection.createFrom({
+        sourceDirectory: store.sourceDirectory,
+        outputDirectory: store.outputDirectory,
+        traits: [...store.traits],
+        layers: layers,
+        width: parseInt(store.width.toString(), 10),
         height: parseInt(store.height.toString(), 10),
-        Size: parseInt(store.size.toString(), 10)
-    }
+        size: parseInt(store.size.toString(), 10)
+    })
 
-    getPreview(config)
+    rpc.CollectionService.GenerateCollectionPreview(collection)
         .then((base64Image) => {
             preview.value = base64Image
         })
@@ -52,10 +52,10 @@ onMounted(() => {
 
 function queueConfetti() {
     isDone.value = true
-    varly.runtime.LogInfo('Setting isDone to true')
+    window.runtime.LogInfo('Setting isDone to true')
     setTimeout(() => {
         isDone.value = false
-        varly.runtime.LogInfo('Setting isDone to false')
+        window.runtime.LogInfo('Setting isDone to false')
     }, 5000)
 }
 
@@ -64,18 +64,24 @@ function toggleIsWorking() {
 }
 
 async function generateCollection() {
+    debugger;
     currentStep.value = 0 // reset each time this method is called
 
     window.runtime.EventsOn('collection.generation.started', (data) => {
+        console.log({ msg: `collection generation started`, data})
         loadingText.value = `Preparing collection of ${data.CollectionSize} items`
     })
 
     window.runtime.EventsOn('collection.item.generated', async (data) => {
         steps.value = data.CollectionSize
         currentStep.value = data.ItemNumber
+        console.log({ msg: `collection item generated`, data})
+    })
+    window.runtime.EventsOn('debug', async (data) => {
+        console.log(data)
     })
 
-    const outputDirectory = await varly.openDirectoryDialog()
+    const outputDirectory = await rpc.app.OpenDirectoryDialog('Select a folder in which to save generated images')
 
     if (!outputDirectory) return
 
@@ -94,21 +100,23 @@ async function generateCollection() {
         }
     }
 
-    const config = {
-        Dir: outputDirectory,
-        Order: [...store.traits].map((item: any) => item.name),
-        Layers: layers,
-        Width: parseInt(store.width.toString(), 10),
+    const collection = Collection.createFrom({
+        sourceDirectory: '',
+        outputDirectory: outputDirectory,
+        traits: [...store.traits],
+        layers: layers,
+        width: parseInt(store.width.toString(), 10),
         height: parseInt(store.height.toString(), 10),
-        Size: parseInt(store.size.toString(), 10)
-    }
+        size: parseInt(store.size.toString(), 10)
+    })
 
-    const data = JSON.stringify(config)
-    const saved = await varly.app.SaveFile('collection1.json', data)
+    // Save to file, if desired
+    // const data = JSON.stringify(collection)
+    // const saved = await varly.app.SaveFile('collection1.json', data)
+    // log(saved.toString())
 
-    log(saved.toString())
-
-    await varly.app.GenerateNewCollectionFromConfig(config)
+    console.log(collection)
+    await rpc.CollectionService.GenerateCollection(collection)
 
     toggleIsWorking()
     queueConfetti()

@@ -5,14 +5,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	f "io/fs"
-	"log"
 	"os"
 	"path/filepath"
 
-	wr "github.com/mroth/weightedrand"
-	"github.com/varlyapp/varlyapp/backend/fs"
-	"github.com/varlyapp/varlyapp/backend/img"
-	"github.com/varlyapp/varlyapp/backend/nft"
 	"github.com/varlyapp/varlyapp/backend/services"
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -75,8 +70,9 @@ func (app *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
 }
 
-func (app *App) OpenDirectoryDialog() string {
+func (app *App) OpenDirectoryDialog(title string) string {
 	path, _ := runtime.OpenDirectoryDialog(app.ctx, runtime.OpenDialogOptions{
+		Title: title,
 		CanCreateDirectories:       true,
 		TreatPackagesAsDirectories: true,
 	})
@@ -96,51 +92,6 @@ func (app *App) SaveFileDialog() string {
 	return path
 }
 
-func (app *App) GenerateNewCollectionFromConfig(config nft.NewCollectionConfig) {
-	nft.GenerateNewCollectionFromConfig(app.ctx, config)
-}
-
-// GetPreview returns a base64 encoded string for the image preview
-func (app *App) GetPreview(config nft.NewCollectionConfig) string {
-	var images []string
-
-	for _, trait := range config.Order {
-		files := config.Layers[trait]
-
-		if len(files) > 0 {
-			var choices []wr.Choice
-
-			for _, layer := range files {
-				choices = append(choices, wr.Choice{Item: layer.Item, Weight: uint(layer.Weight)})
-			}
-
-			chooser, err := wr.NewChooser(choices...)
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			pick := chooser.Pick().(string)
-
-			images = append(images, pick)
-		}
-	}
-
-	str, _ := img.MakePreview(images, config.Width, config.Height)
-
-	return str
-}
-
-func (app *App) GetApplicationDocumentsDirectory(paths ...string) string {
-	path, _ := fs.GetApplicationDocumentsDirectory(paths...)
-
-	return path
-}
-
-func (app *App) ReadLayers(dir string) fs.CollectionConfig {
-	return nft.ReadLayers(app.ctx, dir)
-}
-
 func (app *App) EncodeImage(path string) string {
 	image, err := os.ReadFile(path)
 
@@ -156,8 +107,7 @@ func (app *App) EncodeImage(path string) string {
 }
 
 func (app *App) SaveFile(file string, data string) bool {
-	docs := app.GetApplicationDocumentsDirectory()
-	path := fmt.Sprintf("%s%s", docs, file)
+	path := fmt.Sprintf("%s%s", docsdir, file)
 
 	err := os.WriteFile(path, []byte(data), os.ModePerm)
 
@@ -188,8 +138,4 @@ func (app *App) MessageDialog(options runtime.MessageDialogOptions) string {
 	})
 
 	return res
-}
-
-func (app *App) GetFileContents(file string) string {
-	return fs.GetFileContents(file)
 }

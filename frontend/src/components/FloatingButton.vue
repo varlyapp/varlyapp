@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { runtime } from '@/utils/backend'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const props = defineProps(['emoji', 'text', 'to', 'path', 'icon'])
 
-async function handleClick(e: any): Promise<void> {
+async function handleClick(): Promise<void> {
     if (props.to && typeof props.to === 'string' && props.to.length) {
         router.push({ name: props.to })
         return
@@ -14,7 +13,7 @@ async function handleClick(e: any): Promise<void> {
     try {
         return Promise.resolve(props.to())
     } catch (error) {
-        runtime().LogError(`unable to handle click: ${error}`)
+        console.error(`unable to handle click: ${error}`)
     }
 }
 </script>

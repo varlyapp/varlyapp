@@ -5,40 +5,27 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { Collection } from '@/wailsjs/go/models'
 import { useCollectionStore } from '@/store'
-import { runtime } from '@/utils/backend'
 import rpc from '@/rpc'
-import { Collection } from '@/types'
-import { Collection as CollectionModel } from '@/wailsjs/go/models'
 
-const store = useCollectionStore()
 const router = useRouter()
+const store = useCollectionStore()
 const isOnStartScreen = ref(false)
 
 onMounted(() => {
-  runtime().EventsOn('shortcut.collection.open', async () => {
+  window.runtime.EventsOn('shortcut.collection.open', async () => {
     const collection = await rpc.CollectionService.LoadCollection()
     store.hydrate(collection)
     router.push({ name: 'artwork.layers' })
   })
-  runtime().EventsOn('shortcut.collection.save', async () => {
+  window.runtime.EventsOn('shortcut.collection.save', async () => {
     if (store.layers && Object.keys(store.layers).length) {
-      // const collection: Collection = {
-      //   sourceDirectory: '',
-      //   outputDirectory: '',
-      //   name: '',
-      //   description: '',
-      //   traits: [ ...store.traits],
-      //   layers: { ...store.layers },
-      //   width: parseFloat(store.width.toString()),
-      //   height: parseFloat(store.height.toString()),
-      //   size: parseInt(store.size.toString(), 10),
-      // }
+      const error = await rpc.CollectionService.SaveCollection(Collection.createFrom(store.prepare()))
 
-      console.log(store.$state)
-      await rpc.CollectionService.SaveCollection(CollectionModel.createFrom(store.prepare()))
-
-      console.log('Saved collection?!')
+      if (error) {
+        console.error(error)
+      }
     }
   })
 })

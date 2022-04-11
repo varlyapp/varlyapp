@@ -1,4 +1,4 @@
-package img
+package lib
 
 import (
 	"bytes"
@@ -16,7 +16,10 @@ func MakePreview(layers []string, width int, height int) (string, error) {
 
 	// @todo this can fail if file doesn't exist, add error check
 	for _, layer := range layers {
-		img, _ := imaging.Open(layer)
+		img, err := imaging.Open(layer)
+		if err != nil {
+			return "", err
+		}
 		preview = imaging.Overlay(preview, img, image.Pt(0, 0), 1)
 	}
 
@@ -33,4 +36,23 @@ func MakePreview(layers []string, width int, height int) (string, error) {
 	encoded = fmt.Sprintf("data:image/png;base64,%s", encoded)
 
 	return encoded, nil
+}
+
+func GeneratePNG(layers []string, output string, width int, height int) error {
+	png := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
+
+	for _, layer := range layers {
+		fmt.Printf("opening layer %s\n", layer)
+		img, err := imaging.Open(layer)
+		if err != nil {
+			return err
+		}
+		png = imaging.Overlay(png, img, image.Pt(0, 0), 1)
+	}
+	err := imaging.Save(png, output)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
