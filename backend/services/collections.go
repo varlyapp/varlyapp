@@ -287,7 +287,7 @@ func (c *CollectionService) GenerateCollectionPreview(collection Collection) str
 		}
 	}
 
-	preview, err := lib.MakePreview(layers, 512, 512)
+	preview, err := lib.MakePreview(layers, int(collection.Width), int(collection.Height), 512)
 
 	if err != nil {
 		lib.ShowErrorModal(c.Ctx, "No Preview", "Sorry, I was unable to generate preview for this collection")

@@ -64,7 +64,6 @@ function toggleIsWorking() {
 }
 
 async function generateCollection() {
-    debugger;
     currentStep.value = 0 // reset each time this method is called
 
     window.runtime.EventsOn('collection.generation.started', (data) => {

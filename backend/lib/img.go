@@ -11,7 +11,7 @@ import (
 	"github.com/disintegration/imaging"
 )
 
-func MakePreview(layers []string, width int, height int) (string, error) {
+func MakePreview(layers []string, width int, height int, size int) (string, error) {
 	preview := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
 
 	// @todo this can fail if file doesn't exist, add error check
@@ -23,11 +23,11 @@ func MakePreview(layers []string, width int, height int) (string, error) {
 		preview = imaging.Overlay(preview, img, image.Pt(0, 0), 1)
 	}
 
-	// imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-before.png")
+	imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-before.png")
 
-	preview = imaging.Resize(preview, 512, 0, imaging.Lanczos)
+	preview = imaging.Resize(preview, size, 0, imaging.Lanczos)
 
-	// imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-after.png")
+	imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-after.png")
 
 	var buff bytes.Buffer
 
