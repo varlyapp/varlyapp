@@ -211,7 +211,7 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 
 	go func() {
 		defer wg.Done()
-		lib.Batch(c.Ctx, collection.Size, jobs, func(ctx context.Context, id int, job lib.Job) {
+		lib.Batch(c.Ctx, 0, jobs, func(ctx context.Context, id int, job lib.Job) {
 			var images []string
 			collection := job.Config.(Collection)
 
