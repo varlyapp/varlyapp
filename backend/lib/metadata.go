@@ -9,27 +9,41 @@ type Metadata struct {
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
 	Image       string          `json:"image"`
-	ExternalURL string          `json:"external_url"`
-	Attributes  []MetadataAttribute `json:"attributes"`
+	Traits      []MetadataTrait `json:"attributes"`
+
+	// Solana JSON schema
+	Collection   MetadataCollection `json:"collection"`
+	Symbol       string             `json:"symbol"`
+	AnimationURL string             `json:"animatin_url"`
+	ExternalURL  string             `json:"external_url"`
+
+	SellerFeeBasisPoints string `json:"seller_fee_basis_points"`
+	// Other properties
+	// properties[files[], category, creators[]]
 }
 
-type MetadataAttribute struct {
+type MetadataTrait struct {
 	Type  string `json:"trait_type"`
 	Value string `json:"value"`
 }
 
-func GenerateMetadata(metadata Metadata, output string) bool {
+type MetadataCollection struct {
+	Name   string `json:"name"`
+	Family string `json:"family"`
+}
+
+func GenerateMetadata(metadata Metadata, filepath string) error {
 	b, err := json.MarshalIndent(metadata, "", "  ")
 
 	if err != nil {
-		return false
+		return err
 	}
 
-	err = os.WriteFile(output, b, os.ModePerm)
+	err = os.WriteFile(filepath, b, os.ModePerm)
 
 	if err != nil {
-		return false
+		return err
 	}
 
-	return true
+	return nil
 }

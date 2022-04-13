@@ -38,18 +38,17 @@ func MakePreview(layers []string, width int, height int, size int) (string, erro
 	return encoded, nil
 }
 
-func GeneratePNG(layers []string, output string, width int, height int) error {
+func GeneratePNG(layers []string, filepath string, width int, height int) error {
 	png := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
 
 	for _, layer := range layers {
-		fmt.Printf("opening layer %s\n", layer)
 		img, err := imaging.Open(layer)
 		if err != nil {
 			return err
 		}
 		png = imaging.Overlay(png, img, image.Pt(0, 0), 1)
 	}
-	err := imaging.Save(png, output)
+	err := imaging.Save(png, filepath)
 	if err != nil {
 		return err
 	}

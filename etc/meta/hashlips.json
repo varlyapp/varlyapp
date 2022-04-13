@@ -3,8 +3,11 @@
     "description": "Remember to replace this description",
     "image": "ipfs://NewUriToReplace/1.png",
     "dna": "8a6468bd8330bd3cdeba0f4adf7cbf9a3bdeb5da",
-    "edition": 1,
+    "edition": "integer id for nft",
     "date": 1648278648042,
+    "artist": "Selvin Ortiz",
+    "compiler": "Varly.app",
+    "engine": "Varly.app",
     "attributes": [
       {
         "trait_type": "00_Backgrounds",
@@ -42,6 +45,5 @@
         "trait_type": "08_eyewear",
         "value": "03"
       }
-    ],
-    "compiler": "HashLips Art Engine"
+    ]
   }

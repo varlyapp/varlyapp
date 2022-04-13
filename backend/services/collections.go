@@ -204,6 +204,7 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 		jobs = append(jobs, lib.Job{Id: i, Config: collection})
 	}
 
+	// dnas := make(map[string]string, 0)
 	var completed = 0
 	var wg sync.WaitGroup
 
@@ -237,7 +238,9 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 				}
 			}
 
-			png := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
+			pngFilepath := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
+
+			jsonFilepath := fmt.Sprintf("%s/%d.json", collection.OutputDirectory, job.Id)
 
 			defer func() {
 				completed++
@@ -245,16 +248,57 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 				data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size)}
 				runtime.EventsEmit(ctx, "collection.item.generated", data)
 
-				fmt.Printf("%d. %s\n", job.Id, png)
+				fmt.Printf("%d. %s\n", job.Id, pngFilepath)
 			}()
 
 			runtime.EventsEmit(ctx, "debug", map[string]interface{}{
-				"images": images, "png": png,
+				"images": images, "png": pngFilepath,
 			})
-			err := lib.GeneratePNG(images, png, int(collection.Width), int(collection.Height))
 
-			if err != nil {
-				fmt.Printf("unable to generate image: %s\n%v\n", png, err)
+			// dna := lib.GenerateDNA(images)
+			// val, exists := dnas[dna]
+			// if exists {
+			// 	fmt.Println("DNA already exists: ", val)
+			// } else {
+			// 	dnas[val] = val
+			// 	fmt.Println("Printing DNA: ", dna)
+			// }
+
+			err1 := lib.GenerateMetadata(lib.Metadata{
+				Name: fmt.Sprintf("%d", job.Id),
+				Description: "",
+				Image: pngFilepath,
+				Traits: []lib.MetadataTrait{
+					{
+						Type: "Background",
+						Value: "Red",
+					},
+					{
+						Type: "Fur",
+						Value: "Panda",
+					},
+					{
+						Type: "Hat",
+						Value: "Fedora",
+					},
+				},
+
+				// Solana JSON schema
+				Collection: lib.MetadataCollection{},
+				Symbol: "{{SYMBOL}}",
+				AnimationURL: "",
+				ExternalURL: "",
+
+				SellerFeeBasisPoints: "",
+			}, jsonFilepath)
+
+			if err1 != nil {
+				fmt.Printf("unable to generate metadata: %s\n%v\n", pngFilepath, err1)
+			}
+			err2 := lib.GeneratePNG(images, pngFilepath, int(collection.Width), int(collection.Height))
+
+			if err2 != nil {
+				fmt.Printf("unable to generate image: %s\n%v\n", pngFilepath, err2)
 			}
 		})
 	}()
