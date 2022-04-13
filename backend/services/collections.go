@@ -204,15 +204,18 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 		jobs = append(jobs, lib.Job{Id: i, Config: collection})
 	}
 
-	// dnas := make(map[string]string, 0)
-	var completed = 0
-	var wg sync.WaitGroup
+	var (
+		wg        sync.WaitGroup
+		usedDNA   = sync.Map{}
+		completed = 0
+	)
 
 	wg.Add(1)
 
 	go func() {
 		defer wg.Done()
 		lib.Batch(c.Ctx, 0, jobs, func(ctx context.Context, id int, job lib.Job) {
+			success := true
 			var images []string
 			collection := job.Config.(Collection)
 
@@ -240,65 +243,53 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 
 			pngFilepath := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
 
-			jsonFilepath := fmt.Sprintf("%s/%d.json", collection.OutputDirectory, job.Id)
-
 			defer func() {
-				completed++
+				if success {
+					completed++
 
-				data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size)}
-				runtime.EventsEmit(ctx, "collection.item.generated", data)
+					data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size)}
+					runtime.EventsEmit(ctx, "collection.item.generated", data)
 
-				fmt.Printf("%d. %s\n", job.Id, pngFilepath)
+					// fmt.Printf("%d. %s\n", job.Id, pngFilepath)
+				}
 			}()
 
 			runtime.EventsEmit(ctx, "debug", map[string]interface{}{
 				"images": images, "png": pngFilepath,
 			})
 
-			// dna := lib.GenerateDNA(images)
-			// val, exists := dnas[dna]
-			// if exists {
-			// 	fmt.Println("DNA already exists: ", val)
-			// } else {
-			// 	dnas[val] = val
-			// 	fmt.Println("Printing DNA: ", dna)
-			// }
-
-			err1 := lib.GenerateMetadata(lib.Metadata{
-				Name: fmt.Sprintf("%d", job.Id),
-				Description: "",
-				Image: pngFilepath,
-				Traits: []lib.MetadataTrait{
-					{
-						Type: "Background",
-						Value: "Red",
-					},
-					{
-						Type: "Fur",
-						Value: "Panda",
-					},
-					{
-						Type: "Hat",
-						Value: "Fedora",
-					},
-				},
-
-				// Solana JSON schema
-				Collection: lib.MetadataCollection{},
-				Symbol: "{{SYMBOL}}",
-				AnimationURL: "",
-				ExternalURL: "",
-
-				SellerFeeBasisPoints: "",
-			}, jsonFilepath)
-
-			if err1 != nil {
-				fmt.Printf("unable to generate metadata: %s\n%v\n", pngFilepath, err1)
+			dna := lib.GenerateDNA(images)
+			val, exists := usedDNA.Load(dna)
+			if exists {
+				success = false
+				fmt.Println("DNA already exists: ", val)
+			} else {
+				usedDNA.Store(dna, dna)
 			}
-			err2 := lib.GeneratePNG(images, pngFilepath, int(collection.Width), int(collection.Height))
 
-			if err2 != nil {
-				fmt.Printf("unable to generate image: %s\n%v\n", pngFilepath, err2)
+			if success {
+				err1 := lib.GenerateMetadata(lib.MetadataConfig{
+					CollectionName:        collection.Name,
+					CollectionSymbol:      "{{SYMBOL}}",
+					CollectionDescription: "",
+					CollectionBaseURI:     "ipfs://72D2D7B2-E1E2-46BF-8122-3C229C32538A/",
+					Name:                  collection.Name,
+					Edition:               job.Id,
+					Layers:                images,
+					Image:                 pngFilepath,
+					Artist:                "Selvin Ortiz",
+					DNA:                   dna,
+				})
+
+				if err1 != nil {
+					fmt.Printf("unable to generate metadata: %s\n%v\n", pngFilepath, err1)
+				}
+
+				err2 := lib.GeneratePNG(images, pngFilepath, int(collection.Width), int(collection.Height))
+
+				if err2 != nil {
+					fmt.Printf("unable to generate image: %s\n%v\n", pngFilepath, err2)
+				}
 			}
 		})
 	}()
@@ -334,6 +325,7 @@ func (c *CollectionService) GenerateCollectionPreview(collection Collection) str
 	preview, err := lib.MakePreview(layers, int(collection.Width), int(collection.Height), 512)
 
 	if err != nil {
+		fmt.Println(err)
 		lib.ShowErrorModal(c.Ctx, "No Preview", "Sorry, I was unable to generate preview for this collection")
 	}
 	return preview

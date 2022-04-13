@@ -67,14 +67,14 @@ async function generateCollection() {
     currentStep.value = 0 // reset each time this method is called
 
     window.runtime.EventsOn('collection.generation.started', (data) => {
-        console.log({ msg: `collection generation started`, data})
+        console.log({ msg: `collection generation started`, data })
         loadingText.value = `Preparing collection of ${data.CollectionSize} items`
     })
 
     window.runtime.EventsOn('collection.item.generated', async (data) => {
         steps.value = data.CollectionSize
         currentStep.value = data.ItemNumber
-        console.log({ msg: `collection item generated`, data})
+        console.log({ msg: `collection item generated`, data })
     })
     window.runtime.EventsOn('debug', async (data) => {
         console.log(data)
@@ -100,6 +100,8 @@ async function generateCollection() {
     }
 
     const collection = Collection.createFrom({
+        name: store.name,
+        description: store.description,
         sourceDirectory: '',
         outputDirectory: outputDirectory,
         traits: [...store.traits],
@@ -124,19 +126,14 @@ async function generateCollection() {
 
 <template>
     <section class="h-full flex">
-        <Sidebar
-            :links="[
-                { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
-                { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
-                { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: true },
-            ]"
-        />
+        <Sidebar :links="[
+            { icon: CollectionIcon, text: 'Layer Setup', to: 'artwork.layers', selected: false },
+            { icon: CogIcon, text: 'Build Settings', to: 'artwork.build', selected: false },
+            { icon: PlayIcon, text: 'Run', to: 'artwork.run', selected: true },
+        ]" />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <div
-                v-if="isWorking"
-                class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8"
-            >
+            <div v-if="isWorking" class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8">
                 <Progress :steps="steps" :current-step="currentStep" loading-text="Preparing..." />
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
@@ -145,22 +142,15 @@ async function generateCollection() {
                         <Preview :source="preview" caption="Generated Preview" />
                     </div>
                     <div class="max-w-xs mx-auto">
-                        <h1
-                            v-if="isDone"
-                            class="animate__animated animate__fadeIn text-6xl text-center font-bold"
-                        >Yay 🎉</h1>
+                        <h1 v-if="isDone" class="animate__animated animate__fadeIn text-6xl text-center font-bold">Yay
+                            🎉</h1>
                     </div>
                 </div>
             </div>
         </main>
 
-        <Confetti
-            v-if="isDone"
-            :particle-count="200"
-            :particle-size="10"
-            :duration="5000"
-            class="absolute w-screen h-screen top-0 right-0 bottom-0 left-0"
-        />
+        <Confetti v-if="isDone" :particle-count="200" :particle-size="10" :duration="5000"
+            class="absolute w-screen h-screen top-0 right-0 bottom-0 left-0" />
         <FloatingButton v-if="!isDone" :icon="PlayIcon" text="Let&rsquo;s Do It" :to="generateCollection" />
     </section>
 </template>
