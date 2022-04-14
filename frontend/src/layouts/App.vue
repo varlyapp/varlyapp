@@ -1,5 +1,7 @@
 <template>
-  <router-view class="relative h-full overflow-hidden"></router-view>
+  <keep-alive>
+    <router-view class="relative h-full overflow-hidden"></router-view>
+  </keep-alive>
 </template>
 
 <script setup lang="ts">
