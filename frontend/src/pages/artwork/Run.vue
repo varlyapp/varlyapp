@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import Confetti from 'vue-confetti-explosion'
-import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
+import { CogIcon, CollectionIcon, PlayIcon, FolderDownloadIcon } from '@heroicons/vue/solid'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import FloatingButton from '@/components/FloatingButton.vue'
 import { useCollectionStore } from '@/store'
 import Preview from '@/components/Preview.vue'
 import rpc from '@/rpc'
 import { Collection } from '@/wailsjs/go/models'
+import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
 
 const store = useCollectionStore()
 
@@ -63,6 +63,15 @@ function toggleIsWorking() {
     isWorking.value = !isWorking.value
 }
 
+async function selectOutputDirectory() {
+    const outputDirectory = await rpc.app.OpenDirectoryDialog('Select a folder in which to save generated images')
+
+    if (!outputDirectory || outputDirectory === '') {
+        alert(`Folder could not be selected, please try again`)
+    }
+
+    store.outputDirectory = outputDirectory
+}
 async function generateCollection() {
     currentStep.value = 0 // reset each time this method is called
 
@@ -80,7 +89,7 @@ async function generateCollection() {
         console.log(data)
     })
 
-    const outputDirectory = await rpc.app.OpenDirectoryDialog('Select a folder in which to save generated images')
+    const outputDirectory = store.outputDirectory
 
     if (!outputDirectory) return
 
@@ -102,7 +111,7 @@ async function generateCollection() {
     const collection = Collection.createFrom({
         name: store.name,
         description: store.description,
-        sourceDirectory: '',
+        sourceDirectory: store.sourceDirectory,
         outputDirectory: outputDirectory,
         traits: [...store.traits],
         layers: layers,
@@ -116,7 +125,6 @@ async function generateCollection() {
     // const saved = await varly.app.SaveFile('collection1.json', data)
     // log(saved.toString())
 
-    console.log(collection)
     await rpc.CollectionService.GenerateCollection(collection)
 
     toggleIsWorking()
@@ -138,8 +146,12 @@ async function generateCollection() {
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
-                    <div v-if="preview && !isDone" class="p-8">
-                        <Preview :source="preview" caption="Generated Preview" />
+                    <div v-if="preview && !isDone" class="p-16">
+                        <p v-if="store.outputDirectory" class="pt-4 text-xs text-center">
+                            <strong>＊ Output Folder: </strong>
+                            {{ store.outputDirectory }}
+                        </p>
+                        <Preview :source="preview" caption="" />
                     </div>
                     <div class="max-w-xs mx-auto">
                         <h1 v-if="isDone" class="animate__animated animate__fadeIn text-6xl text-center font-bold">Yay
@@ -149,8 +161,36 @@ async function generateCollection() {
             </div>
         </main>
 
-        <Confetti v-if="isDone" :particle-count="200" :particle-size="10" :duration="5000"
-            class="absolute w-screen h-screen top-0 right-0 bottom-0 left-0" />
-        <FloatingButton v-if="!isDone" :icon="PlayIcon" text="Let&rsquo;s Do It" :to="generateCollection" />
+        <Confetti
+            v-if="isDone"
+            :particle-count="200"
+            :particle-size="10"
+            :duration="5000"
+            class="absolute w-screen h-screen top-0 right-0 bottom-0 left-0"
+        />
+
+        <FloatingButtonBar>
+            <button
+                type="button"
+                class="select-none flex mt-2 py-2 px-6 items-center rounded text-slate-50 bg-slate-700 shadow-md shadow-slate-800 hover:bg-opacity-90 font-bold"
+                @click="selectOutputDirectory"
+            >
+                <span>
+                    <FolderDownloadIcon class="w-6 mr-2 fill-slate-100"/>
+                </span>
+                <span>Select Output Folder</span>
+            </button>
+
+            <button v-if="store.outputDirectory"
+                type="button"
+                class="select-none flex mt-2 py-2 px-6 items-center rounded text-slate-50 bg-fuchsia-700 shadow-md shadow-fuchsia-900 hover:bg-opacity-90 font-bold"
+                @click="generateCollection"
+            >
+                <span>
+                    <PlayIcon class="w-6 mr-2 fill-fuchsia-100"/>
+                </span>
+                <span>Generate Collection</span>
+            </button>
+        </FloatingButtonBar>
     </section>
 </template>

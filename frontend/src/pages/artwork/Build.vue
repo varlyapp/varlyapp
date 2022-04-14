@@ -4,6 +4,7 @@ import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
 import { useCollectionStore } from '@/store'
 import FloatingButton from '@/components/FloatingButton.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import rpc from '@/rpc'
 
 const WIDTH = 1500
 const HEIGHT = 1500
@@ -17,13 +18,17 @@ onMounted(async () => {
     store.width = store.width || WIDTH
 
     if (store.layers && Object.keys(store.layers).length) {
-        for (const trait in Object.keys(store.layers)) {
+        for (const trait in store.layers) {
             if (store.layers.hasOwnProperty(trait)) {
                 if (store.layers[trait] && store.layers[trait].length) {
-                    const image = store.layers[trait][0]
-                    if (image) {
-                        const stats = {} // await varly.stat(image)
-                        console.log(stats)
+                    const variant = store.layers[trait][0]
+                    if (variant) {
+                        const image = await rpc.app.GetImageStats(variant.path)
+
+                        if (image['Width'] && image['Height']) {
+                            store.width = image['Width']
+                            store.height = image['Height']
+                        }
                     }
                 }
             }
@@ -56,9 +61,27 @@ onMounted(async () => {
                                 id="collection-name"
                                 class="field"
                                 name="collection-name"
-                                autocomplete="none"
+                                autocomplete="off"
+                                placeholder="e.g. Boss Beauties"
                                 autofocus
                                 v-model="store.name"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-span-12">
+                        <label
+                            for="collection-name"
+                            class="block text-sm opacity-75"
+                        >Collection Artist</label>
+                        <div class="mt-1">
+                            <input
+                                type="text"
+                                id="collection-artist"
+                                class="field"
+                                name="collection-artist"
+                                autocomplete="off"
+                                placeholder="e.g Your name or pseudonym"
+                                v-model="store.artist"
                             />
                         </div>
                     </div>
@@ -69,13 +92,32 @@ onMounted(async () => {
                         >Collection Description</label>
                         <div class="mt-1">
                             <textarea
-                                rows="4"
+                                rows="6"
                                 id="collection-description"
-                                class="field"
+                                class="field scrollbar-none"
                                 name="collection-description"
-                                autocomplete="none"
-                                autofocus
+                                autocomplete="off"
+                                placeholder="A brief description about your collection, one to two sentences should be good"
                                 v-model="store.description"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="col-span-12">
+                        <label
+                            for="collection-name"
+                            class="block text-sm opacity-75"
+                        >Collection Base URI</label>
+                        <div class="mt-1">
+                            <input
+                                type="text"
+                                id="collection-base-uri"
+                                class="field"
+                                name="collection-base-uri"
+                                autocomplete="off"
+                                spellcheck="false"
+                                placeholder="e.g ipfs://your-collection-cid/"
+                                v-model="store.baseUri"
                             />
                         </div>
                     </div>
@@ -87,10 +129,9 @@ onMounted(async () => {
                         <div class="mt-1">
                             <input
                                 type="text"
-                                autofocus
                                 name="collection-width"
                                 id="collection-width"
-                                autocomplete="none"
+                                autocomplete="off"
                                 class="field"
                                 v-model="store.width"
                             />
@@ -101,10 +142,9 @@ onMounted(async () => {
                         <div class="mt-1">
                             <input
                                 type="text"
-                                autofocus
                                 name="collection-height"
                                 id="collection-height"
-                                autocomplete="none"
+                                autocomplete="off"
                                 class="field"
                                 v-model="store.height"
                             />
@@ -119,16 +159,15 @@ onMounted(async () => {
                         <div class="mt-1">
                             <input
                                 type="text"
-                                autofocus
                                 name="collection-size"
                                 id="collection-size"
-                                autocomplete="none"
+                                autocomplete="off"
                                 class="field"
                                 v-model="store.size"
                             />
                         </div>
                     </div>
-                    <div class="col-span-6" />
+                    <div class="col-span-6"></div>
                 </div>
             </form>
         </main>

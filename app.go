@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	f "io/fs"
+	"image"
 	"os"
 	"path/filepath"
 
@@ -72,7 +72,7 @@ func (app *App) shutdown(ctx context.Context) {
 
 func (app *App) OpenDirectoryDialog(title string) string {
 	path, _ := runtime.OpenDirectoryDialog(app.ctx, runtime.OpenDialogOptions{
-		Title: title,
+		Title:                      title,
 		CanCreateDirectories:       true,
 		TreatPackagesAsDirectories: true,
 	})
@@ -118,14 +118,18 @@ func (app *App) SaveFile(file string, data string) bool {
 	return true
 }
 
-func (app *App) GetImageStats(path string) f.FileInfo {
-	info, err := os.Stat(path)
-
+func (app *App) GetImageStats(path string) image.Config {
+	reader, err := os.Open(path)
 	if err != nil {
-		fmt.Println("unable to get stat(): ", err)
+		return image.Config{}
+	}
+	defer reader.Close()
+	img, _, err := image.DecodeConfig(reader)
+	if err != nil {
+		return image.Config{}
 	}
 
-	return info
+	return img
 }
 
 func (app *App) MessageDialog(options runtime.MessageDialogOptions) string {

@@ -52,6 +52,8 @@ type Variant struct {
 type Collection struct {
 	Name            string               `json:"name"`
 	Description     string               `json:"description"`
+	Artist          string               `json:"artist"`
+	BaseUri         string               `json:"baseUri"`
 	SourceDirectory string               `json:"sourceDirectory"`
 	OutputDirectory string               `json:"outputDirectory"`
 	Traits          []Trait              `json:"traits"`
@@ -272,7 +274,7 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 					CollectionName:        collection.Name,
 					CollectionSymbol:      "{{SYMBOL}}",
 					CollectionDescription: "",
-					CollectionBaseURI:     "ipfs://72D2D7B2-E1E2-46BF-8122-3C229C32538A/",
+					CollectionBaseURI:     collection.BaseUri,
 					Name:                  collection.Name,
 					Edition:               job.Id,
 					Layers:                images,
