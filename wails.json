@@ -5,7 +5,7 @@
   "frontend:build": "",
   "frontend:install": "",
   "frontend:dev": "",
-  "frontend:dev:watcher": "",
+  "frontend:dev:watcher": "npm run dev",
   "version": "2",
   "Path": "",
   "BuildDir": "",
