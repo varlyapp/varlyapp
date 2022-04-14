@@ -17,6 +17,8 @@ const useCollectionStore = defineStore('collection', () => {
   const outputDirectory = ref<string>('')
   const name = ref<string>('')
   const description = ref<string>('')
+  const artist = ref<string>('')
+  const baseUri = ref<string>('')
   const traits = ref<Object[]>([])
   const layers = ref<Object>({})
   const size = ref<number>(0.0)
@@ -29,6 +31,8 @@ const useCollectionStore = defineStore('collection', () => {
     this.outputDirectory = collection.outputDirectory || ''
     this.name = collection.name || ''
     this.descrption = collection.descrption || ''
+    this.artist = collection.artist || ''
+    this.baseUri = collection.baseUri || ''
     this.traits = collection.traits || []
     this.layers = collection.layers || {}
     this.width = collection.width || 0.0
@@ -42,6 +46,8 @@ const useCollectionStore = defineStore('collection', () => {
       outputDirectory: this.outputDirectory,
       name: this.name,
       description: this.description,
+      artist: this.artist,
+      baseUri: this.baseUri,
       traits: this.traits,
       layers: this.layers,
       width: parseFloat(this.width),
@@ -54,6 +60,8 @@ const useCollectionStore = defineStore('collection', () => {
     this.outputDirectory = ''
     this.name = ''
     this.description = ''
+    this.artist = ''
+    this.baseUri = ''
     this.traits = []
     this.layers = {}
     this.width = 0
@@ -61,7 +69,7 @@ const useCollectionStore = defineStore('collection', () => {
     this.size = 0
   }
 
-  return { hydrate, prepare, reset, traits, layers, sourceDirectory, outputDirectory, name, description, width, height, size }
+  return { hydrate, prepare, reset, traits, layers, sourceDirectory, outputDirectory, name, description, artist, baseUri, width, height, size }
 }, { persist: true })
 
 export { useStore, useCollectionStore }
