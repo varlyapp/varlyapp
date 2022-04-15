@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
 import Sidebar from '@/components/Sidebar.vue'
-import FloatingButton from '@/components/FloatingButton.vue'
 import { useCollectionStore } from '@/store'
 import { CogIcon, CollectionIcon, PlusIcon, PlayIcon } from '@heroicons/vue/solid'
 import rpc from '@/rpc'
@@ -33,10 +32,6 @@ function toggleCollapsed(element: any) {
     element.collapsed = !element.collapsed
 }
 
-onMounted(() => {
-    console.log({ state: collectionStore.$state })
-})
-
 async function loadLayers() {
     const sourceDirectory = await rpc.app.OpenDirectoryDialog('Open Collection Folder')
 
@@ -47,13 +42,11 @@ async function loadLayers() {
     collectionStore.sourceDirectory = sourceDirectory
 
     const collection: Collection = await rpc.CollectionService.LoadCollectionFromDirectory(sourceDirectory)
-    console.log({ collection })
 
     collectionStore.layers = { ...collection.layers }
 
     const traits: Object[] = []
 
-    console.log( collectionStore.$state )
     for (const trait in collectionStore.layers) {
         if (Object.hasOwnProperty.call(collectionStore.layers, trait)) {
             traits.push({ name: trait, collapsed: false })
@@ -76,12 +69,11 @@ async function loadLayers() {
 
         <main class="relative h-full flex-1 overflow-y-scroll scrollbar-none">
             <section v-if="collectionStore && collectionStore.layers && Object.keys(collectionStore.layers).length" class="h-full animate__animated animate__fadeIn">
-                <div class="max-w-4xl mx-auto px-8 py-16 xl:py-32">
+                <div class="p-8 mx:p-12 xl:p-16">
                     <!-- @see :force-fallback -->
                     <!-- Solves issue where dragging works first but second drag requires two clicks -->
                     <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
                     <draggable
-                        class="rounded bg-slate-50 bg-opacity-20 dark:bg-slate-900 dark:bg-opacity-20 border-dashed border-2 border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
                         group="trait"
                         v-model="collectionStore.traits"
                         :force-fallback="true"
@@ -90,19 +82,24 @@ async function loadLayers() {
                         item-key="name"
                     >
                         <template #item="{ element }">
-                            <div class="p-4 lg:p-8">
-                                <div
-                                    class="flex items-center justify-between bg-slate-900 bg-opacity-20 dark:bg-opacity-20"
+                            <div
+                                class="mt-4 lg:mt-8 border border-slate-900 dark:border-slate-100 border-opacity-20 dark:border-opacity-10"
                                 >
-                                    <div class="flex items-center">
+                                <div
+                                    class="flex items-center justify-between bg-slate-900 dark:bg-slate-200 bg-opacity-20 dark:bg-opacity-10"
+                                >
+                                    <div
+                                        @click="toggleCollapsed(element)"
+                                        class="flex items-center"
+                                    >
                                         <button
-                                            class="py-1 px-1 mr-1 text-slate-100"
+                                            class="py-1 px-2 mr-1 text-lg font-bold text-slate-900 dark:text-slate-100"
                                             @click="toggleCollapsed(element)"
                                         >
                                             <span v-if="element.collapsed">⇣</span>
                                             <span v-else>⇡</span>
                                         </button>
-                                        <h1 v-text="element.name" class="text-base"></h1>
+                                        <h1 v-text="element.name" class="text-base font-bold"></h1>
                                     </div>
                                     <div>
                                         <input
@@ -125,17 +122,20 @@ async function loadLayers() {
                                     <template #item="{ element, index }">
                                         <div
                                             :key="element.Name"
-                                            class="min-w-full flex justify-between border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
-                                            :class="[index % 2 === 0 ? `bg-slate-900 dark:bg-slate-100 bg-opacity-10 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]"
+                                            class="min-w-full flex justify-between border-t border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
+                                            :class="[index % 2 === 0 ? `bg-slate-200 dark:bg-slate-800 bg-opacity-10 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]"
                                         >
                                             <div
                                                 class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
                                                 v-text="element.name"
                                             />
-                                            <div
-                                                class="whitespace-nowrap py-2 px-4 text-sm"
-                                                v-text="element.weight"
-                                            />
+                                            <div>
+                                                <input
+                                                    class="grow-0 text-right appearance-none bg-transparent border-0"
+                                                    type="text"
+                                                    v-model="element.weight"
+                                                />
+                                            </div>
                                         </div>
                                     </template>
                                 </draggable>
@@ -178,11 +178,11 @@ async function loadLayers() {
                 </div>
             </section>
         </main>
-
+<!--
         <FloatingButton
             v-if="collectionStore && collectionStore.layers && Object.keys(collectionStore.layers).length"
             text="Next&nbsp;→"
             :to="() => $router.push({ name: 'artwork.build' })"
-        ></FloatingButton>
+        ></FloatingButton> -->
     </section>
 </template>
