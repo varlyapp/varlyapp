@@ -89,5 +89,6 @@ const buttons = computed(() => {
                     <h2 v-else class="mt-8 text-xs opacity-60 dark:opacity-40 font-bold uppercase">{{ link.text }}</h2>
                 </li>
             </ul>
-        </nav> </aside>
+        </nav>
+    </aside>
 </template>

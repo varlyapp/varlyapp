@@ -172,6 +172,6 @@ onMounted(async () => {
             </form>
         </main>
 
-        <FloatingButton text="Next&nbsp;→" :to="() => $router.push({ name: 'artwork.run' })"></FloatingButton>
+        <!-- <FloatingButton text="Next&nbsp;→" :to="() => $router.push({ name: 'artwork.run' })"></FloatingButton> -->
     </section>
 </template>

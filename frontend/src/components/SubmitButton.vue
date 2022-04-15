@@ -6,7 +6,7 @@ const props = defineProps(['icon', 'text'])
     <div class="mt-4 text-center mx-auto">
         <button
             type="button"
-            class="select-none text-base py-2 px-6 text-center rounded-full uppercase text-slate-50 bg-fuchsia-700 shadow-lg shadow-fuchsia-900 hover:bg-opacity-90 font-bold"
+            class="text-base py-2 px-6 text-center rounded-full uppercase text-slate-50 bg-fuchsia-700 shadow-lg shadow-fuchsia-900 hover:bg-opacity-90 font-bold"
             @click="$emit('tap', $event)"
         >
             <span class="flex items-center">
