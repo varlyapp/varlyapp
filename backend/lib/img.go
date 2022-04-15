@@ -12,28 +12,33 @@ import (
 )
 
 func MakePreview(layers []string, width int, height int, size int) (string, error) {
-	preview := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
-
-	// @todo this can fail if file doesn't exist, add error check
+	// started := time.Now()
+	preview := imaging.New(size, size, color.NRGBA{0, 0, 0, 0})
+	// fmt.Printf("Created placeholder preview: %s\n", time.Since(started))
 	for _, layer := range layers {
 		img, err := imaging.Open(layer)
 		if err != nil {
 			return "", err
 		}
+		img = imaging.Resize(img, size, 0, imaging.Box)
 		preview = imaging.Overlay(preview, img, image.Pt(0, 0), 1)
+		// fmt.Printf("Created overlay %d: %s\n", index, time.Since(started))
 	}
 
-	imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-before.png")
+	// imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-before.png")
 
-	preview = imaging.Resize(preview, size, 0, imaging.Lanczos)
+	// preview = imaging.Resize(preview, size, 0, imaging.Lanczos)
+	// fmt.Printf("Resized preview: %s\n", time.Since(started))
 
-	imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-after.png")
+	// imaging.Save(preview, "/Users/selvinortiz/Desktop/preview-after.png")
 
 	var buff bytes.Buffer
 
 	png.Encode(&buff, preview)
 	encoded := base64.StdEncoding.EncodeToString(buff.Bytes())
 	encoded = fmt.Sprintf("data:image/png;base64,%s", encoded)
+
+	// fmt.Printf("Encoded preview: %s\n", time.Since(started))
 
 	return encoded, nil
 }

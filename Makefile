@@ -17,4 +17,4 @@ sign: build
 	gon -log-level=info ./build/darwin/gon-sign.json
 
 notarize:
-	xcrun altool --notarize-app --primary-bundle-id "app.varly.Varly" -u "selvin@selvin.co" -p "@env:APPLE_ID_PASSWORD" --asc-provider NA229UVJJB --file ./build/Varly.dmg --output-format xml
+	xcrun altool --notarize-app --primary-bundle-id "com.varlylabs.Varly" -u "selvin@selvin.co" -p "@env:APPLE_ID_PASSWORD" --asc-provider NA229UVJJB --file ./build/darwin/Varly.dmg --output-format xml

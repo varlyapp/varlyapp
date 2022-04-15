@@ -5,7 +5,7 @@
   "frontend:build": "",
   "frontend:install": "",
   "frontend:dev": "",
-  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:watcher": "",
   "version": "2",
   "Path": "",
   "BuildDir": "",
@@ -23,7 +23,7 @@
     "productName": "Varly",
     "productVersion": "1.0.0",
     "copyright": "(c) 2022 Selvin Ortiz",
-    "comments": "Built with love for NFT creatives"
+    "comments": "A delightful desktop app for NFT creatives. Made with ♥️ by Selvin Ortiz at Varly Labs"
   },
   "debounceMS": 1000,
   "devserverurl": "http://localhost:34115",

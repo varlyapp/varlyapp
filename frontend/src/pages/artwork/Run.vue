@@ -5,10 +5,10 @@ import { CogIcon, CollectionIcon, PlayIcon, FolderDownloadIcon } from '@heroicon
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import { useCollectionStore } from '@/store'
-import Preview from '@/components/Preview.vue'
-import rpc from '@/rpc'
 import { Collection } from '@/wailsjs/go/models'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
+import Preview from '@/components/Preview.vue'
+import rpc from '@/rpc'
 
 const store = useCollectionStore()
 
@@ -19,7 +19,7 @@ const isDone = ref(false)
 const loadingText = ref('Loading')
 const preview = ref('')
 
-onMounted(() => {
+onMounted(async () => {
     const layers = { ...store.layers }
 
     for (const trait in layers) {
@@ -43,11 +43,11 @@ onMounted(() => {
         size: parseInt(store.size.toString(), 10)
     })
 
-    rpc.CollectionService.GenerateCollectionPreview(collection)
-        .then((base64Image) => {
-            preview.value = base64Image
-        })
-        .catch(console.error)
+    try {
+        preview.value = await rpc.CollectionService.GenerateCollectionPreview(collection)
+    } catch (error) {
+        console.error(error)
+    }
 })
 
 function queueConfetti() {
@@ -151,6 +151,47 @@ async function generateCollection() {
                             {{ store.outputDirectory }}
                         </p>
                         <Preview :source="preview" caption="" />
+                    </div>
+                    <div v-else class="p-16 text-center">
+                        <p class="py-4">Generating Preview</p>
+                        <svg class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
+                                    <stop stop-color="#fff" stop-opacity="0" offset="0%" />
+                                    <stop stop-color="#fff" stop-opacity=".631" offset="63.146%" />
+                                    <stop stop-color="#fff" offset="100%" />
+                                </linearGradient>
+                            </defs>
+                            <g fill="none" fill-rule="evenodd">
+                                <g transform="translate(1 1)">
+                                    <path
+                                        d="M36 18c0-9.94-8.06-18-18-18"
+                                        id="Oval-2"
+                                        stroke="url(#a)"
+                                        stroke-width="2"
+                                    >
+                                        <animateTransform
+                                            attributeName="transform"
+                                            type="rotate"
+                                            from="0 18 18"
+                                            to="360 18 18"
+                                            dur="0.9s"
+                                            repeatCount="indefinite"
+                                        />
+                                    </path>
+                                    <circle fill="#fff" cx="36" cy="18" r="1">
+                                        <animateTransform
+                                            attributeName="transform"
+                                            type="rotate"
+                                            from="0 18 18"
+                                            to="360 18 18"
+                                            dur="0.9s"
+                                            repeatCount="indefinite"
+                                        />
+                                    </circle>
+                                </g>
+                            </g>
+                        </svg>
                     </div>
                     <div class="max-w-xs mx-auto">
                         <h1 v-if="isDone" class="animate__animated animate__fadeIn text-6xl text-center font-bold">Yay
