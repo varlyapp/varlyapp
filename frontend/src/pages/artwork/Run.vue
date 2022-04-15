@@ -22,12 +22,12 @@ const preview = ref('')
 onMounted(() => {
     const layers = { ...store.layers }
 
-    for (const trait in Object.keys(layers)) {
+    for (const trait in layers) {
         if (layers.hasOwnProperty(trait)) {
             layers[trait] = layers[trait].map((layer) => {
                 return {
                     ...layer,
-                    Weight: parseInt(layer.Weight)
+                    weight: parseFloat(layer.weight)
                 }
             })
         }
@@ -38,8 +38,8 @@ onMounted(() => {
         outputDirectory: store.outputDirectory,
         traits: [...store.traits],
         layers: layers,
-        width: parseInt(store.width.toString(), 10),
-        height: parseInt(store.height.toString(), 10),
+        width: parseFloat(store.width.toString()),
+        height: parseFloat(store.height.toString()),
         size: parseInt(store.size.toString(), 10)
     })
 
@@ -83,7 +83,6 @@ async function generateCollection() {
     window.runtime.EventsOn('collection.item.generated', async (data) => {
         steps.value = data.CollectionSize
         currentStep.value = data.ItemNumber
-        console.log({ msg: `collection item generated`, data })
     })
     window.runtime.EventsOn('debug', async (data) => {
         console.log(data)
@@ -97,12 +96,12 @@ async function generateCollection() {
 
     const layers = { ...store.layers }
 
-    for (const trait in Object.keys(layers)) {
+    for (const trait in layers) {
         if (layers.hasOwnProperty(trait)) {
             layers[trait] = layers[trait].map((layer) => {
                 return {
                     ...layer,
-                    Weight: parseInt(layer.Weight)
+                    weight: parseFloat(layer.weight)
                 }
             })
         }
@@ -172,7 +171,7 @@ async function generateCollection() {
         <FloatingButtonBar>
             <button
                 type="button"
-                class="select-none flex mt-2 py-2 px-6 items-center rounded text-slate-50 bg-slate-700 shadow-md shadow-slate-800 hover:bg-opacity-90 font-bold"
+                class="flex mt-2 py-2 px-6 items-center rounded text-slate-50 bg-slate-700 shadow-md shadow-slate-800 hover:bg-opacity-90 font-bold"
                 @click="selectOutputDirectory"
             >
                 <span>
@@ -183,7 +182,7 @@ async function generateCollection() {
 
             <button v-if="store.outputDirectory"
                 type="button"
-                class="select-none flex mt-2 py-2 px-6 items-center rounded text-slate-50 bg-fuchsia-700 shadow-md shadow-fuchsia-900 hover:bg-opacity-90 font-bold"
+                class="flex mt-2 py-2 px-6 items-center rounded text-slate-50 bg-fuchsia-700 shadow-md shadow-fuchsia-900 hover:bg-opacity-90 font-bold"
                 @click="generateCollection"
             >
                 <span>
