@@ -16,14 +16,14 @@
   "postBuildHooks": null,
   "Author": {
     "name": "Selvin Ortiz",
-    "email": "selvin@selvin.dev"
+    "email": "selvin@selvin.com"
   },
   "Info": {
-    "companyName": "Selvin Ortiz",
+    "companyName": "Selvin Co",
     "productName": "Varly",
-    "productVersion": "1.0.0",
-    "copyright": "(c) 2022 Selvin Ortiz",
-    "comments": "A delightful desktop app for NFT creatives. Made with ♥️ by Selvin Ortiz at Varly Labs"
+    "productVersion": "0.1.0",
+    "copyright": "(c) 2022 Selvin Co",
+    "comments": "A delightful desktop app with a fast generative art engine for NFT creators."
   },
   "debounceMS": 1000,
   "devserverurl": "http://localhost:34115",
