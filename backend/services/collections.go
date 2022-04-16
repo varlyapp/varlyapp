@@ -14,7 +14,6 @@ import (
 	"time"
 
 	wr "github.com/mroth/weightedrand"
-	"github.com/pkg/errors"
 	"github.com/varlyapp/varlyapp/backend/lib"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -99,13 +98,13 @@ func (c *CollectionService) LoadCollection() *Collection {
 	content, err := lib.OpenFileContents(c.Ctx)
 
 	if err != nil {
-		lib.ShowErrorModal(c.Ctx, "Collection cannot be loaded", "The collection file may be corrupted or data may be missing")
+		lib.ErrorModal(c.Ctx, "Collection cannot be loaded", "The collection file may be corrupted or data may be missing")
 		return nil
 	} else {
 		err = json.Unmarshal([]byte(content), collection)
 
 		if err != nil {
-			lib.ShowErrorModal(c.Ctx, "Collection cannot be read", err.Error())
+			lib.ErrorModal(c.Ctx, "Collection cannot be read", err.Error())
 			return nil
 		}
 
@@ -152,15 +151,15 @@ func (c *CollectionService) LoadCollectionFromDirectory(dir string) *Collection 
 		})
 
 	if err != nil {
-		lib.ShowErrorModal(c.Ctx, "Collection cannot be loaded from directory", err.Error())
+		lib.ErrorModal(c.Ctx, "Collection cannot be loaded from directory", err.Error())
 		return nil
 	}
 
 	return collection
 }
 
-func (c *CollectionService) SaveCollection(collection *Collection) error {
-	path, err := runtime.SaveFileDialog(c.Ctx, runtime.SaveDialogOptions{
+func (c *CollectionService) SaveCollection(collection *Collection) string {
+	file, err := runtime.SaveFileDialog(c.Ctx, runtime.SaveDialogOptions{
 		Title:           "Save Varly collection as a file",
 		DefaultFilename: collection.Name,
 		Filters: []runtime.FileFilter{
@@ -170,27 +169,31 @@ func (c *CollectionService) SaveCollection(collection *Collection) error {
 			},
 		},
 	})
+	fmt.Println(file)
 	if err != nil {
-		return err
+		return ""
 	}
-	if path == "" {
-		return errors.New("path to file was empty")
+	if file == "" {
+		lib.ErrorModal(c.Ctx, "Collection has no save location", "Collection destination may be read-only")
+
+		return ""
 	}
 
 	contents, err := json.MarshalIndent(collection, "", "  ")
 
 	if err != nil {
-		return err
+		lib.ErrorModal(c.Ctx, "Collection could not be formatted", "Collection data may be in a different format")
+		return ""
 	}
 
-	err = lib.WriteFileContents(path, contents)
+	err = lib.WriteFileContents(file, contents)
 
 	if err != nil {
-		lib.ShowErrorModal(c.Ctx, "Collection cannot be saved", "Collection data may be corrupted")
-		return nil
+		lib.ErrorModal(c.Ctx, "Collection could not be saved", "Collection data may be corrupted")
+		return ""
 	}
 
-	return nil
+	return file
 }
 
 func (c *CollectionService) ValidateCollection() error {
@@ -246,14 +249,9 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 			pngFilepath := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
 
 			defer func() {
-				if success {
-					completed++
-
-					data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size)}
-					runtime.EventsEmit(ctx, "collection.item.generated", data)
-
-					// fmt.Printf("%d. %s\n", job.Id, pngFilepath)
-				}
+				completed++
+				data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size), "Completed": fmt.Sprintf("%v", success)}
+				runtime.EventsEmit(ctx, "collection.item.generated", data)
 			}()
 
 			runtime.EventsEmit(ctx, "debug", map[string]interface{}{
@@ -319,7 +317,6 @@ func (c *CollectionService) GenerateCollectionPreview(collection Collection) str
 			}
 
 			pick := chooser.Pick().(string)
-
 			layers = append(layers, pick)
 		}
 	}
@@ -328,7 +325,7 @@ func (c *CollectionService) GenerateCollectionPreview(collection Collection) str
 
 	if err != nil {
 		fmt.Println(err)
-		lib.ShowErrorModal(c.Ctx, "No Preview", "Sorry, I was unable to generate preview for this collection")
+		lib.ErrorModal(c.Ctx, "No Preview", "Could not generate preview")
 	}
 	return preview
 }

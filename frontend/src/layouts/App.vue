@@ -1,42 +1,49 @@
-<template>
-  <keep-alive>
-    <router-view class="relative h-full overflow-hidden"></router-view>
-  </keep-alive>
-</template>
-
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { nextTick, onBeforeMount, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { Collection } from '@/wailsjs/go/models'
-import { useCollectionStore } from '@/store'
+import { useStore, useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 
+const intl = useI18n()
 const router = useRouter()
-const store = useCollectionStore()
-const isOnStartScreen = ref(false)
+const store = useStore()
+const collectionStore = useCollectionStore()
+
+onBeforeMount(() => {
+  intl.locale.value = store.locale || 'en'
+})
 
 onMounted(() => {
   window.runtime.EventsOn('shortcut.collection.open', async () => {
     const collection = await rpc.CollectionService.LoadCollection()
-    store.hydrate(collection)
+    collectionStore.hydrate(collection)
     router.push({ name: 'artwork.layers' })
   })
   window.runtime.EventsOn('shortcut.collection.save', async () => {
-    if (store.layers && Object.keys(store.layers).length) {
-      const error = await rpc.CollectionService.SaveCollection(Collection.createFrom(store.prepare()))
-
-      if (error) {
-        console.error(error)
-      }
+    if (collectionStore.layers && Object.keys(collectionStore.layers).length) {
+      const path = await rpc.CollectionService.SaveCollection(Collection.createFrom(collectionStore.prepare()))
+      if (path && path !== '') store.addDocument(path)
     }
   })
-})
-
-function setIsOnStartScreen(to: any) {
-  isOnStartScreen.value = to.name === 'start'
-}
-
-router.beforeResolve((to: any) => {
-  setIsOnStartScreen(to)
+  window.runtime.EventsOn('shortcut.language.english', () => {
+    intl.locale.value = 'en'
+    store.setLocale('en')
+    nextTick(() => window.location.reload())
+  })
+  window.runtime.EventsOn('shortcut.language.spanish', () => {
+    intl.locale.value = 'es'
+    store.setLocale('es')
+    nextTick(() => window.location.reload())
+  })
 })
 </script>
+
+<template>
+  <router-view class="relative h-full overflow-hidden" v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
+</template>

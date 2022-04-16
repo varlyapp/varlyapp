@@ -2,16 +2,16 @@
 import { computed, type FunctionalComponent, type PropType } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { BadgeCheckIcon, DocumentAddIcon, FolderOpenIcon } from '@heroicons/vue/solid'
+import { BadgeCheckIcon, FolderAddIcon, FolderOpenIcon, GiftIcon } from '@heroicons/vue/solid'
 import SidebarButton from '@/components/SidebarButton.vue'
-import {useCollectionStore } from '@/store'
+import { useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 
-const route           = useRoute()
-const router          = useRouter()
+const route = useRoute()
+const router = useRouter()
 const collectionStore = useCollectionStore()
 
-const intl  = useI18n({ useScope: 'global' })
+const intl = useI18n({ useScope: 'global' })
 const { t } = intl
 
 type Links = Array<{
@@ -26,11 +26,11 @@ const props = defineProps({
 })
 
 const startNewProjectAction = () => {
-    if (route.name === 'start') {
-        return 'artwork.layers'
-    }
-
     return async function () {
+        if (!Object.keys(collectionStore.layers).length) {
+            return router.push({ name: 'artwork.layers' })
+        }
+
         const response = await rpc.app.MessageDialog({
             Title: t(`confirm_start_new_project_title`),
             Message: t(`confirm_start_new_project_message`),
@@ -47,17 +47,12 @@ const startNewProjectAction = () => {
 
 const presets = {
     links: [
-        { icon: null, text: 'Support', to: '', selected: false },
-        // {
-        //     icon: TranslateIcon, text: t('switch_language'), to: () => {
-        //         console.log('Setting language')
-        //         store.setLocale('es')
-        //     }, selected: false
-        // },
+        { icon: null, text: t('support'), to: '', selected: false },
+        { icon: GiftIcon, text: t('sponsor_on_github'), to: () => window.runtime.BrowserOpenURL('https://github.com/sponsors/selvindev'), selected: false },
         { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: () => window.runtime.BrowserOpenURL('https://twitter.com/varlyapp'), selected: false },
-        { icon: null, text: 'Workspace', to: '', selected: false },
+        { icon: null, text: t('workspace'), to: '', selected: false },
         { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: route.name === 'start' },
-        { icon: DocumentAddIcon, text: t('start_new_project'), to: startNewProjectAction(), selected: false },
+        { icon: FolderAddIcon, text: t('start_new_project'), to: startNewProjectAction(), selected: false },
     ]
 }
 
@@ -65,12 +60,12 @@ const buttons = computed(() => {
     if (props.links?.length) {
         let added = false
         presets.links.map((link) => {
-            if (link.text === 'Project') {
+            if (link.text === t('project')) {
                 added = true
             }
         })
 
-        if (!added) presets.links.push({ icon: null, text: 'Project', to: '', selected: false })
+        if (!added) presets.links.push({ icon: null, text: t('project'), to: '', selected: false })
     }
 
     return [...presets.links, ...(props.links || [])]

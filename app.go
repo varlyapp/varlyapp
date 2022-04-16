@@ -15,15 +15,15 @@ import (
 )
 
 var (
-	userdir, _ = os.UserConfigDir()
-	basedir    = filepath.Join(userdir, "varlyapp")
+	libdir, _  = os.UserConfigDir()
+	userdir, _ = os.UserHomeDir()
+	basedir    = filepath.Join(libdir, "varlyapp")
 	docsdir    = filepath.Join(basedir, "Documents")
 )
 
 // App struct
 type App struct {
 	ctx               context.Context
-	Docs              map[string]interface{}
 	SettingsService   *services.SettingsService
 	FileSystemService *services.FileSystemService
 	CollectionService *services.CollectionService
@@ -47,6 +47,13 @@ func (app *App) startup(ctx context.Context) {
 	m := menu.NewMenuFromItems(
 		menu.AppMenu(),
 		menu.SubMenu("File", menu.NewMenuFromItems(
+			menu.Text("Refresh", keys.CmdOrCtrl("r"), func(cd *menu.CallbackData) {
+				runtime.EventsEmit(ctx, "shortcut.view.refresh")
+			}),
+			menu.Text("Hard Refresh", keys.Combo("r", keys.CmdOrCtrlKey, keys.ShiftKey), func(cd *menu.CallbackData) {
+				runtime.EventsEmit(ctx, "shortcut.view.hard-refresh")
+			}),
+			menu.Separator(),
 			menu.Text("Open Collection", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
 				runtime.EventsEmit(ctx, "shortcut.collection.open")
 			}),
@@ -55,6 +62,14 @@ func (app *App) startup(ctx context.Context) {
 			}),
 		)),
 		menu.EditMenu(),
+		menu.SubMenu("Language", menu.NewMenuFromItems(
+			menu.Text("🇺🇸 English", nil, func(cd *menu.CallbackData) {
+				runtime.EventsEmit(ctx, "shortcut.language.english")
+			}),
+			menu.Text("🇪🇸 Español", nil, func(cd *menu.CallbackData) {
+				runtime.EventsEmit(ctx, "shortcut.language.spanish")
+			}),
+		)),
 	)
 
 	runtime.MenuSetApplicationMenu(ctx, m)
@@ -100,7 +115,6 @@ func (app *App) EncodeImage(path string) string {
 	}
 
 	encoded := base64.StdEncoding.EncodeToString(image)
-
 	encoded = fmt.Sprintf("data:image/png;base64,%s", encoded)
 
 	return encoded

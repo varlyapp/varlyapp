@@ -6,7 +6,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func ShowInfoModal(ctx context.Context, title string, msg string) {
+func InfoModal(ctx context.Context, title string, msg string) {
 	runtime.MessageDialog(ctx, runtime.MessageDialogOptions{
 		Type: runtime.InfoDialog,
 		Title: title,
@@ -14,7 +14,7 @@ func ShowInfoModal(ctx context.Context, title string, msg string) {
 	})
 }
 
-func ShowErrorModal(ctx context.Context, title string, msg string) {
+func ErrorModal(ctx context.Context, title string, msg string) {
 	runtime.MessageDialog(ctx, runtime.MessageDialogOptions{
 		Type: runtime.ErrorDialog,
 		Title: title,

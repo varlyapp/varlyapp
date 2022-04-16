@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/varlyapp/varlyapp/backend/lib"
 )
@@ -15,7 +16,12 @@ func NewFileSystemService() *FileSystemService {
 }
 
 func (f *FileSystemService) ReadFileContents(path string) string {
-	contents, _ := lib.ReadFileContents(path)
+	contents, err := lib.ReadFileContents(path)
+
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	return contents
 }

@@ -19,7 +19,7 @@ async function handleClick(): Promise<void> {
 </script>
 
 <template>
-    <div class="absolute z-auto bottom-8 right-8">
+    <div class="absolute z-auto bottom-12 right-8">
         <button
             type="button"
             class="select-none flex min-w-full mt-2 py-2 px-6 items-center rounded-full uppercase text-slate-50 bg-fuchsia-700 shadow-md shadow-fuchsia-900 hover:bg-opacity-90 font-bold"

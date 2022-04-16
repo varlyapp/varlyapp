@@ -3,13 +3,18 @@ import { defineStore } from 'pinia'
 
 const useStore = defineStore('app', () => {
   const locale = ref<string>('en')
-  const isDark = ref<boolean>(false)
+  const documents = ref<string[]>([])
 
-  function setLocale(_locale: string) {
-    locale.value = _locale
+  function setLocale(this: any, locale: string) {
+    this.locale = locale
   }
 
-  return { locale, isDark, setLocale }
+  function addDocument(this: any, path: string) {
+    console.log('Adding document: ', path)
+    this.documents = [...this.documents, path]
+  }
+
+  return { locale, documents, setLocale, addDocument }
 }, { persist: true })
 
 const useCollectionStore = defineStore('collection', () => {

@@ -50,9 +50,9 @@ func main() {
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{
-			WebviewIsTransparent: false,
-			WindowIsTranslucent:  false,
-			DisableWindowIcon:    false,
+			WebviewIsTransparent: true,
+			WindowIsTranslucent:  true,
+			DisableWindowIcon:    true,
 		},
 		Mac: &mac.Options{
 			TitleBar: &mac.TitleBar{
@@ -67,7 +67,7 @@ func main() {
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
 				Title:   "🦄 Varly",
-				Message: "Varly is an app designed for NFT creators by @selvindev",
+				Message: "The most delightful desktop app for NFT creators. Made with love in Minnesota by Selvin Ortiz",
 				Icon:    icon,
 			},
 		},
