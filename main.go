@@ -67,7 +67,7 @@ func main() {
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
 				Title:   "🦄 Varly",
-				Message: "The most delightful desktop app for NFT creators. Made with love in Minnesota by Selvin Ortiz",
+				Message: "Varly is a delightful and fast desktop app for NFT creators who demand more from the tools they use. Made with ♥️ by Selvin Ortiz",
 				Icon:    icon,
 			},
 		},
