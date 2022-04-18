@@ -44,6 +44,7 @@ func (app *App) startup(ctx context.Context) {
 	app.ctx = ctx
 	app.FileSystemService.Ctx = ctx
 	app.CollectionService.Ctx = ctx
+
 	m := menu.NewMenuFromItems(
 		menu.AppMenu(),
 		menu.SubMenu("File", menu.NewMenuFromItems(

@@ -63,6 +63,10 @@ async function loadLayers() {
   }
 
   collectionStore.traits = [...traits]
+
+  nextTick(() => {
+    router.push({ name: `artwork.layers` })
+  })
 }
 
 function loadCollection(collection: Collection) {
@@ -97,19 +101,14 @@ function loadCollection(collection: Collection) {
       <section v-else class="h-full animate__animated animate__fadeIn">
         <div class="h-full p-4 lg:p-8 flex items-center justify-center text-center">
           <div>
-            <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-            </svg>
-            <h3 class="mt-2 text-sm font-medium" v-text="t('get_started_by_opening_your_layers_folder')"></h3>
-            <div class="mt-8">
-              <button type="button"
-                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-700 hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
-                @click="loadLayers">
-                <CollectionIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                <span v-text="t('open_layers_folder')" />
-              </button>
-            </div>
+              <h3 class="mt-2 text-sm font-medium" v-text="t('get_started_by_opening_your_layers_folder')" />
+              <div class="mt-8">
+                  <button type="button" @click="loadLayers"
+                      class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-700 hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500">
+                      <CollectionIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                      <span v-text="t('open_layers_folder')" />
+                  </button>
+              </div>
           </div>
         </div>
       </section>
