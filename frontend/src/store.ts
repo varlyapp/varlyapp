@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 const useStore = defineStore('app', () => {
   const locale = ref<string>('en')
   const documents = ref<string[]>([])
+  const isGeneratingCollection = ref<boolean>(false)
 
   function setLocale(this: any, locale: string) {
     this.locale = locale
@@ -14,7 +15,11 @@ const useStore = defineStore('app', () => {
     this.documents = [...this.documents, path]
   }
 
-  return { locale, documents, setLocale, addDocument }
+  function setIsGeneratingCollection(this: any, value: boolean) {
+    this.isGeneratingCollection = value
+  }
+
+  return { locale, documents, isGeneratingCollection, setLocale, addDocument, setIsGeneratingCollection }
 }, { persist: true })
 
 const useCollectionStore = defineStore('collection', () => {

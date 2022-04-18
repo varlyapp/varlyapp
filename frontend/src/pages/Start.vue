@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onActivated, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Collection } from '@/wailsjs/go/models'
@@ -18,7 +18,7 @@ const { t } = intl
 
 const projects = ref<Array<Collection>>([])
 
-onMounted(() => {
+onActivated(() => {
   load()
   nextTick(() => {
     window.runtime.EventsOn('shortcut.view.refresh', () => {
@@ -84,8 +84,35 @@ function loadCollection(collection: Collection) {
     ]" />
 
     <main class="h-full flex-1 overflow-auto scrollbar-none">
-      <section v-if="projects.length" class="p-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-8">
-        <div class="col-span-1" v-for="(collection, i) in projects" :key="i">
+      <section class="p-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-8">
+        <div class="col-span-1">
+          <div>
+            <img
+              @click="loadLayers"
+              class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
+              src="../assets/varly-new-document.png"
+              alt=""
+            >
+          </div>
+          <h2 class="mt-2 py-2 px-4 text-center leading-tight" v-text="`Start New Project`" />
+        </div>
+
+        <div v-if="collectionStore.layers && Object.keys(collectionStore.layers).length" class="col-span-1">
+          <div>
+            <img
+              @click="() => router.push({ name: 'artwork.layers' })"
+              class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
+              src="../assets/varly-current-document.png"
+              alt=""
+            >
+          </div>
+          <h2 class="mt-2 py-2 px-4 text-center leading-tight" v-text="`Open Current Project`" />
+        </div>
+
+        <div
+          class="col-span-1" v-for="(collection, i) in projects" :key="i"
+          :class="[i === 0 ? 'col-start-1' : '']"
+          >
           <div>
             <img
               @click="loadCollection(collection)"
@@ -95,21 +122,6 @@ function loadCollection(collection: Collection) {
             >
           </div>
           <h2 class="mt-2 py-2 px-4 text-center leading-tight">{{ collection.name }}</h2>
-        </div>
-      </section>
-
-      <section v-else class="h-full animate__animated animate__fadeIn">
-        <div class="h-full p-4 lg:p-8 flex items-center justify-center text-center">
-          <div>
-              <h3 class="mt-2 text-sm font-medium" v-text="t('get_started_by_opening_your_layers_folder')" />
-              <div class="mt-8">
-                  <button type="button" @click="loadLayers"
-                      class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-700 hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500">
-                      <CollectionIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                      <span v-text="t('open_layers_folder')" />
-                  </button>
-              </div>
-          </div>
         </div>
       </section>
     </main>

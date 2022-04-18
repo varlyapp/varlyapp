@@ -220,7 +220,6 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 	go func() {
 		defer wg.Done()
 		lib.Batch(c.Ctx, 0, jobs, func(ctx context.Context, id int, job lib.Job) {
-			success := true
 			var images []string
 			collection := job.Config.(Collection)
 
@@ -246,50 +245,49 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 				}
 			}
 
-			pngFilepath := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
-
 			defer func() {
 				completed++
-				data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size), "Completed": fmt.Sprintf("%v", success)}
+				data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size)}
 				runtime.EventsEmit(ctx, "collection.item.generated", data)
 			}()
 
-			runtime.EventsEmit(ctx, "debug", map[string]interface{}{
-				"images": images, "png": pngFilepath,
-			})
+			pngFilepath := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
 
 			dna := lib.GenerateDNA(images)
 			val, exists := usedDNA.Load(dna)
 			if exists {
-				success = false
+				pngFilepath = fmt.Sprintf("%s/duplicate-%d.png", collection.OutputDirectory, job.Id)
+
 				fmt.Println("DNA already exists: ", val)
 			} else {
 				usedDNA.Store(dna, dna)
 			}
 
-			if success {
-				err1 := lib.GenerateMetadata(lib.MetadataConfig{
-					CollectionName:        collection.Name,
-					CollectionSymbol:      "{{SYMBOL}}",
-					CollectionDescription: "",
-					CollectionBaseURI:     collection.BaseUri,
-					Name:                  collection.Name,
-					Edition:               job.Id,
-					Layers:                images,
-					Image:                 pngFilepath,
-					Artist:                "Selvin Ortiz",
-					DNA:                   dna,
-				})
+			runtime.EventsEmit(ctx, "debug", map[string]interface{}{
+				"images": images, "png": pngFilepath,
+			})
 
-				if err1 != nil {
-					fmt.Printf("unable to generate metadata: %s\n%v\n", pngFilepath, err1)
-				}
+			err1 := lib.GenerateMetadata(lib.MetadataConfig{
+				CollectionName:        collection.Name,
+				CollectionSymbol:      "{{SYMBOL}}",
+				CollectionDescription: "",
+				CollectionBaseURI:     collection.BaseUri,
+				Name:                  collection.Name,
+				Edition:               job.Id,
+				Layers:                images,
+				Image:                 pngFilepath,
+				Artist:                "Selvin Ortiz",
+				DNA:                   dna,
+			})
 
-				err2 := lib.GeneratePNG(images, pngFilepath, int(collection.Width), int(collection.Height))
+			if err1 != nil {
+				fmt.Printf("unable to generate metadata: %s\n%v\n", pngFilepath, err1)
+			}
 
-				if err2 != nil {
-					fmt.Printf("unable to generate image: %s\n%v\n", pngFilepath, err2)
-				}
+			err2 := lib.GeneratePNG(images, pngFilepath, int(collection.Width), int(collection.Height))
+
+			if err2 != nil {
+				fmt.Printf("unable to generate image: %s\n%v\n", pngFilepath, err2)
 			}
 		})
 	}()

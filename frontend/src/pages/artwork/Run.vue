@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Confetti from 'vue-confetti-explosion'
 import { CogIcon, CollectionIcon, PlayIcon, FolderDownloadIcon } from '@heroicons/vue/solid'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import { useCollectionStore } from '@/store'
+import { useStore, useCollectionStore } from '@/store'
 import { Collection } from '@/wailsjs/go/models'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
 import Preview from '@/components/Preview.vue'
@@ -13,11 +13,10 @@ import StatusBar from '@/components/StatusBar.vue'
 import { useRoute } from 'vue-router'
 import rpc from '@/rpc'
 
-const store = useCollectionStore()
+const { t } = useI18n()
 const route = useRoute()
-const i18n = useI18n()
-
-const { t } = i18n
+const store = useStore()
+const collectionStore = useCollectionStore()
 
 const steps = ref(0)
 const currentStep = ref(0)
@@ -26,19 +25,26 @@ const isDone = ref(false)
 const preview = ref('')
 
 onMounted(() => {
+    store.setIsGeneratingCollection(false)
+
     load()
     nextTick(() => {
         window.runtime.EventsOn('shortcut.view.refresh', () => {
+            if (route.name === 'artwork.run') load()
+        })
+        window.runtime.EventsOn('shortcut.view.hard-refresh', () => {
+            store.setIsGeneratingCollection(false)
             if (route.name === 'artwork.run') load()
         })
     })
 })
 
 async function load() {
-    if (isWorking.value)
+    if (isWorking.value || store.isGeneratingCollection) return
+
     console.log('Reloading Run.vue')
     preview.value = ''
-    const layers = { ...store.layers }
+    const layers = { ...collectionStore.layers }
 
     for (const trait in layers) {
         if (layers.hasOwnProperty(trait)) {
@@ -52,13 +58,13 @@ async function load() {
     }
 
     const collection = Collection.createFrom({
-        sourceDirectory: store.sourceDirectory,
-        outputDirectory: store.outputDirectory,
-        traits: [...store.traits],
+        sourceDirectory: collectionStore.sourceDirectory,
+        outputDirectory: collectionStore.outputDirectory,
+        traits: [...collectionStore.traits],
         layers: layers,
-        width: parseFloat(store.width.toString()),
-        height: parseFloat(store.height.toString()),
-        size: parseInt(store.size.toString(), 10)
+        width: parseFloat(collectionStore.width.toString()),
+        height: parseFloat(collectionStore.height.toString()),
+        size: parseInt(collectionStore.size.toString(), 10)
     })
 
     try {
@@ -88,9 +94,13 @@ async function selectOutputDirectory() {
         alert(`Folder could not be selected, please try again`)
     }
 
-    store.outputDirectory = outputDirectory
+    collectionStore.outputDirectory = outputDirectory
 }
+
 async function generateCollection() {
+    if (isWorking.value || store.isGeneratingCollection) return
+
+    store.setIsGeneratingCollection(true)
     currentStep.value = 0 // reset each time this method is called
 
     window.runtime.EventsOn('collection.generation.started', (data) => {
@@ -105,13 +115,13 @@ async function generateCollection() {
         console.log(data)
     })
 
-    const outputDirectory = store.outputDirectory
+    const outputDirectory = collectionStore.outputDirectory
 
     if (!outputDirectory) return
 
     toggleIsWorking()
 
-    const layers = { ...store.layers }
+    const layers = { ...collectionStore.layers }
 
     for (const trait in layers) {
         if (layers.hasOwnProperty(trait)) {
@@ -125,15 +135,15 @@ async function generateCollection() {
     }
 
     const collection = Collection.createFrom({
-        name: store.name,
-        description: store.description,
-        sourceDirectory: store.sourceDirectory,
+        name: collectionStore.name,
+        description: collectionStore.description,
+        sourceDirectory: collectionStore.sourceDirectory,
         outputDirectory: outputDirectory,
-        traits: [...store.traits],
+        traits: [...collectionStore.traits],
         layers: layers,
-        width: parseInt(store.width.toString(), 10),
-        height: parseInt(store.height.toString(), 10),
-        size: parseInt(store.size.toString(), 10)
+        width: parseInt(collectionStore.width.toString(), 10),
+        height: parseInt(collectionStore.height.toString(), 10),
+        size: parseInt(collectionStore.size.toString(), 10)
     })
 
     // Save to file, if desired
@@ -145,6 +155,7 @@ async function generateCollection() {
 
     toggleIsWorking()
     queueConfetti()
+    store.setIsGeneratingCollection(false)
 }
 </script>
 
@@ -199,8 +210,7 @@ async function generateCollection() {
             </div>
         </main>
 
-        <Confetti v-if="isDone" @done="() => isDone = false" :particle-count="200" :particle-size="10" :duration="3000"
-            class="absolute w-screen h-screen top-0 right-0 bottom-0 left-0" />
+        <Confetti v-if="isDone" @done="() => isDone = false" :particle-count="200" :particle-size="10" :duration="4000" class="absolute w-full h-full top-0 right-0 bottom-0 left-0" />
 
         <FloatingButtonBar>
             <button type="button"
@@ -212,8 +222,10 @@ async function generateCollection() {
                 <span>Select Output Folder</span>
             </button>
 
-            <button v-if="store.outputDirectory" type="button"
+            <button v-if="collectionStore.outputDirectory" type="button"
                 class="flex mt-2 py-2 px-4 items-center rounded text-slate-50 bg-fuchsia-700 shadow-md shadow-fuchsia-900 hover:bg-opacity-90"
+                :class="[isWorking ? 'opacity-50' : '']"
+                :disabled="isWorking"
                 @click="generateCollection">
                 <span>
                     <PlayIcon class="w-6 mr-2 fill-fuchsia-100" />
@@ -222,10 +234,10 @@ async function generateCollection() {
             </button>
         </FloatingButtonBar>
 
-        <StatusBar v-if="store.outputDirectory">
-            <p v-if="store.outputDirectory" class="pt-4 text-xs">
+        <StatusBar v-if="collectionStore.outputDirectory">
+            <p v-if="collectionStore.outputDirectory" class="pt-4 text-xs">
                 <strong>🏁 Output Folder: </strong>
-                {{ store.outputDirectory }}
+                {{ collectionStore.outputDirectory }}
             </p>
         </StatusBar>
     </section>
