@@ -17,4 +17,4 @@ notarize:
 	xcrun altool --notarize-app --primary-bundle-id "com.varlylabs.Varly" -u "selvin@selvin.co" -p "@env:APPLE_ID_PASSWORD" --asc-provider NA229UVJJB --file ./build/darwin/Varly.dmg --output-format xml
 
 release:
-	npm --prefix ./frontend run build && wails build -clean -nsis -webview2 download -platform windows/amd64,windows/arm64
+	npm --prefix ./frontend run build && wails build -clean -nsis -webview2 download -platform darwin/amd64,darwin/arm64,windows/amd64,windows/arm64
