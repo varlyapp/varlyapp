@@ -38,10 +38,10 @@ const startNewProjectAction = () => {
             DefaultButton: `OK`
         })
 
-        if (response.toLowerCase() !== 'ok') return
-
-        collectionStore.reset()
-        router.push({ name: 'artwork.layers' })
+        if (response.toLowerCase() in ['ok', 'yes']) {
+            collectionStore.reset()
+            router.push({ name: 'artwork.layers' })
+        }
     }
 }
 
