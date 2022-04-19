@@ -17,10 +17,9 @@ import (
 )
 
 var (
-	libdir, _  = os.UserConfigDir()
-	userdir, _ = os.UserHomeDir()
-	basedir    = filepath.Join(libdir, "varlyapp")
-	docsdir    = filepath.Join(basedir, "Documents")
+	libdir, _ = os.UserConfigDir()
+	basedir   = filepath.Join(libdir, "varlyapp")
+	docsdir   = filepath.Join(basedir, "Documents")
 )
 
 // App struct
@@ -134,11 +133,7 @@ func (app *App) SaveFile(file string, data string) bool {
 
 	err := os.WriteFile(path, []byte(data), os.ModePerm)
 
-	if err != nil {
-		return false
-	}
-
-	return true
+	return err == nil
 }
 
 func (app *App) GetImageStats(path string) image.Config {

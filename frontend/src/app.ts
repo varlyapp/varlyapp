@@ -9,6 +9,7 @@ import App from '@/layouts/App.vue'
 
 import 'animate.css'
 import '@/assets/app.css'
+import '@/assets/favicon.ico'
 
 const pinia = createPinia()
 pinia.use(piniaPersistedState)
