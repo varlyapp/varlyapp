@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"log"
+	"runtime"
 
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 
@@ -22,9 +23,14 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 
+	title := "Varly"
+	if runtime.GOOS == "darwin" {
+		title = "🦄 Varly"
+	}
+
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:             "🦄 Varly",
+		Title:             title,
 		Width:             720,
 		Height:            640,
 		MinWidth:          720,
@@ -36,7 +42,7 @@ func main() {
 		Frameless:         false,
 		StartHidden:       false,
 		HideWindowOnClose: false,
-		RGBA:              &options.RGBA{R: 29, G: 29, B: 64, A: 255},
+		RGBA:              &options.RGBA{R: 255, G: 255, B: 255, A: 255},
 		Assets:            assets,
 		LogLevel:          logger.DEBUG,
 		OnStartup:         app.startup,
@@ -50,9 +56,9 @@ func main() {
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{
-			WebviewIsTransparent: true,
-			WindowIsTranslucent:  true,
-			DisableWindowIcon:    true,
+			WebviewIsTransparent: false,
+			WindowIsTranslucent:  false,
+			DisableWindowIcon:    false,
 		},
 		Mac: &mac.Options{
 			TitleBar: &mac.TitleBar{
@@ -66,7 +72,7 @@ func main() {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
-				Title:   "🦄 Varly",
+				Title:   title,
 				Message: "Varly is a delightful and fast desktop app for NFT creators who demand more from the tools they use. Made with ♥️ by Selvin Ortiz",
 				Icon:    icon,
 			},

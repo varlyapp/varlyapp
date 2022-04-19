@@ -8,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
+	r "runtime"
+
 	"github.com/varlyapp/varlyapp/backend/services"
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -40,38 +42,44 @@ func NewApp() *App {
 
 // startup is called at application startup
 func (app *App) startup(ctx context.Context) {
-	// Perform your setup here
 	app.ctx = ctx
 	app.FileSystemService.Ctx = ctx
 	app.CollectionService.Ctx = ctx
 
-	m := menu.NewMenuFromItems(
-		menu.AppMenu(),
-		menu.SubMenu("File", menu.NewMenuFromItems(
-			menu.Text("Refresh", keys.CmdOrCtrl("r"), func(cd *menu.CallbackData) {
-				runtime.EventsEmit(ctx, "shortcut.view.refresh")
-			}),
-			menu.Text("Hard Refresh", keys.Combo("r", keys.CmdOrCtrlKey, keys.ShiftKey), func(cd *menu.CallbackData) {
-				runtime.EventsEmit(ctx, "shortcut.view.hard-refresh")
-			}),
-			menu.Separator(),
-			menu.Text("Open Collection", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
-				runtime.EventsEmit(ctx, "shortcut.collection.open")
-			}),
-			menu.Text("Save Collection", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
-				runtime.EventsEmit(ctx, "shortcut.collection.save")
-			}),
-		)),
-		menu.EditMenu(),
-		menu.SubMenu("Language", menu.NewMenuFromItems(
-			menu.Text("🇺🇸 English", nil, func(cd *menu.CallbackData) {
-				runtime.EventsEmit(ctx, "shortcut.language.english")
-			}),
-			menu.Text("🇪🇸 Español", nil, func(cd *menu.CallbackData) {
-				runtime.EventsEmit(ctx, "shortcut.language.spanish")
-			}),
-		)),
-	)
+	m := menu.NewMenu()
+
+	if r.GOOS == "darwin" {
+		m.Items = append(m.Items, menu.AppMenu())
+	}
+
+	m.Items = append(m.Items, menu.SubMenu("File", menu.NewMenuFromItems(
+		menu.Text("Refresh", keys.CmdOrCtrl("r"), func(cd *menu.CallbackData) {
+			runtime.EventsEmit(ctx, "shortcut.view.refresh")
+		}),
+		menu.Text("Hard Refresh", keys.Combo("r", keys.CmdOrCtrlKey, keys.ShiftKey), func(cd *menu.CallbackData) {
+			runtime.EventsEmit(ctx, "shortcut.view.hard-refresh")
+		}),
+		menu.Separator(),
+		menu.Text("Open Collection", keys.CmdOrCtrl("o"), func(cd *menu.CallbackData) {
+			runtime.EventsEmit(ctx, "shortcut.collection.open")
+		}),
+		menu.Text("Save Collection", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
+			runtime.EventsEmit(ctx, "shortcut.collection.save")
+		}),
+	)))
+
+	if r.GOOS == "darwin" {
+		m.Items = append(m.Items, menu.EditMenu())
+	}
+
+	m.Items = append(m.Items, menu.SubMenu("Language", menu.NewMenuFromItems(
+		menu.Text("🇺🇸 English", nil, func(cd *menu.CallbackData) {
+			runtime.EventsEmit(ctx, "shortcut.language.english")
+		}),
+		menu.Text("🇪🇸 Español", nil, func(cd *menu.CallbackData) {
+			runtime.EventsEmit(ctx, "shortcut.language.spanish")
+		}),
+	)))
 
 	runtime.MenuSetApplicationMenu(ctx, m)
 }
