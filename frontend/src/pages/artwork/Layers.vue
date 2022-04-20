@@ -37,6 +37,9 @@ function weightDistributionTotal(items: any) {
     items.forEach((item) => {
         total += parseInt(item.weight.toString(), 10)
     })
+
+    if (isNaN(total)) return 0
+
     return total
 }
 
@@ -105,9 +108,9 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
                                         <h1 v-text="element.name" class="text-base font-bold"></h1>
                                     </div>
                                     <div>
-                                        <input type="text"
-                                            class="field grow-0 text-right appearance-none bg-transparent border-0"
-                                            :value="`${weightDistributionTotal(collectionStore.layers[element.name])}`" />
+                                        <p
+                                            class="grow-0 text-base text-right px-2 font-bold bg-transparent border-0"
+                                            v-text="`${weightDistributionTotal(collectionStore.layers[element.name])}%`" />
                                     </div>
                                 </div>
 
