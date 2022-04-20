@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, onActivated, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
 import { Collection } from '@/wailsjs/go/models'
@@ -8,6 +9,7 @@ import Sidebar from '@/components/Sidebar.vue'
 import { useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 
+const route = useRoute()
 const intl = useI18n({ useScope: 'global' })
 const { t } = intl
 
@@ -16,6 +18,19 @@ const collectionStore = useCollectionStore()
 const isCollapsed = ref(false)
 const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
+
+const ROUTE_NAME = 'artwork.layers'
+
+onActivated(() => {
+    nextTick(() => {
+        window.runtime.EventsOn('shortcut.view.refresh', () => {
+            if (route.name === ROUTE_NAME && collectionStore.sourceDirectory.length) loadLayersFromDirectory(collectionStore.sourceDirectory)
+        })
+        window.runtime.EventsOn('shortcut.view.hard-refresh', () => {
+            if (route.name === ROUTE_NAME && collectionStore.sourceDirectory.length) loadLayersFromDirectory(collectionStore.sourceDirectory)
+        })
+    })
+})
 
 function weightDistributionTotal(items: any) {
     let total = 0
@@ -38,6 +53,10 @@ async function loadLayers() {
 
     collectionStore.sourceDirectory = sourceDirectory
 
+    await loadLayersFromDirectory(sourceDirectory)
+}
+
+async function loadLayersFromDirectory(sourceDirectory: string) {
     const collection: Collection = await rpc.CollectionService.LoadCollectionFromDirectory(sourceDirectory)
 
     collectionStore.layers = { ...collection.layers }
@@ -86,8 +105,7 @@ async function loadLayers() {
                                         <h1 v-text="element.name" class="text-base font-bold"></h1>
                                     </div>
                                     <div>
-                                        <input
-                                            type="text"
+                                        <input type="text"
                                             class="field grow-0 text-right appearance-none bg-transparent border-0"
                                             :value="`${weightDistributionTotal(collectionStore.layers[element.name])}`" />
                                     </div>
@@ -95,13 +113,10 @@ async function loadLayers() {
 
                                 <div :class="element.collapsed || isCollapsed ? 'hidden' : 'block'" group="layer"
                                     item-key="name">
-                                    <div
-                                        v-for="( collection, j) in collectionStore.layers[element.name]"
-                                        :key="j"
+                                    <div v-for="( collection, j) in collectionStore.layers[element.name]" :key="j"
                                         class="min-w-full flex justify-between border-t border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
                                         :class="[j % 2 === 0 ? `bg-slate-200 dark:bg-slate-800 bg-opacity-10 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]">
-                                        <div
-                                            class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
+                                        <div class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
                                             v-text="collection.name" />
                                         <div>
                                             <input
