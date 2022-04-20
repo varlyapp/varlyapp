@@ -21,10 +21,11 @@ var icon []byte
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
+	title := "Varly"
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:             "Varly",
+		Title:             title,
 		Width:             720,
 		Height:            640,
 		MinWidth:          720,

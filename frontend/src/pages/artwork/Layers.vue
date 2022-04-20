@@ -95,7 +95,7 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
                         @start="() => isTraitDragging = true" @end="() => isTraitDragging = false" item-key="name">
                         <template #item="{ element }">
                             <div
-                                class="mt-4 lg:mt-8 border border-slate-900 dark:border-slate-100 border-opacity-20 dark:border-opacity-10">
+                                class="mt-8 lg:mt-12 border border-slate-900 dark:border-slate-100 border-opacity-20 dark:border-opacity-10">
                                 <div
                                     class="flex items-center justify-between bg-slate-900 dark:bg-slate-200 bg-opacity-20 dark:bg-opacity-10">
                                     <div @click="toggleCollapsed(element)" class="flex items-center">

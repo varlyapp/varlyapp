@@ -174,7 +174,7 @@ async function generateCollection() {
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
                     <div v-if="!isWorking && !isDone">
-                        <div v-if="preview" class="p-16">
+                        <div v-if="preview" class="py-16">
                             <Preview :source="preview" caption="" />
                         </div>
                         <div v-else class="p-16 text-center">

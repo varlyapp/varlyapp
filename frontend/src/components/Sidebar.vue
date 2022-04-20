@@ -76,7 +76,7 @@ const buttons = computed(() => {
     <aside
         class="h-full overflow-auto scrollbar-none border-r border-slate-900 border-opacity-10 dark:border-slate-50 dark:border-opacity-10">
         <nav v-if="buttons"
-            class="p-4 xl:p-8 mt-4 xl:mt-8 text-left text-sm text-slate-900 text-opacity-80 dark:text-slate-50 dark:text-opacity-80;">
+            class="p-4 xl:p-8 text-left text-sm text-slate-900 text-opacity-80 dark:text-slate-50 dark:text-opacity-80;">
             <ul>
                 <li v-for="(link, i) in buttons" :key="i">
                     <SidebarButton v-if="link.icon" :text="link.text" :to="link.to" :selected="link.selected"
