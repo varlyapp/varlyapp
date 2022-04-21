@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Confetti from 'vue-confetti-explosion'
 import { CogIcon, CollectionIcon, PlayIcon, FolderDownloadIcon } from '@heroicons/vue/solid'
