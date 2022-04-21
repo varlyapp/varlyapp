@@ -28,7 +28,7 @@ async function handleClick(): Promise<void> {
         <span>
             <component
                 :is="props.icon"
-                class="w-6 mr-2 fill-fuchsia-700 dark:fill-fuchsia-500"
+                class="w-6 mr-2 text-fuchsia-700 dark:text-fuchsia-500"
             />
         </span>
         <span v-text="text" />
