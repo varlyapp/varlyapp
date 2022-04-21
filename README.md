@@ -1,9 +1,9 @@
 ![Varly.app](https://s3.us-west-2.amazonaws.com/cdn.selvin.dev/varly-preview.png)
 
 # Varly.app
-> A delightful **desktop app** for NFT creatives who value their time and care about the quality of their work.
+> Varly is a delightful **desktop app** for NFT creatives who value their time and care about the quality of their work.
 > Varly aims to create an end-to-end workflow for generating, uploading, and launching your NFT collection.
-> All from a lighting fast Mac/Windows app with a small memory and CPU footprint.
+> All from a well designed, lighting fast Mac/Windows app with a small memory and CPU footprint.
 
 ## Roadmap
 
@@ -19,13 +19,13 @@
     - Customizable ERC1155 template
     - Smart contract deployment to Ethereum and Polygon
 
-### Phase 3 (Lunch it) 🚀
+### Phase 3 (Launch it) 🚀
   - Minting Website or Widget
     - Generate minting website or embedable widget from collection assets
     - Deploy minting website to Netlify or Heroku
 
 ### Phase 4
-> The community will decide where we go from here.
+> Evolve!
 
 ---
 
@@ -41,7 +41,7 @@
 ---
 
 ## Support♥️
-> To support my efforts in building **Varly.app**, you can **contribute** to the project or send **Eth** to this address `0xcEc5D699e254dB1fbF73fEA6fB929Ea31CB839F4`
+> To support my efforts in building **Varly.app** and keeping it free and accessible to everyone, you can **contribute** to this open source project or send **Eth** to this address `0xcEc5D699e254dB1fbF73fEA6fB929Ea31CB839F4`
 
 > You may also sponsor me or donate via the GitHub Sponsors program at https://github.com/sponsors/selvindev
 ---
