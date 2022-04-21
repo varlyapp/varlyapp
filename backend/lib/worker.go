@@ -22,7 +22,7 @@ func Batch(ctx context.Context, size int, jobs []Job, fn Callback) {
 
 	// if number of workers is 0, use a sensible default
 	if numberOfWorkers == 0 {
-		numberOfWorkers = runtime.NumCPU()
+		numberOfWorkers = runtime.NumCPU() * 3
 	}
 
 	wg.Add(numberOfWorkers)
