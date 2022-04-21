@@ -4,7 +4,8 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
 import { Collection } from '@/wailsjs/go/models'
-import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
+import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
+import { CollectionIcon as CollectionIconSolid } from '@heroicons/vue/solid'
 import Sidebar from '@/components/Sidebar.vue'
 import { useCollectionStore } from '@/store'
 import rpc from '@/rpc'
@@ -95,7 +96,7 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
                         @start="() => isTraitDragging = true" @end="() => isTraitDragging = false" item-key="name">
                         <template #item="{ element }">
                             <div
-                                class="mt-8 lg:mt-12 border border-slate-900 dark:border-slate-100 border-opacity-20 dark:border-opacity-10">
+                                class="mt-8 lg:mt-12 first:mt-2 border border-slate-900 dark:border-slate-100 border-opacity-20 dark:border-opacity-10">
                                 <div
                                     class="flex items-center justify-between bg-slate-900 dark:bg-slate-200 bg-opacity-20 dark:bg-opacity-10">
                                     <div @click="toggleCollapsed(element)" class="flex items-center">
@@ -141,7 +142,7 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
                         <div class="mt-8">
                             <button type="button" @click="loadLayers"
                                 class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-700 hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500">
-                                <CollectionIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                <CollectionIconSolid class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 <span v-text="t('open_layers_folder')" />
                             </button>
                         </div>
