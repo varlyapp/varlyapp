@@ -11,10 +11,9 @@ import (
 
 type Metadata struct {
 	Name         string `json:"name"`
-	Symbol       string `json:"symbol"`
 	Description  string `json:"description"`
 	Image        string `json:"image"`
-	AnimationURL string `json:"animatin_url"`
+	AnimationURL string `json:"animation_url"`
 	ExternalURL  string `json:"external_url"`
 
 	DNA      string `json:"dna"`
@@ -24,8 +23,6 @@ type Metadata struct {
 	Date     int64  `json:"date"`
 
 	// Solana JSON schema
-	Collection MetadataCollection `json:"collection"`
-
 	SellerFeeBasisPoints string `json:"seller_fee_basis_points"`
 	// Other properties
 	// properties[files[], category, creators[]]
@@ -39,22 +36,15 @@ type MetadataTrait struct {
 	Value string `json:"value"`
 }
 
-type MetadataCollection struct {
-	Name   string `json:"name"`
-	Family string `json:"family"`
-}
-
 type MetadataConfig struct {
-	CollectionName        string
-	CollectionDescription string
-	CollectionSymbol      string
-	CollectionBaseURI     string
-	Artist                string
-	DNA                   string
-	Name                  string
-	Edition               int
-	Layers                []string
-	Image                 string
+	Name        string   `json:"name"`
+	BaseURI     string   `json:"baseUri"`
+	Description string   `json:"description"`
+	Artist      string   `json:"artist"`
+	DNA         string   `json:"dna"`
+	Edition     int      `json:"edition"`
+	Layers      []string `json:"layers"`
+	Image       string   `json:"image"`
 }
 
 func LayersToMetadataTraits(layers []string) []MetadataTrait {
@@ -82,13 +72,13 @@ func ParseImageURI(path string, baseURI string) (string, string) {
 }
 
 func GenerateMetadata(config MetadataConfig) error {
-	name := ParsePlaceholder(config.CollectionName, "{{edition}}", fmt.Sprintf("%d", config.Edition))
+	name := ParsePlaceholder(config.Name, "{{edition}}", fmt.Sprintf("%d", config.Edition))
 	traits := LayersToMetadataTraits(config.Layers)
-	imageURI, jsonFilepath := ParseImageURI(config.Image, config.CollectionBaseURI)
+	imageURI, jsonFilepath := ParseImageURI(config.Image, config.BaseURI)
 
 	metadata := Metadata{
 		Name:        name,
-		Description: "",
+		Description: config.Description,
 		Image:       imageURI,
 		Artist:      config.Artist,
 		Edition:     config.Edition,
@@ -96,8 +86,7 @@ func GenerateMetadata(config MetadataConfig) error {
 		Date:        time.Now().Unix(),
 
 		// Solana JSON schema
-		Collection:   MetadataCollection{},
-		Symbol:       "{{SYMBOL}}",
+		// Symbol: "{{SYMBOL}}",
 		AnimationURL: "",
 		ExternalURL:  "",
 

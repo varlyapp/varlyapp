@@ -268,16 +268,14 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 			})
 
 			err1 := lib.GenerateMetadata(lib.MetadataConfig{
-				CollectionName:        collection.Name,
-				CollectionSymbol:      "{{SYMBOL}}",
-				CollectionDescription: "",
-				CollectionBaseURI:     collection.BaseUri,
-				Name:                  collection.Name,
-				Edition:               job.Id,
-				Layers:                images,
-				Image:                 pngFilepath,
-				Artist:                "Selvin Ortiz",
-				DNA:                   dna,
+				Name:        collection.Name,
+				Description: collection.Description,
+				BaseURI:     collection.BaseUri,
+				Edition:     job.Id,
+				Layers:      images,
+				Image:       pngFilepath,
+				Artist:      collection.Artist,
+				DNA:         dna,
 			})
 
 			if err1 != nil {

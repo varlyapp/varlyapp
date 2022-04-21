@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"log"
+	"runtime"
 
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 
@@ -22,6 +23,9 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 	title := "Varly"
+	if runtime.GOOS == "darwin" {
+		title = "🦄 Varly"
+	}
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -67,7 +71,7 @@ func main() {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
-				Title:   "🦄 Varly",
+				Title:   title,
 				Message: "Varly is a delightful and fast desktop app for NFT creators who demand more from the tools they use. Made with ♥️ by Selvin Ortiz",
 				Icon:    icon,
 			},
