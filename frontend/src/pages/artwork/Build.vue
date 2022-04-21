@@ -2,7 +2,7 @@
 import { nextTick, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/solid'
+import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
 import { useCollectionStore } from '@/store'
 import Sidebar from '@/components/Sidebar.vue'
 import rpc from '@/rpc'
@@ -12,7 +12,7 @@ const HEIGHT = 1500
 const SIZE = 100
 
 const route = useRoute()
-const store = useCollectionStore()
+const collectionStore = useCollectionStore()
 
 const i18n = useI18n()
 const { t } = i18n
@@ -28,21 +28,21 @@ onMounted(() => {
 
 async function load() {
     console.log('Reloading Build.vue')
-    store.size = store.size || SIZE
-    store.height = store.height || HEIGHT
-    store.width = store.width || WIDTH
+    collectionStore.size = collectionStore.size || SIZE
+    collectionStore.height = collectionStore.height || HEIGHT
+    collectionStore.width = collectionStore.width || WIDTH
 
-    if (store.layers && Object.keys(store.layers).length) {
-        for (const trait in store.layers) {
-            if (store.layers.hasOwnProperty(trait)) {
-                if (store.layers[trait] && store.layers[trait].length) {
-                    const variant = store.layers[trait][0]
+    if (collectionStore.layers && Object.keys(collectionStore.layers).length) {
+        for (const trait in collectionStore.layers) {
+            if (collectionStore.layers.hasOwnProperty(trait)) {
+                if (collectionStore.layers[trait] && collectionStore.layers[trait].length) {
+                    const variant = collectionStore.layers[trait][0]
                     if (variant) {
                         const image = await rpc.app.GetImageStats(variant.path)
 
                         if (image['Width'] && image['Height']) {
-                            store.width = image['Width']
-                            store.height = image['Height']
+                            collectionStore.width = image['Width']
+                            collectionStore.height = image['Height']
                         }
                     }
                 }
@@ -67,14 +67,14 @@ async function load() {
                         <label for="collection-name" class="block text-sm opacity-75">Collection Name</label>
                         <div class="mt-1">
                             <input type="text" id="collection-name" class="field" name="collection-name"
-                                autocomplete="off" placeholder="e.g. Boss Beauties" autofocus v-model="store.name" />
+                                autocomplete="off" placeholder="e.g. Boss Beauties" autofocus v-model="collectionStore.name" />
                         </div>
                     </div>
                     <div class="col-span-12">
                         <label for="collection-name" class="block text-sm opacity-75">Collection Artist</label>
                         <div class="mt-1">
                             <input type="text" id="collection-artist" class="field" name="collection-artist"
-                                autocomplete="off" placeholder="e.g Your name or pseudonym" v-model="store.artist" />
+                                autocomplete="off" placeholder="e.g Your name or pseudonym" v-model="collectionStore.artist" />
                         </div>
                     </div>
                     <div class="col-span-12">
@@ -83,7 +83,7 @@ async function load() {
                         <div class="mt-1">
                             <textarea rows="6" id="collection-description" class="field scrollbar-none"
                                 name="collection-description" autocomplete="off"
-                                placeholder="A short description about your collection" v-model="store.description" />
+                                placeholder="A short description about your collection" v-model="collectionStore.description" />
                         </div>
                     </div>
 
@@ -92,7 +92,7 @@ async function load() {
                         <div class="mt-1">
                             <input type="text" id="collection-base-uri" class="field" name="collection-base-uri"
                                 autocomplete="off" spellcheck="false" placeholder="e.g ipfs://your-collection-cid/"
-                                v-model="store.baseUri" />
+                                v-model="collectionStore.baseUri" />
                         </div>
                     </div>
 
@@ -102,14 +102,14 @@ async function load() {
                         <label for="collection-width" class="block text-sm opacity-75">Layer Width</label>
                         <div class="mt-1">
                             <input type="text" name="collection-width" id="collection-width" autocomplete="off"
-                                class="field" v-model="store.width" />
+                                class="field" v-model="collectionStore.width" />
                         </div>
                     </div>
                     <div class="col-span-6">
                         <label for="collection-height" class="block text-sm opacity-75">Layer Height</label>
                         <div class="mt-1">
                             <input type="text" name="collection-height" id="collection-height" autocomplete="off"
-                                class="field" v-model="store.height" />
+                                class="field" v-model="collectionStore.height" />
                         </div>
                     </div>
 
@@ -117,7 +117,7 @@ async function load() {
                         <label for="collection-size" class="block text-sm opacity-75">Collection Size</label>
                         <div class="mt-1">
                             <input type="text" name="collection-size" id="collection-size" autocomplete="off"
-                                class="field" v-model="store.size" />
+                                class="field" v-model="collectionStore.size" />
                         </div>
                     </div>
                     <div class="col-span-6"></div>
