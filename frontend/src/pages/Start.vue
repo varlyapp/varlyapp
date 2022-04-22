@@ -94,7 +94,7 @@ function loadCollection(collection: Collection) {
               alt=""
             >
           </div>
-          <h2 class="mt-2 py-2 px-4 text-center leading-tight" v-text="`Start New Project`" />
+          <h2 class="mt-2 py-2 px-4 text-center leading-tight" v-text="t('start_new_project')" />
         </div>
 
         <div v-if="collectionStore.layers && Object.keys(collectionStore.layers).length" class="col-span-1">
@@ -106,7 +106,7 @@ function loadCollection(collection: Collection) {
               alt=""
             >
           </div>
-          <h2 class="mt-2 py-2 px-4 text-center leading-tight" v-text="`Open Current Project`" />
+          <h2 class="mt-2 py-2 px-4 text-center leading-tight" v-text="t('open_current_project')" />
         </div>
 
         <div

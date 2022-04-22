@@ -46,6 +46,11 @@ async function load() {
     preview.value = ''
     const layers = { ...collectionStore.layers }
 
+    if (!layers || !Object.keys(layers).length) {
+        console.log('No preview to generate')
+        return
+    }
+
     for (const trait in layers) {
         if (layers.hasOwnProperty(trait)) {
             layers[trait] = layers[trait].map((layer) => {
@@ -178,9 +183,7 @@ async function generateCollection() {
                             <Preview :source="preview" caption="" />
                         </div>
                         <div v-else class="p-16 text-center">
-                            <p class="py-4">Generating Preview</p>
-                            <svg class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38"
-                                xmlns="http://www.w3.org/2000/svg">
+                            <svg v-if=" collectionStore.layers && Object.keys(collectionStore.layers).length" class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
                                         <stop stop-color="#a21caf" stop-opacity="0" offset="0%" />
@@ -201,10 +204,11 @@ async function generateCollection() {
                                     </g>
                                 </g>
                             </svg>
+                            <p v-else v-text="t('no_preview_yet')" />
                         </div>
                     </div>
                     <div v-if="isDone" class="max-w-xs mx-auto">
-                        <h1 class="animate__animated animate__fadeIn text-6xl text-center font-bold">Yay 🎉</h1>
+                        <h1 class="animate__animated animate__fadeIn text-6xl text-center font-bold">🎉</h1>
                     </div>
                 </div>
             </div>
@@ -216,10 +220,7 @@ async function generateCollection() {
             <button type="button"
                 class="flex mt-2 py-2 px-4 items-center rounded text-slate-50 bg-slate-700 shadow-md shadow-slate-800 hover:bg-opacity-90"
                 @click="selectOutputDirectory">
-                <span>
-                    <FolderDownloadIcon class="w-6 mr-2 fill-slate-100" />
-                </span>
-                <span>Select Output Folder</span>
+                <span v-text="t('select_output_folder')" />
             </button>
 
             <button v-if="collectionStore.outputDirectory" type="button"
@@ -227,17 +228,13 @@ async function generateCollection() {
                 :class="[isWorking ? 'opacity-50' : '']"
                 :disabled="isWorking"
                 @click="generateCollection">
-                <span>
-                    <PlayIcon class="w-6 mr-2 fill-fuchsia-100" />
-                </span>
-                <span>Generate Collection</span>
+                <span v-text="t('generate_collection')"/>
             </button>
         </FloatingButtonBar>
 
         <StatusBar v-if="collectionStore.outputDirectory">
             <p v-if="collectionStore.outputDirectory" class="pt-4 text-xs">
-                <strong>🏁 Output Folder: </strong>
-                {{ collectionStore.outputDirectory }}
+                🏁 {{ collectionStore.outputDirectory }}
             </p>
         </StatusBar>
     </section>
