@@ -2,12 +2,13 @@
 
 ## 0.4.0 - 2022-04-22
 ### Added
-- Added move coverage for the Spanish language translations
+- Added more coverage for the Spanish language translations
 - Added a way for you to refresh the **Layer Setup** screen when the layers folder changes externally
 
 ### Fixed
 - Fixed issue #4 where the **Layer Setup** screen would not update when changes were made in Finder/Explorer
 - Fixed issue #3 where the **Artist** and **Base URI** were not used in metadata generation
+- Fixed issue where the **Generate Collection** showed up even when there were no layers to generate from
 
 ### Updated
 - Updated the number of workers that can run concurrently during generation to the number of physical CPUs X 3
