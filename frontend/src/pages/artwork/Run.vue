@@ -218,13 +218,13 @@ async function generateCollection() {
 
         <FloatingButtonBar>
             <button type="button"
-                class="flex mt-2 py-2 px-4 items-center rounded text-slate-50 bg-slate-700 shadow-md shadow-slate-800 hover:bg-opacity-90"
+                class="flex mt-2 py-3 px-4 items-center rounded text-slate-50 bg-slate-700 shadow shadow-slate-800 hover:bg-opacity-90"
                 @click="selectOutputDirectory">
                 <span v-text="t('select_output_folder')" />
             </button>
 
-            <button v-if="collectionStore.outputDirectory" type="button"
-                class="flex mt-2 py-2 px-4 items-center rounded text-slate-50 bg-fuchsia-700 shadow-md shadow-fuchsia-900 hover:bg-opacity-90"
+            <button v-if="collectionStore.layers && Object.keys(collectionStore.layers).length && collectionStore.outputDirectory" type="button"
+                class="flex mt-2 py-3 px-4 items-center rounded text-slate-50 bg-fuchsia-700 shadow shadow-fuchsia-900 hover:bg-opacity-90"
                 :class="[isWorking ? 'opacity-50' : '']"
                 :disabled="isWorking"
                 @click="generateCollection">
