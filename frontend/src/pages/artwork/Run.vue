@@ -2,7 +2,7 @@
 import { nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Confetti from 'vue-confetti-explosion'
-import { CogIcon, CollectionIcon, PlayIcon, FolderDownloadIcon } from '@heroicons/vue/solid'
+import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import { useStore, useCollectionStore } from '@/store'
@@ -22,7 +22,6 @@ const steps = ref(0)
 const currentStep = ref(0)
 const isWorking = ref(false)
 const isDone = ref(false)
-const preview = ref('')
 
 onMounted(() => {
     store.setIsGeneratingCollection(false)
@@ -43,7 +42,7 @@ async function load() {
     if (isWorking.value || store.isGeneratingCollection) return
 
     console.log('Reloading Run.vue')
-    preview.value = ''
+    collectionStore.preview = ''
     const layers = { ...collectionStore.layers }
 
     if (!layers || !Object.keys(layers).length) {
@@ -73,7 +72,7 @@ async function load() {
     })
 
     try {
-        preview.value = await rpc.CollectionService.GenerateCollectionPreview(collection)
+        collectionStore.preview = await rpc.CollectionService.GenerateCollectionPreview(collection)
     } catch (error) {
         console.error(error)
     }
@@ -179,8 +178,8 @@ async function generateCollection() {
             <div v-else class="h-full flex flex-col items-center justify-center p-8">
                 <div class="flex flex-col items-center">
                     <div v-if="!isWorking && !isDone">
-                        <div v-if="preview" class="py-16">
-                            <Preview :source="preview" caption="" />
+                        <div v-if="collectionStore.preview" class="py-16">
+                            <Preview :source="collectionStore.preview" caption="" />
                         </div>
                         <div v-else class="p-16 text-center">
                             <svg v-if=" collectionStore.layers && Object.keys(collectionStore.layers).length" class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">

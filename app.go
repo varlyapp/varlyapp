@@ -65,6 +65,10 @@ func (app *App) startup(ctx context.Context) {
 		menu.Text("Save Collection", keys.CmdOrCtrl("s"), func(cd *menu.CallbackData) {
 			runtime.EventsEmit(ctx, "shortcut.collection.save")
 		}),
+		menu.Separator(),
+		menu.Text("Print...", keys.CmdOrCtrl("p"), func(cd *menu.CallbackData) {
+			runtime.EventsEmit(ctx, "shortcut.collection.print")
+		}),
 	)))
 
 	if r.GOOS == "darwin" {

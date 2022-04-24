@@ -1,9 +1,12 @@
 package services
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/gif"
 	"log"
 	"math/rand"
 	"os"
@@ -13,6 +16,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/disintegration/imaging"
 	wr "github.com/mroth/weightedrand"
 	"github.com/varlyapp/varlyapp/backend/lib"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -324,4 +328,119 @@ func (c *CollectionService) GenerateCollectionPreview(collection Collection) str
 		lib.ErrorModal(c.Ctx, "No Preview", "Could not generate preview")
 	}
 	return preview
+}
+
+func (c *CollectionService) GenerateCollectionGif(collection Collection, frames int, delay int) {
+	// layers := []string{
+	// 	"/Users/selvinortiz/Desktop/hashlips output/0.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/1.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/3.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/4.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/5.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/6.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/8.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/9.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/11.png",
+	// 	"/Users/selvinortiz/Desktop/hashlips output/12.png",
+	// }
+
+	var layers []string
+
+	for _, trait := range collection.Traits {
+		variants := collection.Layers[trait.Name]
+
+		if len(variants) > 0 {
+			var choices []wr.Choice
+
+			for _, variant := range variants {
+				choices = append(choices, wr.Choice{Item: variant.Path, Weight: uint(variant.Weight)})
+			}
+
+			chooser, err := wr.NewChooser(choices...)
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			pick := chooser.Pick().(string)
+			layers = append(layers, pick)
+		}
+	}
+
+	preview, err := lib.MakePreview(layers, int(collection.Width), int(collection.Height), 512)
+
+	if err != nil {
+		fmt.Println(err)
+		lib.ErrorModal(c.Ctx, "No Preview", "Could not generate preview")
+	}
+
+	var outputFrames []*image.Paletted
+
+	for _, layer := range layers {
+		img, err := imaging.Open(layer)
+		if err != nil {
+			log.Printf("Skipping file %s due to error reading it :%s", layer, err)
+			continue
+		}
+
+		buf := bytes.Buffer{}
+		if err := gif.Encode(&buf, img, nil); err != nil {
+			log.Printf("Skipping file %s due to error in gif encoding:%s", layer, err)
+			continue
+		}
+
+		decoded, err := gif.Decode(&buf)
+		if err != nil {
+			log.Printf("Skipping file %s due to weird error reading the temporary gif :%s", layer, err)
+			continue
+		}
+		outputFrames = append(outputFrames, decoded.(*image.Paletted))
+	}
+
+	delays := make([]int, len(outputFrames))
+	for j := range delays {
+		delays[j] = delay
+	}
+
+	output, err := os.Create("./animated.gif")
+
+	if err != nil {
+		log.Fatalf("Error creating the destination file %s", err)
+	}
+
+	if err := gif.EncodeAll(output, &gif.GIF{Image: outputFrames, Delay: delays, LoopCount: 0}); err != nil {
+		log.Printf("Error encoding output into animated gif :%s", err)
+	}
+
+	output.Close()
+
+	fmt.Println("Done")
+	// animated := &gif.GIF{
+	// 	Image: []*image.Paletted{},
+	// 	Delay: []int{30, 30},
+	// 	LoopCount: 0,
+	// }
+
+	// for _, layer := range layers {
+	// 	file, err := os.Open(layer)
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// 	decoded, err := png.Decode(file)
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// 	img := image.NewPaletted(image.Rect(0, 0, 1500, 1500), palette.Plan9)
+	// 	draw.Draw(img, img.Bounds(), decoded, image.ZP, draw.Src)
+	// 	animated.Image = append(animated.Image, img)
+	// }
+
+	// output, err := os.OpenFile("./animated.gif", os.O_WRONLY|os.O_CREATE, 0600)
+
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// gif.EncodeAll(output, animated)
+	// fmt.Println("Running GenerateCollectionGif")
 }

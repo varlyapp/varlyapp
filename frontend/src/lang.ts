@@ -20,6 +20,8 @@ export default {
             run: 'Preview & Generate',
             next: 'Next',
             // Buttons
+            close: 'Close',
+            export_gif: 'Export GIF',
             open_layers_folder: 'Open Layers Folder',
             select_output_folder: 'Select Output Folder',
             generate_collection: 'Generate Collection',
@@ -54,6 +56,8 @@ export default {
             run: 'Revisar y Correr',
             next: 'Sígue',
             // Buttons
+            close: 'Close',
+            export_gif: 'Export GIF',
             open_layers_folder: 'Abrir Carpeta de Capas',
             select_output_folder: 'Seleccionar Carpeta de Producción',
             generate_collection: 'Generar la Colección',
@@ -88,6 +92,8 @@ export default {
             run: 'Preview & Generate',
             next: 'Next',
             // Buttons
+            close: 'Close',
+            export_gif: 'Export GIF',
             open_layers_folder: 'Open Layers Folder',
             select_output_folder: 'Select Output Folder',
             generate_collection: 'Generate Collection',

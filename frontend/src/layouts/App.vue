@@ -37,6 +37,9 @@ onMounted(() => {
     store.setLocale('es')
     nextTick(() => window.location.reload())
   })
+  window.runtime.EventsOn('shortcut.collection.print', () => {
+    nextTick(() => router.push({ name: 'print' }))
+  })
 })
 </script>
 

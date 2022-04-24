@@ -1,6 +1,11 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
+type GifConfig = {
+  frames: number,
+  delay: number,
+}
+
 const useStore = defineStore('app', () => {
   const locale = ref<string>('en')
   const documents = ref<string[]>([])
@@ -31,9 +36,11 @@ const useCollectionStore = defineStore('collection', () => {
   const baseUri = ref<string>('')
   const traits = ref<Object[]>([])
   const layers = ref<Object>({})
-  const size = ref<number>(0.0)
   const width = ref<number>(0.0)
   const height = ref<number>(0.0)
+  const size = ref<number>(0.0)
+  const preview = ref<string>('')
+  const gif = ref<GifConfig>({ frames: 10, delay: 25 })
 
   function hydrate(this: any, collection: any) {
     this.reset()
@@ -43,6 +50,12 @@ const useCollectionStore = defineStore('collection', () => {
     this.descrption = collection.descrption || ''
     this.artist = collection.artist || ''
     this.baseUri = collection.baseUri || ''
+    // @todo Consider separating these for supporting editions
+    this.editions = [
+      { name: 'Silver', traits: [], layers: {}, width: 0, height: 0, size: 0 },
+      { name: 'Gold', traits: [], layers: {}, width: 0, height: 0, size: 0 },
+      { name: 'Platinum', traits: [], layers: {}, width: 0, height: 0, size: 0 },
+    ]
     this.traits = collection.traits || []
     this.layers = collection.layers || {}
     this.width = collection.width || 0.0
@@ -65,6 +78,7 @@ const useCollectionStore = defineStore('collection', () => {
       size: parseInt(this.size, 10),
     }
   }
+
   function reset(this: any) {
     this.sourceDirectory = ''
     this.outputDirectory = ''
@@ -77,9 +91,11 @@ const useCollectionStore = defineStore('collection', () => {
     this.width = 0
     this.height = 0
     this.size = 0
+    this.preview = '',
+    this.gif = {}
   }
 
-  return { hydrate, prepare, reset, traits, layers, sourceDirectory, outputDirectory, name, description, artist, baseUri, width, height, size }
+  return { hydrate, prepare, reset, traits, layers, sourceDirectory, outputDirectory, name, description, artist, baseUri, width, height, size, preview, gif }
 }, { persist: true })
 
 export { useStore, useCollectionStore }
