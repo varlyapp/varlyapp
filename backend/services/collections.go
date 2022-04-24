@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image"
@@ -330,7 +331,7 @@ func (c *CollectionService) GenerateCollectionPreview(collection Collection) str
 	return preview
 }
 
-func (c *CollectionService) GenerateCollectionGif(collection Collection, frames int, delay int) {
+func (c *CollectionService) GenerateCollectionGif(collection Collection, fps int, delay int) string {
 	// layers := []string{
 	// 	"/Users/selvinortiz/Desktop/hashlips output/0.png",
 	// 	"/Users/selvinortiz/Desktop/hashlips output/1.png",
@@ -344,77 +345,127 @@ func (c *CollectionService) GenerateCollectionGif(collection Collection, frames 
 	// 	"/Users/selvinortiz/Desktop/hashlips output/12.png",
 	// }
 
-	var layers []string
+	runtime.LogInfo(c.Ctx, "Starting job")
 
-	for _, trait := range collection.Traits {
-		variants := collection.Layers[trait.Name]
+	var wg sync.WaitGroup
+	var images []string
 
-		if len(variants) > 0 {
-			var choices []wr.Choice
+	wg.Add(fps)
+	for i := 0; i < fps; i++ {
+		runtime.LogInfo(c.Ctx, "Generating images")
 
-			for _, variant := range variants {
-				choices = append(choices, wr.Choice{Item: variant.Path, Weight: uint(variant.Weight)})
+		var layers []string
+
+		for _, trait := range collection.Traits {
+			variants := collection.Layers[trait.Name]
+
+			if len(variants) > 0 {
+				var choices []wr.Choice
+
+				for _, variant := range variants {
+					choices = append(choices, wr.Choice{Item: variant.Path, Weight: uint(variant.Weight)})
+				}
+
+				chooser, err := wr.NewChooser(choices...)
+
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				pick := chooser.Pick().(string)
+				layers = append(layers, pick)
+			}
+		}
+
+		path := filepath.Join(os.TempDir(), fmt.Sprintf("%d.png", i))
+
+		go func() {
+			defer wg.Done()
+			if err := lib.GenerateFrame(layers, path, int(collection.Width), int(collection.Height), 512); err != nil {
+				panic(err)
 			}
 
-			chooser, err := wr.NewChooser(choices...)
+			images = append(images, path)
+			runtime.LogInfo(c.Ctx, "Generated image")
+		}()
+	}
 
+	wg.Wait()
+	wg.Add(len(images))
+
+	var frames []*image.Paletted
+	for _, img := range images {
+		runtime.LogInfo(c.Ctx, "Generating frames")
+
+		go func(i string) {
+			defer wg.Done()
+
+			img, err := imaging.Open(i)
 			if err != nil {
-				log.Fatal(err)
+				log.Printf("Skipping file %s due to error reading it :%s", i, err)
 			}
 
-			pick := chooser.Pick().(string)
-			layers = append(layers, pick)
-		}
+			buf := bytes.Buffer{}
+			if err := gif.Encode(&buf, img, nil); err != nil {
+				log.Printf("Skipping file %s due to error in gif encoding:%s", i, err)
+			}
+			decoded, err := gif.Decode(&buf)
+			if err != nil {
+				log.Printf("Skipping file %s due to weird error reading the temporary gif :%s", i, err)
+			}
+			frames = append(frames, decoded.(*image.Paletted))
+			runtime.LogInfo(c.Ctx, "Generated frame")
+		}(img)
 	}
 
-	preview, err := lib.MakePreview(layers, int(collection.Width), int(collection.Height), 512)
+	wg.Wait()
 
-	if err != nil {
-		fmt.Println(err)
-		lib.ErrorModal(c.Ctx, "No Preview", "Could not generate preview")
-	}
-
-	var outputFrames []*image.Paletted
-
-	for _, layer := range layers {
-		img, err := imaging.Open(layer)
-		if err != nil {
-			log.Printf("Skipping file %s due to error reading it :%s", layer, err)
-			continue
-		}
-
-		buf := bytes.Buffer{}
-		if err := gif.Encode(&buf, img, nil); err != nil {
-			log.Printf("Skipping file %s due to error in gif encoding:%s", layer, err)
-			continue
-		}
-
-		decoded, err := gif.Decode(&buf)
-		if err != nil {
-			log.Printf("Skipping file %s due to weird error reading the temporary gif :%s", layer, err)
-			continue
-		}
-		outputFrames = append(outputFrames, decoded.(*image.Paletted))
-	}
-
-	delays := make([]int, len(outputFrames))
+	fmt.Println(len(frames))
+	delays := make([]int, len(frames))
 	for j := range delays {
 		delays[j] = delay
 	}
 
-	output, err := os.Create("./animated.gif")
+	filepath, err := runtime.SaveFileDialog(c.Ctx, runtime.SaveDialogOptions{
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "GIF Files (*.gif)",
+				Pattern:     "*.gif;",
+			},
+		},
+		DefaultFilename:      "animated.gif",
+		Title:                "Save Animated GIF",
+		CanCreateDirectories: true,
+	})
 
 	if err != nil {
-		log.Fatalf("Error creating the destination file %s", err)
+		log.Fatalf("Error selecting the destination file %s", err)
 	}
 
-	if err := gif.EncodeAll(output, &gif.GIF{Image: outputFrames, Delay: delays, LoopCount: 0}); err != nil {
+	file, err := os.Create(filepath)
+
+	if err != nil {
+		log.Fatalf("Error opening the destination file %s", err)
+	}
+
+	defer file.Close()
+
+	if err := gif.EncodeAll(file, &gif.GIF{Image: frames, Delay: delays, LoopCount: 0}); err != nil {
 		log.Printf("Error encoding output into animated gif :%s", err)
 	}
 
-	output.Close()
-
 	fmt.Println("Done")
+
+	b, _ := os.ReadFile(filepath)
+
+	if err != nil {
+		panic(err)
+	}
+
+	str := base64.StdEncoding.EncodeToString(b)
+	str = fmt.Sprintf("data:image/png;base64,%s", str)
+
+	return str
 	// animated := &gif.GIF{
 	// 	Image: []*image.Paletted{},
 	// 	Delay: []int{30, 30},

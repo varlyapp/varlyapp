@@ -60,3 +60,23 @@ func GeneratePNG(layers []string, filepath string, width int, height int) error 
 
 	return nil
 }
+
+func GenerateFrame(layers []string, filepath string, width int, height int, size int) error {
+	png := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
+
+	for _, layer := range layers {
+		img, err := imaging.Open(layer)
+		if err != nil {
+			return err
+		}
+		img = imaging.Resize(img, size, 0, imaging.Box)
+		png = imaging.Overlay(png, img, image.Pt(0, 0), 1)
+	}
+
+	err := imaging.Save(png, filepath)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

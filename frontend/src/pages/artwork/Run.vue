@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import Confetti from 'vue-confetti-explosion'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
 import Progress from '@/components/Progress.vue'
@@ -10,7 +11,6 @@ import { Collection } from '@/wailsjs/go/models'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
 import Preview from '@/components/Preview.vue'
 import StatusBar from '@/components/StatusBar.vue'
-import { useRoute } from 'vue-router'
 import rpc from '@/rpc'
 
 const { t } = useI18n()

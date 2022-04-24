@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
+import { Collection } from '@/wailsjs/go/models'
 import { useCollectionStore, useStore } from '@/store'
 import Preview from '@/components/Preview.vue'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
 import rpc from '@/rpc'
-import { Collection } from '@/wailsjs/go/models'
-import { useRoute } from 'vue-router'
 
 const { t } = useI18n()
 const route = useRoute()
 const store = useStore()
 const collectionStore = useCollectionStore()
 
+const gif = ref<string>('')
 const isWorking = ref<boolean>(false)
 onMounted(() => {
     store.setIsGeneratingCollection(false)
@@ -28,6 +29,49 @@ onMounted(() => {
         })
     })
 })
+
+async function exportGIF() {
+    if (isWorking.value) return
+
+    console.log('Reloading Print.vue')
+
+    const layers = { ...collectionStore.layers }
+
+    if (!layers || !Object.keys(layers).length) {
+        console.log('Nothing to export GIF')
+        return
+    }
+
+    for (const trait in layers) {
+        if (layers.hasOwnProperty(trait)) {
+            layers[trait] = layers[trait].map((layer) => {
+                return {
+                    ...layer,
+                    weight: parseFloat(layer.weight)
+                }
+            })
+        }
+    }
+
+    const collection = Collection.createFrom({
+        sourceDirectory: collectionStore.sourceDirectory,
+        outputDirectory: collectionStore.outputDirectory,
+        traits: [...collectionStore.traits],
+        layers: layers,
+        width: parseFloat(collectionStore.width.toString()),
+        height: parseFloat(collectionStore.height.toString()),
+        size: parseInt(collectionStore.size.toString(), 10)
+    })
+
+    const frames = collectionStore.gif.frames || 10
+    const delay = collectionStore.gif.delay || 33
+
+    try {
+        gif.value = await rpc.CollectionService.GenerateCollectionGif(collection, parseInt(frames.toString(), 10), parseInt(delay.toString(), 10))
+    } catch (error) {
+        console.error(error)
+    }
+}
 
 async function load() {
     if (isWorking.value || store.isGeneratingCollection) return
@@ -88,7 +132,7 @@ async function load() {
                             <label for="gif-delay" class="block text-sm opacity-75">Delay Between Frames</label>
                             <div class="mt-1">
                                 <select v-model="collectionStore.gif.delay" id="gif-delay"
-                                    class="field mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    class="field mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-fuchsia-500 focus:border-fuchsia-500 sm:text-sm rounded-md">
                                     <option value="25">1/4 Second</option>
                                     <option value="33">1/3 Second</option>
                                     <option value="50">1/2 Second</option>
@@ -138,6 +182,13 @@ async function load() {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-span-6">
+                            <div v-if="gif">
+                                <h1 class="font-bold uppercase py-1">Exported GIF Preview</h1>
+                                <Preview :source="gif" />
+                            </div>
+                        </div>
                     </div>
                 </form>
             </section>
@@ -150,11 +201,9 @@ async function load() {
                 <span v-text="t('close')" />
             </button>
 
-            <button
-                v-if="collectionStore.layers && Object.keys(collectionStore.layers).length && collectionStore.outputDirectory"
-                type="button"
+            <button v-if="collectionStore.layers && Object.keys(collectionStore.layers).length" type="button"
                 class="flex mt-2 py-3 px-4 items-center rounded text-slate-50 bg-fuchsia-700 shadow shadow-fuchsia-900 hover:bg-opacity-90"
-                :class="[isWorking ? 'opacity-50' : '']" :disabled="isWorking" @click="">
+                :class="[isWorking ? 'opacity-50' : '']" :disabled="isWorking" @click="exportGIF">
                 <span v-text="t('export_gif')" />
             </button>
         </FloatingButtonBar>
