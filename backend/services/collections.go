@@ -32,12 +32,15 @@ const (
 )
 
 const FileTypeExpression = `.(png|jpg|jpeg)$`
+const ImageTypeExpression = `.(png|jpg|jpeg)$`
+const JsonTypeExpression = `.(json)$`
 const RarityExpression = `(.*)#([.0-9]+).(png|jpg|jpeg)$`
 const DefaultRarity float64 = 100.0
 
 type CollectionService struct {
-	Ctx        context.Context
-	Collection *Collection
+	Ctx           context.Context
+	Collection    *Collection
+	DocsDirecotry string
 }
 
 type Trait struct {
@@ -68,12 +71,16 @@ type Collection struct {
 	Size            int                  `json:"size"`
 }
 
+type FileItem struct {
+	filepath string
+}
+
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
-func NewCollectionService() *CollectionService {
-	return &CollectionService{}
+func NewCollectionService(docsdir string) *CollectionService {
+	return &CollectionService{DocsDirecotry: docsdir}
 }
 
 func GetVariantDefaults() *Variant {
@@ -465,7 +472,7 @@ func (c *CollectionService) GenerateCollectionGif(collection Collection, fps int
 	str := base64.StdEncoding.EncodeToString(b)
 	str = fmt.Sprintf("data:image/png;base64,%s", str)
 
-	return str
+	return filepath
 	// animated := &gif.GIF{
 	// 	Image: []*image.Paletted{},
 	// 	Delay: []int{30, 30},
@@ -494,4 +501,100 @@ func (c *CollectionService) GenerateCollectionGif(collection Collection, fps int
 
 	// gif.EncodeAll(output, animated)
 	// fmt.Println("Running GenerateCollectionGif")
+}
+
+func (c *CollectionService) UploadCollection(dir string) {
+	// var jobs []lib.Job
+
+	// filepaths, _ := c.PrepareUploadsFromDirectory(dir)
+
+	// for i, filepath := range filepaths {
+	// 	jobs = append(jobs, lib.Job{Id: i, Config: FileItem{filepath: filepath}})
+	// }
+
+	var (
+		wg        sync.WaitGroup
+		// completed = 0
+		storage   = lib.GetStorage()
+	)
+
+	fmt.Println(dir)
+
+	// Create empty directory
+	// dirpath := path.Join(c.DocsDirecotry, "Collection Name")
+	// err := os.Mkdir(dirpath, os.ModeDir|os.ModePerm)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	wg.Add(1)
+
+	go func() {
+		defer wg.Done()
+		str, err := storage.PinFile(dir)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(str)
+	}()
+
+	// go func() {
+	// 	defer wg.Done()
+	// 	lib.Batch(c.Ctx, 0, jobs, func(ctx context.Context, id int, job lib.Job) {
+	// 		fileitem := job.Config.(FileItem)
+
+	// 		defer func() {
+	// 			completed++
+	// 			data := map[string]string{"File": fileitem.filepath}
+	// 			runtime.EventsEmit(ctx, "collection.item.uploaded", data)
+	// 			fmt.Println(fileitem.filepath)
+	// 		}()
+
+	// 		h, _ := storage.PinFile(fileitem.filepath)
+	// 		fmt.Println(h)
+	// 	})
+	// }()
+
+	wg.Wait()
+	fmt.Println("Done")
+}
+
+func (c *CollectionService) PrepareUploadsFromDirectory(dir string) ([]string, error) {
+	// imagesdir := path.Join(dir, "images'")
+	// metadatadir := path.Join(dir, "metadata")
+	// if _, err := os.Stat(imagesdir); err != nil {
+	// 	panic(err)
+	// 	return false
+	// }
+	// if _, err := os.Stat(metadatadir); err != nil {
+	// 	panic(err)
+	// 	return false
+	// }
+
+	fmt.Println(dir)
+	var uploads []string
+
+	imageexp := regexp.MustCompile(ImageTypeExpression)
+	jsonexp := regexp.MustCompile(JsonTypeExpression)
+
+	err := filepath.Walk(
+		dir,
+		func(filepath string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			if info.IsDir() == false {
+				if imageexp.MatchString(info.Name()) || jsonexp.MatchString(info.Name()) {
+					uploads = append(uploads, filepath)
+				}
+			}
+
+			return nil
+		})
+	if err != nil {
+		// lib.ErrorModal(c.Ctx, "Collection cannot be uploaded from directory", err.Error())
+		return nil, err
+	}
+
+	return uploads, nil
 }
