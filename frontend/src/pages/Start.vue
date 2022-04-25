@@ -86,7 +86,7 @@ function loadCollection(collection: Collection) {
     ]" />
 
     <main class="h-full flex-1 overflow-auto scrollbar-none">
-      <section class="p-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-8">
+      <section class="p-8 lg:p-16 xl:p-24 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
         <div class="col-span-1">
           <div>
             <img

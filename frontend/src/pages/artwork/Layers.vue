@@ -90,7 +90,7 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
         <main class="relative h-full flex-1 overflow-y-scroll scrollbar-none">
             <section v-if="collectionStore && collectionStore.layers && Object.keys(collectionStore.layers).length"
                 class="h-full animate__animated animate__fadeIn">
-                <div class="p-8 mx:p-12 xl:p-16">
+                <div class="p-8 lg:p-16 xl:p-24">
                     <!-- @see :force-fallback -->
                     <!-- Solves issue where dragging works first but second drag requires two clicks -->
                     <!-- https://github.com/SortableJS/Vue.Draggable/issues/954 -->
@@ -138,8 +138,8 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
             </section>
 
             <section v-else class="h-full animate__animated animate__fadeIn">
-                <div class="h-full p-4 lg:p-8 flex items-center justify-center text-center">
-                    <div>
+                <div class="h-full flex items-center justify-center text-center">
+                    <div class="p-8 lg:p-16 xl:p-24">
                         <h3 class="mt-2 text-sm font-medium" v-text="t('get_started_by_opening_your_layers_folder')" />
                         <div class="mt-8">
                             <button type="button" @click="loadLayers"

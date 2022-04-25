@@ -174,10 +174,10 @@ async function generateCollection() {
         ]" />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <div v-if="isWorking" class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8">
+            <div v-if="isWorking" class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8 lg:p-16 xl:p-24">
                 <Progress :steps="steps" :current-step="currentStep" loading-text="Preparing..." />
             </div>
-            <div v-else class="h-full flex flex-col items-center justify-center p-8">
+            <div v-else class="h-full flex flex-col items-center justify-center p-8 lg:p-16 xl:p-24">
                 <div class="flex flex-col items-center">
                     <div v-if="!isWorking && !isDone">
                         <div v-if="collectionStore.preview" class="py-16">
