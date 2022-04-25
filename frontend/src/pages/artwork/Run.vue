@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onBeforeMount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import Confetti from 'vue-confetti-explosion'
@@ -22,6 +22,8 @@ const steps = ref(0)
 const currentStep = ref(0)
 const isWorking = ref(false)
 const isDone = ref(false)
+
+onBeforeMount(() => rpc.setPageTitle("Preview & Generate"))
 
 onMounted(() => {
     store.setIsGeneratingCollection(false)

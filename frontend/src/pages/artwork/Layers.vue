@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onActivated, ref } from 'vue'
+import { nextTick, onActivated, onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
@@ -21,6 +21,8 @@ const isTraitDragging = ref(false)
 const isLayerDragging = ref(false)
 
 const ROUTE_NAME = 'artwork.layers'
+
+onBeforeMount(() => rpc.setPageTitle("Layer Setup"))
 
 onActivated(() => {
     nextTick(() => {

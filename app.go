@@ -35,7 +35,7 @@ func NewApp() *App {
 	return &App{
 		SettingsService:   services.NewSettingsService(docsdir),
 		FileSystemService: services.NewFileSystemService(),
-		CollectionService: services.NewCollectionService(),
+		CollectionService: services.NewCollectionService(docsdir),
 	}
 }
 
@@ -95,6 +95,14 @@ func (app *App) domReady(ctx context.Context) {
 // shutdown is called at application termination
 func (app *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
+}
+
+func (app *App) Title() string {
+	if r.GOOS == "darwin" {
+		return "🦄 Varly"
+	}
+
+	return "Varly"
 }
 
 func (app *App) OpenDirectoryDialog(title string) string {

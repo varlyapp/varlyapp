@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onActivated, ref } from 'vue'
+import { nextTick, onActivated, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Collection } from '@/wailsjs/go/models'
@@ -17,6 +17,8 @@ const intl = useI18n({ useScope: 'global' })
 const { t } = intl
 
 const projects = ref<Array<Collection>>([])
+
+onBeforeMount(() => rpc.setPageTitle('Welcome'))
 
 onActivated(() => {
   load()

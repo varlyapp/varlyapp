@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted } from 'vue'
+import { nextTick, onBeforeMount, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
@@ -16,6 +16,8 @@ const collectionStore = useCollectionStore()
 
 const i18n = useI18n()
 const { t } = i18n
+
+onBeforeMount(() => rpc.setPageTitle("Build Settings"))
 
 onMounted(() => {
     load()
@@ -61,7 +63,7 @@ async function load() {
         ]" />
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <form class="max-w-4xl mx-auto flex flex-col px-8 py-16 xl:py-32 animate__animated animate__fadeIn">
+            <form class="max-w-4xl mx-auto flex flex-col p-8 lg:p-16 xl:p-32 animate__animated animate__fadeIn">
                 <div class="grid grid-cols-12 gap-8">
                     <div class="col-span-12">
                         <label for="collection-name" class="block text-sm opacity-75">Collection Name</label>
