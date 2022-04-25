@@ -6,6 +6,7 @@ import { Collection } from '@/wailsjs/go/models'
 import { useCollectionStore, useStore } from '@/store'
 import Preview from '@/components/Preview.vue'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
+import { XCircleIcon, UploadIcon } from '@heroicons/vue/outline'
 import rpc from '@/rpc'
 
 const { t } = useI18n()
@@ -33,10 +34,51 @@ onMounted(() => {
     })
 })
 
+
+async function load() {
+    if (isWorking.value || store.isGeneratingCollection) return
+
+    console.log('Reloading Print.vue')
+    collectionStore.preview = ''
+    const layers = { ...collectionStore.layers }
+
+    if (!layers || !Object.keys(layers).length) {
+        console.log('No preview to generate')
+        return
+    }
+
+    for (const trait in layers) {
+        if (layers.hasOwnProperty(trait)) {
+            layers[trait] = layers[trait].map((layer) => {
+                return {
+                    ...layer,
+                    weight: parseFloat(layer.weight)
+                }
+            })
+        }
+    }
+
+    const collection = Collection.createFrom({
+        sourceDirectory: collectionStore.sourceDirectory,
+        outputDirectory: collectionStore.outputDirectory,
+        traits: [...collectionStore.traits],
+        layers: layers,
+        width: parseFloat(collectionStore.width.toString()),
+        height: parseFloat(collectionStore.height.toString()),
+        size: parseInt(collectionStore.size.toString(), 10)
+    })
+
+    try {
+        collectionStore.preview = await rpc.CollectionService.GenerateCollectionPreview(collection)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function exportGIF() {
     if (isWorking.value) return
 
-    console.log('Reloading Print.vue')
+    isWorking.value = true
 
     const layers = { ...collectionStore.layers }
 
@@ -73,54 +115,8 @@ async function exportGIF() {
         gif.value = await rpc.CollectionService.GenerateCollectionGif(collection, parseInt(frames.toString(), 10), parseInt(delay.toString(), 10))
     } catch (error) {
         console.error(error)
-    }
-}
-
-async function upload() {
-    if (collectionStore.outputDirectory) {
-        console.log('Uploading from ', collectionStore.outputDirectory)
-
-        await rpc.CollectionService.UploadCollection(collectionStore.outputDirectory)
-    }
-}
-
-async function load() {
-    if (isWorking.value || store.isGeneratingCollection) return
-
-    console.log('Reloading Run.vue')
-    collectionStore.preview = ''
-    const layers = { ...collectionStore.layers }
-
-    if (!layers || !Object.keys(layers).length) {
-        console.log('No preview to generate')
-        return
-    }
-
-    for (const trait in layers) {
-        if (layers.hasOwnProperty(trait)) {
-            layers[trait] = layers[trait].map((layer) => {
-                return {
-                    ...layer,
-                    weight: parseFloat(layer.weight)
-                }
-            })
-        }
-    }
-
-    const collection = Collection.createFrom({
-        sourceDirectory: collectionStore.sourceDirectory,
-        outputDirectory: collectionStore.outputDirectory,
-        traits: [...collectionStore.traits],
-        layers: layers,
-        width: parseFloat(collectionStore.width.toString()),
-        height: parseFloat(collectionStore.height.toString()),
-        size: parseInt(collectionStore.size.toString(), 10)
-    })
-
-    try {
-        collectionStore.preview = await rpc.CollectionService.GenerateCollectionPreview(collection)
-    } catch (error) {
-        console.error(error)
+    } finally {
+        isWorking.value = false
     }
 }
 </script>
@@ -156,47 +152,42 @@ async function load() {
                     </div>
 
                     <div class="col-span-6">
-                        <div v-if="!isWorking">
-                            <div v-if="collectionStore.preview">
-                                <h1 class="font-bold uppercase py-1">Frame Preview</h1>
-                                <Preview :source="collectionStore.preview" />
-                            </div>
-                            <div v-else class="p-16 text-center">
-                                <svg v-if="collectionStore.layers && Object.keys(collectionStore.layers).length"
-                                    class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
-                                            <stop stop-color="#a21caf" stop-opacity="0" offset="0%" />
-                                            <stop stop-color="#a21caf" stop-opacity=".631" offset="63.146%" />
-                                            <stop stop-color="#a21caf" offset="100%" />
-                                        </linearGradient>
-                                    </defs>
-                                    <g fill="none" fill-rule="evenodd">
-                                        <g transform="translate(1 1)">
-                                            <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)"
-                                                stroke-width="2">
-                                                <animateTransform attributeName="transform" type="rotate"
-                                                    from="0 18 18" to="360 18 18" dur="0.9s"
-                                                    repeatCount="indefinite" />
-                                            </path>
-                                            <circle fill="#a21caf" cx="36" cy="18" r="1">
-                                                <animateTransform attributeName="transform" type="rotate"
-                                                    from="0 18 18" to="360 18 18" dur="0.9s"
-                                                    repeatCount="indefinite" />
-                                            </circle>
-                                        </g>
-                                    </g>
-                                </svg>
-                                <p v-else v-text="t('no_preview_yet')" />
-                            </div>
+                        <div v-if="collectionStore.preview">
+                            <h1 class="font-bold uppercase py-1">Frame Preview</h1>
+                            <Preview :source="collectionStore.preview" />
                         </div>
                     </div>
 
-                    <div class="col-span-6">
+                    <div class="col-span-6 flex items-center justify-center">
                         <div v-if="gif">
                             <h1 class="font-bold uppercase py-1">Exported GIF Preview</h1>
                             <Preview :source="gif" />
+                        </div>
+                        <div v-else class="p-16 flex items-center justify-center">
+                            <svg v-if="isWorking" class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
+                                        <stop stop-color="#a21caf" stop-opacity="0" offset="0%" />
+                                        <stop stop-color="#a21caf" stop-opacity=".631" offset="63.146%" />
+                                        <stop stop-color="#a21caf" offset="100%" />
+                                    </linearGradient>
+                                </defs>
+                                <g fill="none" fill-rule="evenodd">
+                                    <g transform="translate(1 1)">
+                                        <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)"
+                                            stroke-width="2">
+                                            <animateTransform attributeName="transform" type="rotate" from="0 18 18"
+                                                to="360 18 18" dur="0.9s" repeatCount="indefinite" />
+                                        </path>
+                                        <circle fill="#a21caf" cx="36" cy="18" r="1">
+                                            <animateTransform attributeName="transform" type="rotate" from="0 18 18"
+                                                to="360 18 18" dur="0.9s" repeatCount="indefinite" />
+                                        </circle>
+                                    </g>
+                                </g>
+                            </svg>
+                            <p v-else v-text="t('no_preview_yet')" />
                         </div>
                     </div>
                 </div>
@@ -207,12 +198,14 @@ async function load() {
             <button type="button"
                 class="flex mt-2 py-3 px-4 items-center rounded text-slate-50 bg-slate-700 shadow shadow-slate-800 hover:bg-opacity-90"
                 @click="$router.back">
+                <XCircleIcon class="w-4 mr-2" />
                 <span v-text="t('close')" />
             </button>
 
             <button v-if="collectionStore.layers && Object.keys(collectionStore.layers).length" type="button"
                 class="flex mt-2 py-3 px-4 items-center rounded text-slate-50 bg-fuchsia-700 shadow shadow-fuchsia-900 hover:bg-opacity-90"
                 :class="[isWorking ? 'opacity-50' : '']" :disabled="isWorking" @click="exportGIF">
+                <UploadIcon class="w-4 mr-2" />
                 <span v-text="t('export_gif')" />
             </button>
         </FloatingButtonBar>

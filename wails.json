@@ -5,7 +5,7 @@
   "frontend:build": "",
   "frontend:install": "",
   "frontend:dev": "",
-  "frontend:dev:watcher": "",
+  "frontend:dev:watcher": "npm run dev",
   "version": "2",
   "Path": "",
   "BuildDir": "",
@@ -25,7 +25,7 @@
     "copyright": "(c) 2022 Selvin Co",
     "comments": "A delightful desktop app with a fast generative art engine for NFT creators."
   },
-  "debounceMS": 1000,
+  "debounceMS": 100,
   "devserverurl": "http://localhost:34115",
   "appargs": "",
   "nsisType": ""

@@ -62,7 +62,7 @@ func GeneratePNG(layers []string, filepath string, width int, height int) error 
 }
 
 func GenerateFrame(layers []string, filepath string, width int, height int, size int) error {
-	png := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
+	png := imaging.New(size, size, color.NRGBA{0, 0, 0, 0})
 
 	for _, layer := range layers {
 		img, err := imaging.Open(layer)
@@ -74,6 +74,7 @@ func GenerateFrame(layers []string, filepath string, width int, height int, size
 	}
 
 	err := imaging.Save(png, filepath)
+	fmt.Println(filepath)
 	if err != nil {
 		return err
 	}

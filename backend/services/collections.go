@@ -449,6 +449,10 @@ func (c *CollectionService) GenerateCollectionGif(collection Collection, fps int
 		log.Fatalf("Error selecting the destination file %s", err)
 	}
 
+	if filepath == "" {
+		return ""
+	}
+
 	file, err := os.Create(filepath)
 
 	if err != nil {
@@ -469,10 +473,10 @@ func (c *CollectionService) GenerateCollectionGif(collection Collection, fps int
 		panic(err)
 	}
 
-	str := base64.StdEncoding.EncodeToString(b)
-	str = fmt.Sprintf("data:image/png;base64,%s", str)
+	s := base64.StdEncoding.EncodeToString(b)
+	s = fmt.Sprintf("data:image/gif;base64,%s", s)
 
-	return filepath
+	return s
 	// animated := &gif.GIF{
 	// 	Image: []*image.Paletted{},
 	// 	Delay: []int{30, 30},
