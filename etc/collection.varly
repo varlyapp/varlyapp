@@ -1,126 +1,208 @@
 {
-    "Dir": "/Users/selvinortiz/Desktop/Hashlips Output/New",
-    "Order": [
-        "Background",
-        "Eyeball",
-        "Eye color",
-        "Iris",
-        "Shine",
-        "Bottom lid",
-        "Top lid"
-    ],
-    "Layers": {
-        "Background": [
-            {
-                "Name": "Black#1.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Background/Black#1.png",
-                "Weight": 1
-            }
+    "name": "Hashlips #{{edition}} Collection #{{item}}",
+    "description": "Great Collection",
+    "artist": "Daniel",
+    "baseUri": "ipfs://your-collection-cid",
+    "sourceDirectory": "/Users/selvinortiz/Desktop/Collections/Hashlips",
+    "outputDirectory": "/Users/selvinortiz/Desktop/hashlips output",
+    "editions": [
+      {
+        "name": "",
+        "size": 500,
+        "width": 512,
+        "height": 512,
+        "traits": [
+          {
+            "name": "Background",
+            "collapsed": false
+          },
+          {
+            "name": "Eyeball",
+            "collapsed": false
+          },
+          {
+            "name": "Eye color",
+            "collapsed": false
+          },
+          {
+            "name": "Iris",
+            "collapsed": false
+          },
+          {
+            "name": "Shine",
+            "collapsed": false
+          },
+          {
+            "name": "Goo",
+            "collapsed": false
+          },
+          {
+            "name": "Bottom lid",
+            "collapsed": false
+          },
+          {
+            "name": "Top lid",
+            "collapsed": false
+          }
         ],
-        "Bottom lid": [
+        "layers": {
+          "Background": [
             {
-                "Name": "High#20.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Bottom lid/High#20.png",
-                "Weight": 20
-            },
-            {
-                "Name": "Low#40.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Bottom lid/Low#40.png",
-                "Weight": 40
-            },
-            {
-                "Name": "Middle#40.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Bottom lid/Middle#40.png",
-                "Weight": 40
+              "name": "Black#1.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Background/Black#1.png",
+              "width": 0,
+              "height": 0,
+              "weight": 1
             }
-        ],
-        "Eye color": [
+          ],
+          "Bottom lid": [
             {
-                "Name": "Cyan#1.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Cyan#1.png",
-                "Weight": 1
+              "name": "High#20.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Bottom lid/High#20.png",
+              "width": 0,
+              "height": 0,
+              "weight": 20
             },
             {
-                "Name": "Green#1.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Green#1.png",
-                "Weight": 1
+              "name": "Low#40.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Bottom lid/Low#40.png",
+              "width": 0,
+              "height": 0,
+              "weight": 40
             },
             {
-                "Name": "Pink#1.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Pink#1.png",
-                "Weight": 1
-            },
-            {
-                "Name": "Purple#1.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Purple#1.png",
-                "Weight": 1
-            },
-            {
-                "Name": "Red#1.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Red#1.png",
-                "Weight": 1
-            },
-            {
-                "Name": "Yellow#10.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eye color/Yellow#10.png",
-                "Weight": 10
+              "name": "Middle#40.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Bottom lid/Middle#40.png",
+              "width": 0,
+              "height": 0,
+              "weight": 40
             }
-        ],
-        "Eyeball": [
+          ],
+          "Eye color": [
             {
-                "Name": "Red#50.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eyeball/Red#50.png",
-                "Weight": 50
+              "name": "Cyan#1.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eye color/Cyan#1.png",
+              "width": 0,
+              "height": 0,
+              "weight": 1
             },
             {
-                "Name": "White#50.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Eyeball/White#50.png",
-                "Weight": 50
+              "name": "Green#1.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eye color/Green#1.png",
+              "width": 0,
+              "height": 0,
+              "weight": 1
+            },
+            {
+              "name": "Pink#1.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eye color/Pink#1.png",
+              "width": 0,
+              "height": 0,
+              "weight": 1
+            },
+            {
+              "name": "Purple#1.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eye color/Purple#1.png",
+              "width": 0,
+              "height": 0,
+              "weight": 1
+            },
+            {
+              "name": "Red#1.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eye color/Red#1.png",
+              "width": 0,
+              "height": 0,
+              "weight": 1
+            },
+            {
+              "name": "Yellow#10.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eye color/Yellow#10.png",
+              "width": 0,
+              "height": 0,
+              "weight": 10
             }
-        ],
-        "Iris": [
+          ],
+          "Eyeball": [
             {
-                "Name": "Large#20.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Iris/Large#20.png",
-                "Weight": 20
+              "name": "Red#50.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eyeball/Red#50.png",
+              "width": 0,
+              "height": 0,
+              "weight": 50
             },
             {
-                "Name": "Medium#20.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Iris/Medium#20.png",
-                "Weight": 20
-            },
-            {
-                "Name": "Small#60.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Iris/Small#60.png",
-                "Weight": 60
+              "name": "White#50.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Eyeball/White#50.png",
+              "width": 0,
+              "height": 0,
+              "weight": 50
             }
-        ],
-        "Shine": [
+          ],
+          "Goo": [
             {
-                "Name": "Shapes#100.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Shine/Shapes#100.png",
-                "Weight": 100
+              "name": "Green#1.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Goo/Green#1.png",
+              "width": 0,
+              "height": 0,
+              "weight": 1
             }
-        ],
-        "Top lid": [
+          ],
+          "Iris": [
             {
-                "Name": "High#30.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Top lid/High#30.png",
-                "Weight": 30
+              "name": "Large#20.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Iris/Large#20.png",
+              "width": 0,
+              "height": 0,
+              "weight": 20
             },
             {
-                "Name": "Low#20.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Top lid/Low#20.png",
-                "Weight": 20
+              "name": "Medium#20.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Iris/Medium#20.png",
+              "width": 0,
+              "height": 0,
+              "weight": 20
             },
             {
-                "Name": "Middle#50.png",
-                "Item": "/Users/selvinortiz/Desktop/Hashlips/Top lid/Middle#50.png",
-                "Weight": 50
+              "name": "Small#60.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Iris/Small#60.png",
+              "width": 0,
+              "height": 0,
+              "weight": 60
             }
-        ]
-    },
-    "Width": 512,
-    "height": 512,
-    "Size": 100
-}
+          ],
+          "Shine": [
+            {
+              "name": "Shapes#100.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Shine/Shapes#100.png",
+              "width": 0,
+              "height": 0,
+              "weight": 100
+            }
+          ],
+          "Top lid": [
+            {
+              "name": "High#30.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Top lid/High#30.png",
+              "width": 0,
+              "height": 0,
+              "weight": 30
+            },
+            {
+              "name": "Low#20.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Top lid/Low#20.png",
+              "width": 0,
+              "height": 0,
+              "weight": 20
+            },
+            {
+              "name": "Middle#50.png",
+              "path": "/Users/selvinortiz/Desktop/Collections/Hashlips/Top lid/Middle#50.png",
+              "width": 0,
+              "height": 0,
+              "weight": 50
+            }
+          ]
+        }
+      }
+    ]
+  }
