@@ -3,7 +3,6 @@ package services
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image"
@@ -467,16 +466,17 @@ func (c *CollectionService) GenerateCollectionGif(collection Collection, fps int
 
 	fmt.Println("Done")
 
-	b, _ := os.ReadFile(filepath)
+	// b, _ := os.ReadFile(filepath)
 
-	if err != nil {
-		panic(err)
-	}
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	s := base64.StdEncoding.EncodeToString(b)
-	s = fmt.Sprintf("data:image/gif;base64,%s", s)
+	// s := base64.StdEncoding.EncodeToString(b)
+	// s = fmt.Sprintf("data:image/gif;base64,%s", s)
 
-	return s
+	// return s
+	return filepath
 	// animated := &gif.GIF{
 	// 	Image: []*image.Paletted{},
 	// 	Delay: []int{30, 30},
