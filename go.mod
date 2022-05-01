@@ -1,31 +1,24 @@
 module github.com/varlyapp/varlyapp
 
-go 1.17
+go 1.18
 
 require (
 	github.com/mroth/weightedrand v0.4.1
-	github.com/wailsapp/wails/v2 v2.0.0-beta.34
+	github.com/wailsapp/wails/v2 v2.0.0-beta.36
 )
 
 require (
-	github.com/andybalholm/brotli v1.0.2 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fasthttp/websocket v0.0.0-20200320073529-1554a54587ab // indirect
-	github.com/gabriel-vasile/mimetype v1.3.1 // indirect
-	github.com/gofiber/fiber/v2 v2.17.0 // indirect
-	github.com/gofiber/websocket/v2 v2.0.8 // indirect
-	github.com/klauspost/compress v1.12.2 // indirect
-	github.com/leaanthony/go-webview2 v1.0.3-0.20220314105146-f44268990abe // indirect
-	github.com/leaanthony/typescriptify-golang-structs v0.1.7 // indirect
-	github.com/leaanthony/winc v0.0.0-20220208061147-37b059b9dc3b // indirect
-	github.com/savsgio/gotils v0.0.0-20200117113501-90175b0fbe3f // indirect
-	github.com/valyala/fasthttp v1.28.0 // indirect
-	github.com/valyala/tcplisten v1.0.0 // indirect
+	github.com/labstack/echo/v4 v4.7.2 // indirect
+	github.com/labstack/gommon v0.3.1 // indirect
+	github.com/mattn/go-colorable v0.1.11 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/valyala/fasttemplate v1.2.1 // indirect
 	github.com/wabarc/helper v0.0.0-20211225065210-3d35291efe54 // indirect
+	github.com/wailsapp/mimetype v1.4.1 // indirect
 	github.com/ybbus/httpretry v1.0.1 // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	mvdan.cc/xurls/v2 v2.2.0 // indirect
 )
 
