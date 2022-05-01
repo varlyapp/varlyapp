@@ -38,6 +38,7 @@ func main() {
 		HideWindowOnClose: false,
 		RGBA:              &options.RGBA{R: 0, G: 0, B: 0, A: 0},
 		Assets:            assets,
+		AssetsHandler:     NewHandler(),
 		LogLevel:          logger.DEBUG,
 		OnStartup:         app.startup,
 		OnDomReady:        app.domReady,

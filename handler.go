@@ -15,14 +15,12 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	c, err := os.ReadFile(req.RequestURI)
+	c, err := os.ReadFile(req.URL.Path)
 
 	if err != nil {
 		res.WriteHeader(http.StatusBadRequest)
-		res.Write([]byte(fmt.Sprintf("Could not serve file %s", req.RequestURI)))
+		res.Write([]byte(fmt.Sprintf("Could not serve file %s", req.URL.Path)))
 	}
-
-	// res.Header().Add("", "")
 
 	res.Write(c)
 }
