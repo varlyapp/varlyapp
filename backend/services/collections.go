@@ -19,15 +19,8 @@ import (
 	"github.com/disintegration/imaging"
 	wr "github.com/mroth/weightedrand"
 	"github.com/varlyapp/varlyapp/backend/lib"
+	"github.com/varlyapp/varlyapp/backend/types"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
-)
-
-type VariantFileType string
-
-const (
-	VariantFileTypePng  VariantFileType = "PNG"
-	VariantFileTypeTiff                 = "TIFF"
-	VariantFileTypeGif                  = "GIF"
 )
 
 const FileTypeExpression = `.(png|jpg|jpeg)$`
@@ -38,36 +31,8 @@ const DefaultRarity float64 = 100.0
 
 type CollectionService struct {
 	Ctx           context.Context
-	Collection    *Collection
+	Collection    *types.Collection
 	DocsDirecotry string
-}
-
-type Trait struct {
-	Name      string `json:"name"`
-	Collapsed bool   `json:"collapsed"`
-}
-
-type Variant struct {
-	Name   string  `json:"name"`
-	Path   string  `json:"path"`
-	Width  float64 `json:"width"`
-	Height float64 `json:"height"`
-	Weight float64 `json:"weight"`
-}
-
-type Collection struct {
-	Name            string               `json:"name"`
-	Description     string               `json:"description"`
-	Artist          string               `json:"artist"`
-	BaseUri         string               `json:"baseUri"`
-	SourceDirectory string               `json:"sourceDirectory"`
-	OutputDirectory string               `json:"outputDirectory"`
-	Traits          []Trait              `json:"traits"`
-	Layers          map[string][]Variant `json:"layers"`
-	LayersDummy     []Variant            `json:"layersDummy"`
-	Width           float64              `json:"width"`
-	Height          float64              `json:"height"`
-	Size            int                  `json:"size"`
 }
 
 type FileItem struct {
@@ -82,8 +47,8 @@ func NewCollectionService(docsdir string) *CollectionService {
 	return &CollectionService{DocsDirecotry: docsdir}
 }
 
-func GetVariantDefaults() *Variant {
-	return &Variant{
+func GetVariantDefaults() *types.Variant {
+	return &types.Variant{
 		Name:   "",
 		Path:   "",
 		Width:  0.0,
@@ -92,20 +57,20 @@ func GetVariantDefaults() *Variant {
 	}
 }
 
-func GetCollectionDefaults() *Collection {
-	return &Collection{
+func GetCollectionDefaults() *types.Collection {
+	return &types.Collection{
 		SourceDirectory: "",
 		OutputDirectory: "",
-		Traits:          []Trait{},
-		Layers:          map[string][]Variant{},
+		Traits:          []types.Trait{},
+		Layers:          map[string][]types.Variant{},
 		Width:           0.0,
 		Height:          0.0,
 		Size:            100,
 	}
 }
 
-func (c *CollectionService) LoadCollection() *Collection {
-	collection := &Collection{}
+func (c *CollectionService) LoadCollection() *types.Collection {
+	collection := &types.Collection{}
 	content, err := lib.OpenFileContents(c.Ctx)
 
 	if err != nil {
@@ -125,8 +90,8 @@ func (c *CollectionService) LoadCollection() *Collection {
 
 // ReadsDirectory reads a direcotory into a Collection
 // Items within the directory are split into Layers
-func (c *CollectionService) LoadCollectionFromDirectory(dir string) *Collection {
-	collection := &Collection{Layers: map[string][]Variant{}}
+func (c *CollectionService) LoadCollectionFromDirectory(dir string) *types.Collection {
+	collection := &types.Collection{Layers: map[string][]types.Variant{}}
 	lastDirectory := ""
 
 	fileX := regexp.MustCompile(FileTypeExpression)
@@ -154,7 +119,7 @@ func (c *CollectionService) LoadCollectionFromDirectory(dir string) *Collection 
 						weight = DefaultRarity
 					}
 
-					collection.Layers[lastDirectory] = append(collection.Layers[lastDirectory], Variant{Name: info.Name(), Path: path, Weight: weight})
+					collection.Layers[lastDirectory] = append(collection.Layers[lastDirectory], types.Variant{Name: info.Name(), Path: path, Weight: weight})
 				}
 			}
 
@@ -169,7 +134,7 @@ func (c *CollectionService) LoadCollectionFromDirectory(dir string) *Collection 
 	return collection
 }
 
-func (c *CollectionService) SaveCollection(collection *Collection) string {
+func (c *CollectionService) SaveCollection(collection *types.Collection) string {
 	file, err := runtime.SaveFileDialog(c.Ctx, runtime.SaveDialogOptions{
 		Title:           "Save Varly collection as a file",
 		DefaultFilename: collection.Name,
@@ -211,7 +176,7 @@ func (c *CollectionService) ValidateCollection() error {
 	return nil
 }
 
-func (c *CollectionService) GenerateCollection(collection Collection) {
+func (c *CollectionService) GenerateCollection(collection types.Collection) {
 	runtime.EventsEmit(c.Ctx, "collection.generation.started", map[string]int{"CollectionSize": collection.Size})
 
 	var jobs []lib.Job
@@ -232,7 +197,7 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 		defer wg.Done()
 		lib.Batch(c.Ctx, 0, jobs, func(ctx context.Context, id int, job lib.Job) {
 			var images []string
-			collection := job.Config.(Collection)
+			collection := job.Config.(types.Collection)
 
 			for _, trait := range collection.Traits {
 				variants := collection.Layers[trait.Name]
@@ -304,7 +269,7 @@ func (c *CollectionService) GenerateCollection(collection Collection) {
 	wg.Wait()
 }
 
-func (c *CollectionService) GenerateCollectionPreview(collection Collection) string {
+func (c *CollectionService) GenerateCollectionPreview(collection types.Collection) string {
 	var layers []string
 
 	for _, trait := range collection.Traits {
@@ -337,7 +302,7 @@ func (c *CollectionService) GenerateCollectionPreview(collection Collection) str
 	return preview
 }
 
-func (c *CollectionService) GenerateCollectionGif(collection Collection, fps int, delay int) string {
+func (c *CollectionService) GenerateCollectionGif(collection types.Collection, fps int, delay int) string {
 	// layers := []string{
 	// 	"/Users/selvinortiz/Desktop/hashlips output/0.png",
 	// 	"/Users/selvinortiz/Desktop/hashlips output/1.png",

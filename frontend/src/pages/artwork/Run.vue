@@ -6,14 +6,16 @@ import Confetti from 'vue-confetti-explosion'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import { useStore, useCollectionStore } from '@/store'
-import { Collection } from '@/wailsjs/go/models'
+import { types } from '@/wailsjs/go/models'
+import { LogInfo } from '@/wailsjs/runtime/runtime'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
 import Preview from '@/components/Preview.vue'
 import StatusBar from '@/components/StatusBar.vue'
+import { useStore, useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
+
 const route = useRoute()
 const store = useStore()
 const collectionStore = useCollectionStore()
@@ -30,10 +32,10 @@ onMounted(() => {
 
     load()
     nextTick(() => {
-        window.runtime.EventsOn('shortcut.view.refresh', () => {
+        rpc.on('shortcut.view.refresh', () => {
             if (route.name === 'artwork.run') load()
         })
-        window.runtime.EventsOn('shortcut.view.hard-refresh', () => {
+        rpc.on('shortcut.view.hard-refresh', () => {
             store.setIsGeneratingCollection(false)
             if (route.name === 'artwork.run') load()
         })
@@ -63,7 +65,7 @@ async function load() {
         }
     }
 
-    const collection = Collection.createFrom({
+    const collection = types.Collection.createFrom({
         sourceDirectory: collectionStore.sourceDirectory,
         outputDirectory: collectionStore.outputDirectory,
         traits: [...collectionStore.traits],
@@ -82,10 +84,10 @@ async function load() {
 
 function queueConfetti() {
     isDone.value = true
-    window.runtime.LogInfo('Setting isDone to true')
+    LogInfo('Setting isDone to true')
     setTimeout(() => {
         isDone.value = false
-        window.runtime.LogInfo('Setting isDone to false')
+        LogInfo('Setting isDone to false')
     }, 3000)
 }
 
@@ -109,15 +111,15 @@ async function generateCollection() {
     store.setIsGeneratingCollection(true)
     currentStep.value = 0 // reset each time this method is called
 
-    window.runtime.EventsOn('collection.generation.started', (data) => {
+    rpc.on('collection.generation.started', (data) => {
         console.log({ msg: `collection generation started`, data })
     })
 
-    window.runtime.EventsOn('collection.item.generated', async (data) => {
+    rpc.on('collection.item.generated', async (data) => {
         steps.value = data.CollectionSize
         currentStep.value = data.ItemNumber
     })
-    window.runtime.EventsOn('debug', async (data) => {
+    rpc.on('debug', async (data) => {
         console.log(data)
     })
 
@@ -140,7 +142,7 @@ async function generateCollection() {
         }
     }
 
-    const collection = Collection.createFrom({
+    const collection = types.Collection.createFrom({
         name: collectionStore.name,
         description: collectionStore.description,
         sourceDirectory: collectionStore.sourceDirectory,

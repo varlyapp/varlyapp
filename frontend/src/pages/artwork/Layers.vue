@@ -3,17 +3,16 @@ import { nextTick, onActivated, onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
-import { Collection } from '@/wailsjs/go/models'
+import { types } from '@/wailsjs/go/models'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
 import { CollectionIcon as CollectionIconSolid } from '@heroicons/vue/solid'
 import Sidebar from '@/components/Sidebar.vue'
 import { useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 
-const route = useRoute()
-const intl = useI18n({ useScope: 'global' })
-const { t } = intl
+const { t } = useI18n({ useScope: 'global' })
 
+const route = useRoute()
 const collectionStore = useCollectionStore()
 
 const isCollapsed = ref(false)
@@ -26,10 +25,10 @@ onBeforeMount(() => rpc.setPageTitle("Layer Setup"))
 
 onActivated(() => {
     nextTick(() => {
-        window.runtime.EventsOn('shortcut.view.refresh', () => {
+        rpc.on('shortcut.view.refresh', () => {
             if (route.name === ROUTE_NAME && collectionStore.sourceDirectory.length) loadLayersFromDirectory(collectionStore.sourceDirectory)
         })
-        window.runtime.EventsOn('shortcut.view.hard-refresh', () => {
+        rpc.on('shortcut.view.hard-refresh', () => {
             if (route.name === ROUTE_NAME && collectionStore.sourceDirectory.length) loadLayersFromDirectory(collectionStore.sourceDirectory)
         })
     })
@@ -63,7 +62,7 @@ async function loadLayers() {
 }
 
 async function loadLayersFromDirectory(sourceDirectory: string) {
-    const collection: Collection = await rpc.CollectionService.LoadCollectionFromDirectory(sourceDirectory)
+    const collection: types.Collection = await rpc.CollectionService.LoadCollectionFromDirectory(sourceDirectory)
 
     collectionStore.layers = { ...collection.layers }
 

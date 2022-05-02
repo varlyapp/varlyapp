@@ -2,7 +2,7 @@
 import { nextTick, onActivated, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Collection } from '@/wailsjs/go/models'
+import { types } from '@/wailsjs/go/models'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
 import Sidebar from '@/components/Sidebar.vue'
 import { useStore, useCollectionStore } from '@/store'
@@ -13,20 +13,19 @@ const router = useRouter()
 const store = useStore()
 const collectionStore = useCollectionStore()
 
-const intl = useI18n({ useScope: 'global' })
-const { t } = intl
+const { t } = useI18n({ useScope: 'global' })
 
-const projects = ref<Array<Collection>>([])
+const projects = ref<Array<types.Collection>>([])
 
 onBeforeMount(() => rpc.setPageTitle('Welcome'))
 
 onActivated(() => {
   load()
   nextTick(() => {
-    window.runtime.EventsOn('shortcut.view.refresh', () => {
+    rpc.on('shortcut.view.refresh', () => {
       if (route.name === 'start') load()
     })
-    window.runtime.EventsOn('shortcut.view.hard-refresh', () => {
+    rpc.on('shortcut.view.hard-refresh', () => {
       if (route.name === 'start') {
         store.documents = []
         load()
@@ -40,7 +39,7 @@ async function load() {
 
   store.documents.forEach(async (file) => {
     const contents = await rpc.FileSystemService.ReadFileContents(file)
-    const collection = Collection.createFrom(JSON.parse(contents))
+    const collection = types.Collection.createFrom(JSON.parse(contents))
     projects.value = [...projects.value, collection]
   })
 }
@@ -52,7 +51,7 @@ async function loadLayers() {
 
   collectionStore.sourceDirectory = sourceDirectory
 
-  const collection: Collection = await rpc.CollectionService.LoadCollectionFromDirectory(sourceDirectory)
+  const collection: types.Collection = await rpc.CollectionService.LoadCollectionFromDirectory(sourceDirectory)
 
   collectionStore.layers = { ...collection.layers }
 
@@ -71,7 +70,7 @@ async function loadLayers() {
   })
 }
 
-function loadCollection(collection: Collection) {
+function loadCollection(collection: types.Collection) {
   collectionStore.hydrate(collection)
   router.push({ name: 'artwork.layers' })
 }

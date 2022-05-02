@@ -14,15 +14,14 @@ const SIZE = 100
 const route = useRoute()
 const collectionStore = useCollectionStore()
 
-const i18n = useI18n()
-const { t } = i18n
+const { t } = useI18n({ useScope: 'global' })
 
 onBeforeMount(() => rpc.setPageTitle("Build Settings"))
 
 onMounted(() => {
     load()
     nextTick(() => {
-        window.runtime.EventsOn('shortcut.view.refresh', () => {
+        rpc.on('shortcut.view.refresh', () => {
             if (route.name === 'artwork.build') load()
         })
     })

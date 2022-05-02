@@ -2,6 +2,7 @@
 import { computed, type FunctionalComponent, type PropType } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { BrowserOpenURL } from '@/wailsjs/runtime'
 import { BadgeCheckIcon, DocumentAddIcon, FolderOpenIcon, HeartIcon } from '@heroicons/vue/outline'
 import SidebarButton from '@/components/SidebarButton.vue'
 import { useCollectionStore } from '@/store'
@@ -11,8 +12,7 @@ const route = useRoute()
 const router = useRouter()
 const collectionStore = useCollectionStore()
 
-const intl = useI18n({ useScope: 'global' })
-const { t } = intl
+const { t } = useI18n({ useScope: 'global' })
 
 type Links = Array<{
     text: string
@@ -48,8 +48,8 @@ const startNewProjectAction = () => {
 const presets = {
     links: [
         { icon: null, text: t('support'), to: '', selected: false },
-        { icon: HeartIcon, text: t('sponsor_on_github'), to: () => window.runtime.BrowserOpenURL('https://github.com/sponsors/selvindev'), selected: false },
-        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: () => window.runtime.BrowserOpenURL('https://twitter.com/varlyapp'), selected: false },
+        { icon: HeartIcon, text: t('sponsor_on_github'), to: () => BrowserOpenURL('https://github.com/sponsors/selvindev'), selected: false },
+        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: () => BrowserOpenURL('https://twitter.com/varlyapp'), selected: false },
         { icon: null, text: t('workspace'), to: '', selected: false },
         { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: route.name === 'start' },
         { icon: DocumentAddIcon, text: t('start_new_project'), to: startNewProjectAction(), selected: false },

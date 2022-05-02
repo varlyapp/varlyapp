@@ -2,11 +2,11 @@
 import { nextTick, onBeforeMount, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Collection } from '@/wailsjs/go/models'
+import { types } from '@/wailsjs/go/models'
 import { useStore, useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 
-const intl = useI18n()
+const intl = useI18n({ useScope: 'global' })
 const router = useRouter()
 const store = useStore()
 const collectionStore = useCollectionStore()
@@ -16,28 +16,28 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  window.runtime.EventsOn('shortcut.collection.open', async () => {
+  rpc.on('shortcut.collection.open', async () => {
     const collection = await rpc.CollectionService.LoadCollection()
     collectionStore.hydrate(collection)
     router.push({ name: 'artwork.layers' })
   })
-  window.runtime.EventsOn('shortcut.collection.save', async () => {
+  rpc.on('shortcut.collection.save', async () => {
     if (collectionStore.layers && Object.keys(collectionStore.layers).length) {
-      const path = await rpc.CollectionService.SaveCollection(Collection.createFrom(collectionStore.prepare()))
+      const path = await rpc.CollectionService.SaveCollection(types.Collection.createFrom(collectionStore.prepare()))
       if (path && path !== '') store.addDocument(path)
     }
   })
-  window.runtime.EventsOn('shortcut.language.english', () => {
+  rpc.on('shortcut.language.english', () => {
     intl.locale.value = 'en'
     store.setLocale('en')
     nextTick(() => window.location.reload())
   })
-  window.runtime.EventsOn('shortcut.language.spanish', () => {
+  rpc.on('shortcut.language.spanish', () => {
     intl.locale.value = 'es'
     store.setLocale('es')
     nextTick(() => window.location.reload())
   })
-  window.runtime.EventsOn('shortcut.collection.print', () => {
+  rpc.on('shortcut.collection.print', () => {
     nextTick(() => router.push({ name: 'print' }))
   })
 })

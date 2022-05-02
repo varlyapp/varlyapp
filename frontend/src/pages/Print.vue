@@ -2,14 +2,15 @@
 import { nextTick, onBeforeMount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { Collection } from '@/wailsjs/go/models'
+import { types } from '@/wailsjs/go/models'
 import { useCollectionStore, useStore } from '@/store'
 import Preview from '@/components/Preview.vue'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
 import { XCircleIcon, UploadIcon } from '@heroicons/vue/outline'
 import rpc from '@/rpc'
 
-const { t } = useI18n()
+const { t } = useI18n({ useScope: 'global' })
+
 const route = useRoute()
 const store = useStore()
 const collectionStore = useCollectionStore()
@@ -24,10 +25,10 @@ onMounted(() => {
 
     load()
     nextTick(() => {
-        window.runtime.EventsOn('shortcut.view.refresh', () => {
+        rpc.on('shortcut.view.refresh', () => {
             if (route.name === 'print') load()
         })
-        window.runtime.EventsOn('shortcut.view.hard-refresh', () => {
+        rpc.on('shortcut.view.hard-refresh', () => {
             store.setIsGeneratingCollection(false)
             if (route.name === 'print') load()
         })
@@ -58,7 +59,7 @@ async function load() {
         }
     }
 
-    const collection = Collection.createFrom({
+    const collection = types.Collection.createFrom({
         sourceDirectory: collectionStore.sourceDirectory,
         outputDirectory: collectionStore.outputDirectory,
         traits: [...collectionStore.traits],
@@ -98,7 +99,7 @@ async function exportGIF() {
         }
     }
 
-    const collection = Collection.createFrom({
+    const collection = types.Collection.createFrom({
         sourceDirectory: collectionStore.sourceDirectory,
         outputDirectory: collectionStore.outputDirectory,
         traits: [...collectionStore.traits],
