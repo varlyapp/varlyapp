@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type Handler struct {
@@ -15,11 +16,13 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	c, err := os.ReadFile(req.URL.Path)
+	f := strings.Replace(req.RequestURI, "wails://wails", "", 1)
+	c, err := os.ReadFile(f)
 
 	if err != nil {
+		fmt.Println(err)
 		res.WriteHeader(http.StatusBadRequest)
-		res.Write([]byte(fmt.Sprintf("Could not serve file %s", req.URL.Path)))
+		res.Write([]byte(fmt.Sprintf("Could not serve file %s", f)))
 	}
 
 	res.Write(c)
