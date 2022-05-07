@@ -176,7 +176,7 @@ func (c *CollectionService) ValidateCollection() error {
 	return nil
 }
 
-func (c *CollectionService) GenerateCollection(collection types.Collection) {
+func (c *CollectionService) GenerateCollection(collection types.Collection) bool {
 	runtime.EventsEmit(c.Ctx, "collection.generation.started", map[string]int{"CollectionSize": collection.Size})
 
 	var jobs []lib.Job
@@ -221,18 +221,22 @@ func (c *CollectionService) GenerateCollection(collection types.Collection) {
 				}
 			}
 
+			pngpath := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
+
 			defer func() {
 				completed++
-				data := map[string]string{"ItemNumber": fmt.Sprint(completed), "CollectionSize": fmt.Sprint(collection.Size)}
+				data := map[string]string{
+					"ItemPath": pngpath,
+					"ItemNumber": fmt.Sprint(completed),
+					"CollectionSize": fmt.Sprint(collection.Size),
+				}
 				runtime.EventsEmit(ctx, "collection.item.generated", data)
 			}()
-
-			pngFilepath := fmt.Sprintf("%s/%d.png", collection.OutputDirectory, job.Id)
 
 			dna := lib.GenerateDNA(images)
 			val, exists := usedDNA.Load(dna)
 			if exists {
-				pngFilepath = fmt.Sprintf("%s/duplicate-%d.png", collection.OutputDirectory, job.Id)
+				pngpath = fmt.Sprintf("%s/duplicate-%d.png", collection.OutputDirectory, job.Id)
 
 				fmt.Println("DNA already exists: ", val)
 			} else {
@@ -240,7 +244,7 @@ func (c *CollectionService) GenerateCollection(collection types.Collection) {
 			}
 
 			runtime.EventsEmit(ctx, "debug", map[string]interface{}{
-				"images": images, "png": pngFilepath,
+				"images": images, "png": pngpath,
 			})
 
 			err1 := lib.GenerateMetadata(lib.MetadataConfig{
@@ -249,24 +253,26 @@ func (c *CollectionService) GenerateCollection(collection types.Collection) {
 				BaseURI:     collection.BaseUri,
 				Edition:     job.Id,
 				Layers:      images,
-				Image:       pngFilepath,
+				Image:       pngpath,
 				Artist:      collection.Artist,
 				DNA:         dna,
 			})
 
 			if err1 != nil {
-				fmt.Printf("unable to generate metadata: %s\n%v\n", pngFilepath, err1)
+				fmt.Printf("unable to generate metadata: %s\n%v\n", pngpath, err1)
 			}
 
-			err2 := lib.GeneratePNG(images, pngFilepath, int(collection.Width), int(collection.Height))
+			err2 := lib.GeneratePNG(images, pngpath, int(collection.Width), int(collection.Height))
 
 			if err2 != nil {
-				fmt.Printf("unable to generate image: %s\n%v\n", pngFilepath, err2)
+				fmt.Printf("unable to generate image: %s\n%v\n", pngpath, err2)
 			}
 		})
 	}()
 
 	wg.Wait()
+
+	return true
 }
 
 func (c *CollectionService) GenerateCollectionPreview(collection types.Collection) string {
