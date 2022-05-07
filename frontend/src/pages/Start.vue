@@ -17,8 +17,6 @@ const { t } = useI18n({ useScope: 'global' })
 
 const projects = ref<Array<types.Collection>>([])
 
-onBeforeMount(() => rpc.setPageTitle('Welcome'))
-
 onActivated(() => {
   load()
   nextTick(() => {
@@ -35,6 +33,8 @@ onActivated(() => {
 })
 
 async function load() {
+  rpc.setPageTitle('Welcome')
+
   projects.value = []
 
   store.documents.forEach(async (file) => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onActivated, onBeforeMount, ref } from 'vue'
+import { nextTick, onActivated, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import draggable from 'vuedraggable'
@@ -7,6 +7,7 @@ import { types } from '@/wailsjs/go/models'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
 import { CollectionIcon as CollectionIconSolid } from '@heroicons/vue/solid'
 import Sidebar from '@/components/Sidebar.vue'
+import TraitVariantRow from '@/components/TraitVariantRow.vue'
 import { useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 
@@ -21,12 +22,13 @@ const isLayerDragging = ref(false)
 
 const ROUTE_NAME = 'artwork.layers'
 
-onBeforeMount(() => rpc.setPageTitle("Layer Setup"))
-
 onActivated(() => {
+    rpc.setPageTitle("Layer Setup")
+
     nextTick(() => {
         rpc.on('shortcut.view.refresh', () => {
-            if (route.name === ROUTE_NAME && collectionStore.sourceDirectory.length) loadLayersFromDirectory(collectionStore.sourceDirectory)
+            console.log('Requested refresh but it was ignored')
+            // if (route.name === ROUTE_NAME && collectionStore.sourceDirectory.length) loadLayersFromDirectory(collectionStore.sourceDirectory)
         })
         rpc.on('shortcut.view.hard-refresh', () => {
             if (route.name === ROUTE_NAME && collectionStore.sourceDirectory.length) loadLayersFromDirectory(collectionStore.sourceDirectory)
@@ -116,19 +118,24 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
                                     </div>
                                 </div>
 
-                                <div :class="element.collapsed || isCollapsed ? 'hidden' : 'block'" group="layer"
+                                <div
+                                    class="font-mono" :class="element.collapsed || isCollapsed ? 'hidden' : 'block'"
+                                    group="layer"
                                     item-key="name">
-                                    <div v-for="( collection, j) in collectionStore.layers[element.name]" :key="j"
-                                        class="min-w-full flex justify-between border-t border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
+                                    <TraitVariantRow :variants="collectionStore.layers[element.name]"/>
+                                    <!-- <div v-for="( variant, j) in collectionStore.layers[element.name]" :key="j"
+                                        class="min-w-full flex items-center justify-between border-t border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
                                         :class="[j % 2 === 0 ? `bg-slate-200 dark:bg-slate-800 bg-opacity-10 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]">
-                                        <div class="whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
-                                            v-text="collection.name" />
+                                        <img class="w-16 p-2" :src="variant.path" alt="">
+
+                                        <div class="text-left whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
+                                            v-text="variant.name" />
                                         <div>
                                             <input
                                                 class="field grow-0 text-right appearance-none bg-transparent border-0"
-                                                type="text" v-model="collection.weight" />
+                                                type="text" v-model="variant.weight" />
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </template>

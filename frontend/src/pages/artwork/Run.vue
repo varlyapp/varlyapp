@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeMount, onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import Confetti from 'vue-confetti-explosion'
@@ -25,8 +25,6 @@ const currentStep = ref(0)
 const isWorking = ref(false)
 const isDone = ref(false)
 
-onBeforeMount(() => rpc.setPageTitle("Preview & Generate"))
-
 onMounted(() => {
     store.setIsGeneratingCollection(false)
 
@@ -43,6 +41,8 @@ onMounted(() => {
 })
 
 async function load() {
+    rpc.setPageTitle("Preview & Generate")
+
     if (isWorking.value || store.isGeneratingCollection) return
 
     console.log('Reloading Run.vue')

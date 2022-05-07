@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeMount, onMounted } from 'vue'
+import { nextTick, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
@@ -16,8 +16,6 @@ const collectionStore = useCollectionStore()
 
 const { t } = useI18n({ useScope: 'global' })
 
-onBeforeMount(() => rpc.setPageTitle("Build Settings"))
-
 onMounted(() => {
     load()
     nextTick(() => {
@@ -28,7 +26,8 @@ onMounted(() => {
 })
 
 async function load() {
-    console.log('Reloading Build.vue')
+    rpc.setPageTitle("Build Settings")
+
     collectionStore.size = collectionStore.size || SIZE
     collectionStore.height = collectionStore.height || HEIGHT
     collectionStore.width = collectionStore.width || WIDTH
