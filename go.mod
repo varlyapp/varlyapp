@@ -42,4 +42,4 @@ require (
 )
 
 // replace github.com/wailsapp/wails/v2 v2.0.0-beta.33 => /Users/selvinortiz/go/pkg/mod/github.com/wailsapp/wails/v2@v2.0.0-beta.33
-// replace github.com/wailsapp/wails/v2 => /Users/selvinortiz/dev/godev/wails/v2
+replace github.com/wailsapp/wails/v2 v2.0.0-beta.36 => /Users/selvinortiz/dev/godev/wails/v2
