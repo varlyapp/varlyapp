@@ -85,13 +85,13 @@ function loadCollection(collection: types.Collection) {
     ]" />
 
     <main class="h-full flex-1 overflow-auto scrollbar-none">
-      <section class="p-8 lg:p-16 xl:p-24 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+      <section class="p-8 lg:p-16 xl:p-24 grid grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-8">
         <div class="col-span-1">
           <div>
             <img
               @click="loadLayers"
               class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
-              src="../assets/varly-new-document.png"
+              src="@/assets/varly-new-document.png"
               alt=""
             >
           </div>
@@ -103,7 +103,7 @@ function loadCollection(collection: types.Collection) {
             <img
               @click="() => router.push({ name: 'artwork.layers' })"
               class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
-              src="../assets/varly-current-document.png"
+              src="@/assets/varly-current-document.png"
               alt=""
             >
           </div>
@@ -118,7 +118,7 @@ function loadCollection(collection: types.Collection) {
             <img
               @click="loadCollection(collection)"
               class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
-              src="../assets/varly-document.png"
+              src="@/assets/varly-document.png"
               alt=""
             >
           </div>
