@@ -123,19 +123,6 @@ async function loadLayersFromDirectory(sourceDirectory: string) {
                                     group="layer"
                                     item-key="name">
                                     <TraitVariantRow :variants="collectionStore.layers[element.name]"/>
-                                    <!-- <div v-for="( variant, j) in collectionStore.layers[element.name]" :key="j"
-                                        class="min-w-full flex items-center justify-between border-t border-slate-900 dark:border-slate-50 border-opacity-20 dark:border-opacity-20"
-                                        :class="[j % 2 === 0 ? `bg-slate-200 dark:bg-slate-800 bg-opacity-10 dark:bg-opacity-5` : `bg-slate-800 dark:bg-slate-400 bg-opacity-5 dark:bg-opacity-5`]">
-                                        <img class="w-16 p-2" :src="variant.path" alt="">
-
-                                        <div class="text-left whitespace-nowrap py-2 px-4 text-sm font-medium sm:px-6 lg:px-8"
-                                            v-text="variant.name" />
-                                        <div>
-                                            <input
-                                                class="field grow-0 text-right appearance-none bg-transparent border-0"
-                                                type="text" v-model="variant.weight" />
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
                         </template>
