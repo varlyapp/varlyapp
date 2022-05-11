@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeMount, onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { types } from '@/wailsjs/go/models'
@@ -18,8 +18,6 @@ const collectionStore = useCollectionStore()
 const gif = ref<string>('')
 const isWorking = ref<boolean>(false)
 
-onBeforeMount(() => rpc.setPageTitle("Review & Export"))
-
 onMounted(() => {
     store.setIsGeneratingCollection(false)
 
@@ -37,6 +35,8 @@ onMounted(() => {
 
 
 async function load() {
+    rpc.setPageTitle("Review & Export")
+
     if (isWorking.value || store.isGeneratingCollection) return
 
     console.log('Reloading Print.vue')
