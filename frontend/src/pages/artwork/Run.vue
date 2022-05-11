@@ -22,6 +22,7 @@ const collectionStore = useCollectionStore()
 
 const steps = ref(0)
 const currentStep = ref(0)
+const currentImage = ref('')
 const isWorking = ref(false)
 const isDone = ref(false)
 
@@ -82,29 +83,6 @@ async function load() {
     }
 }
 
-function queueConfetti() {
-    isDone.value = true
-    LogInfo('Setting isDone to true')
-    setTimeout(() => {
-        isDone.value = false
-        LogInfo('Setting isDone to false')
-    }, 3000)
-}
-
-function toggleIsWorking() {
-    isWorking.value = !isWorking.value
-}
-
-async function selectOutputDirectory() {
-    const outputDirectory = await rpc.app.OpenDirectoryDialog('Select a folder in which to save generated images')
-
-    if (!outputDirectory || outputDirectory === '') {
-        alert(`Folder could not be selected, please try again`)
-    }
-
-    collectionStore.outputDirectory = outputDirectory
-}
-
 async function generateCollection() {
     if (isWorking.value || store.isGeneratingCollection) return
 
@@ -118,6 +96,7 @@ async function generateCollection() {
     rpc.on('collection.item.generated', async (data) => {
         steps.value = data.CollectionSize
         currentStep.value = data.ItemNumber
+        currentImage.value = data.ItemPath
     })
     rpc.on('debug', async (data) => {
         console.log(data)
@@ -165,6 +144,29 @@ async function generateCollection() {
     queueConfetti()
     store.setIsGeneratingCollection(false)
 }
+
+function queueConfetti() {
+    isDone.value = true
+    LogInfo('Setting isDone to true')
+    setTimeout(() => {
+        isDone.value = false
+        LogInfo('Setting isDone to false')
+    }, 3000)
+}
+
+function toggleIsWorking() {
+    isWorking.value = !isWorking.value
+}
+
+async function selectOutputDirectory() {
+    const outputDirectory = await rpc.app.OpenDirectoryDialog('Select a folder in which to save generated images')
+
+    if (!outputDirectory || outputDirectory === '') {
+        alert(`Folder could not be selected, please try again`)
+    }
+
+    collectionStore.outputDirectory = outputDirectory
+}
 </script>
 
 <template>
@@ -177,6 +179,7 @@ async function generateCollection() {
 
         <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
             <div v-if="isWorking" class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8 lg:p-16 xl:p-24">
+                <img v-if="currentImage !== ''" :src="currentImage" alt="">
                 <Progress :steps="steps" :current-step="currentStep" loading-text="Preparing..." />
             </div>
             <div v-else class="h-full flex flex-col items-center justify-center p-8 lg:p-16 xl:p-24">
