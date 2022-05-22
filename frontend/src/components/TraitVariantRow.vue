@@ -32,7 +32,7 @@ function getRowClasses(index) {
             <input
                 type="text"
                 class="field grow-0 text-right appearance-none bg-transparent border-0"
-                v-model="variant.weight" />
+                v-model.number="variant.weight" />
         </div>
     </div>
 </template>
