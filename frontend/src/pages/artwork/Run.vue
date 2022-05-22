@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref, reactive, onActivated } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import Confetti from 'vue-confetti-explosion'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
+import { PlayIcon as SolidPlayIcon, RefreshIcon as SolidRefreshIcon, FolderOpenIcon as SolidFolderOpenIcon } from '@heroicons/vue/solid'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import { types } from '@/wailsjs/go/models'
@@ -41,13 +42,25 @@ onMounted(() => {
     })
 })
 
+onActivated(() => {
+    rpc.setPageTitle("Preview & Generate")
+})
+
+function canGenerateCollection(): boolean {
+    if (isWorking.value === true) return false
+
+    return (collectionStore.layers !== undefined
+    && Object.keys(collectionStore.layers).length > 0
+    && collectionStore.outputDirectory !== undefined
+    && collectionStore.outputDirectory.length > 0)
+}
+
 async function load() {
     rpc.setPageTitle("Preview & Generate")
 
     if (isWorking.value || store.isGeneratingCollection) return
 
     console.log('Reloading Run.vue')
-    collectionStore.preview = ''
     const layers = { ...collectionStore.layers }
 
     if (!layers || !Object.keys(layers).length) {
@@ -75,6 +88,8 @@ async function load() {
         height: parseFloat(collectionStore.height.toString()),
         size: parseInt(collectionStore.size.toString(), 10)
     })
+
+    collectionStore.preview = ''
 
     try {
         collectionStore.preview = await rpc.CollectionService.GenerateCollectionPreview(collection)
@@ -177,52 +192,105 @@ async function selectOutputDirectory() {
             { icon: PlayIcon, text: t('run'), to: 'artwork.run', selected: true },
         ]" />
 
-        <main class="h-full flex-1 overflow-y-scroll scrollbar-none">
-            <div v-if="isWorking" class="h-full flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center p-8 lg:p-16 xl:p-24">
-                <img v-if="currentImage !== ''" :src="currentImage" alt="">
-                <Progress :steps="steps" :current-step="currentStep" loading-text="Preparing..." />
-            </div>
-            <div v-else class="h-full flex flex-col items-center justify-center p-8 lg:p-16 xl:p-24">
-                <div class="flex flex-col items-center">
-                    <div v-if="!isWorking && !isDone">
-                        <div v-if="collectionStore.preview" class="py-16">
-                            <Preview :source="collectionStore.preview" caption="" />
-                        </div>
-                        <div v-else class="p-16 text-center">
-                            <svg v-if=" collectionStore.layers && Object.keys(collectionStore.layers).length" class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
-                                        <stop stop-color="#a21caf" stop-opacity="0" offset="0%" />
-                                        <stop stop-color="#a21caf" stop-opacity=".631" offset="63.146%" />
-                                        <stop stop-color="#a21caf" offset="100%" />
-                                    </linearGradient>
-                                </defs>
-                                <g fill="none" fill-rule="evenodd">
-                                    <g transform="translate(1 1)">
-                                        <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2">
-                                            <animateTransform attributeName="transform" type="rotate" from="0 18 18"
-                                                to="360 18 18" dur="0.9s" repeatCount="indefinite" />
-                                        </path>
-                                        <circle fill="#a21caf" cx="36" cy="18" r="1">
-                                            <animateTransform attributeName="transform" type="rotate" from="0 18 18"
-                                                to="360 18 18" dur="0.9s" repeatCount="indefinite" />
-                                        </circle>
-                                    </g>
-                                </g>
-                            </svg>
-                            <p v-else v-text="t('no_preview_yet')" />
-                        </div>
+        <article class="h-full flex-1">
+            <main class="h-full flex flex-col">
+                <div
+                    class="max-h-12 bg-opacity-10 px-4 border-b border-slate-900 border-opacity-10 dark:border-slate-50 dark:border-opacity-10">
+                    <nav class="h-full flex items-center justify-end">
+                        <ul class="flex items-center justify-center my-2">
+                            <li>
+                                <button type="button"
+                                    class="flex items-center justify-center px-3 py-1 bg-slate-100 bg-opacity-50 rounded shadow"
+                                    @click="load">
+                                    <SolidRefreshIcon class="w-6 fill-fuchsia-700" />
+                                </button>
+                            </li>
+                            <li class="px-1" />
+                            <li>
+                                <button type="button"
+                                    class="flex items-center justify-center px-3 py-1 bg-slate-100 bg-opacity-50 rounded shadow"
+                                    @click="selectOutputDirectory">
+                                    <SolidFolderOpenIcon class="w-6 fill-fuchsia-700" />
+                                </button>
+                            </li>
+                            <li class="px-1" />
+                            <li>
+                                <button
+                                    type="button"
+                                    class="flex items-center justify-center px-3 py-1 bg-slate-100 bg-opacity-50 rounded shadow"
+                                    :class="[!canGenerateCollection() ? 'opacity-50' : '']" :disabled="!canGenerateCollection()"
+                                    @click="generateCollection">
+                                    <SolidPlayIcon class="w-6 fill-fuchsia-700" />
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="flex items-center justify-center flex-1 flex-shrink-0 overflow-y-scroll scrollbar-none">
+                    <div v-if="isWorking"
+                        class="flex flex-col flex-1 max-w-4xl mx-auto items-center justify-center px-8 lg:px-16 xl:px-24">
+                        <img v-if="currentImage !== ''" :src="currentImage" alt="">
+                        <Progress :steps="steps" :current-step="currentStep" loading-text="Preparing..." />
                     </div>
-                    <div v-if="isDone" class="max-w-xs mx-auto">
-                        <h1 class="animate__animated animate__fadeIn text-6xl text-center font-bold">🎉</h1>
+                    <div v-else class="flex flex-col items-center justify-center px-8 lg:px-16 xl:px-24">
+                        <div class="flex flex-col items-center">
+                            <div v-if="!isWorking && !isDone">
+                                <div v-if="collectionStore.preview" class="">
+                                    <Preview :source="collectionStore.preview" caption="" />
+                                </div>
+                                <div v-else class="p-16 text-center">
+                                    <svg v-if="collectionStore.layers && Object.keys(collectionStore.layers).length"
+                                        class="m-0 p-0 mx-auto" width="38" height="38" viewBox="0 0 38 38"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                            <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
+                                                <stop stop-color="#a21caf" stop-opacity="0" offset="0%" />
+                                                <stop stop-color="#a21caf" stop-opacity=".631" offset="63.146%" />
+                                                <stop stop-color="#a21caf" offset="100%" />
+                                            </linearGradient>
+                                        </defs>
+                                        <g fill="none" fill-rule="evenodd">
+                                            <g transform="translate(1 1)">
+                                                <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)"
+                                                    stroke-width="2">
+                                                    <animateTransform attributeName="transform" type="rotate"
+                                                        from="0 18 18" to="360 18 18" dur="0.9s"
+                                                        repeatCount="indefinite" />
+                                                </path>
+                                                <circle fill="#a21caf" cx="36" cy="18" r="1">
+                                                    <animateTransform attributeName="transform" type="rotate"
+                                                        from="0 18 18" to="360 18 18" dur="0.9s"
+                                                        repeatCount="indefinite" />
+                                                </circle>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <p v-else v-text="t('no_preview_yet')" />
+                                </div>
+                            </div>
+                            <div v-if="isDone" class="max-w-xs mx-auto">
+                                <h1 class="animate__animated animate__fadeIn text-6xl text-center font-bold">🎉</h1>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
 
-        <Confetti v-if="isDone" @done="() => isDone = false" :particle-count="200" :particle-size="10" :duration="4000" class="absolute w-full h-full top-0 right-0 bottom-0 left-0" />
+                <div
+                    class="h-10 bg-opacity-10 px-4 border-t border-slate-900 border-opacity-10 dark:border-slate-50 dark:border-opacity-10">
+                    <div class="max-w-full overflow-h-scroll">
+                        <p v-if="collectionStore.outputDirectory" class="pt-4 text-xs">
+                            <strong>Output Folder</strong> {{ collectionStore.outputDirectory }}
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </article>
 
-        <FloatingButtonBar>
+        <Confetti v-if="isDone" @done="() => isDone = false" :particle-count="200" :particle-size="10" :duration="4000"
+            class="absolute w-full h-full top-0 right-0 bottom-0 left-0" />
+
+        <!-- <FloatingButtonBar>
             <button type="button"
                 class="flex mt-2 py-3 px-4 items-center rounded text-slate-50 bg-slate-700 shadow shadow-slate-800 hover:bg-opacity-90"
                 @click="selectOutputDirectory">
@@ -236,12 +304,12 @@ async function selectOutputDirectory() {
                 @click="generateCollection">
                 <span v-text="t('generate_collection')"/>
             </button>
-        </FloatingButtonBar>
+        </FloatingButtonBar> -->
 
-        <StatusBar v-if="collectionStore.outputDirectory">
+        <!-- <StatusBar v-if="collectionStore.outputDirectory">
             <p v-if="collectionStore.outputDirectory" class="pt-4 text-xs">
                 🏁 {{ collectionStore.outputDirectory }}
             </p>
-        </StatusBar>
+        </StatusBar> -->
     </section>
 </template>
