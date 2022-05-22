@@ -22,10 +22,39 @@ onMounted(() => {
     router.push({ name: 'artwork.layers' })
   })
   rpc.on('shortcut.collection.save', async () => {
-    if (collectionStore.layers && Object.keys(collectionStore.layers).length) {
-      const path = await rpc.CollectionService.SaveCollection(types.Collection.createFrom(collectionStore.prepare()))
-      if (path && path !== '') store.addDocument(path)
+    debugger
+    const layers = { ...collectionStore.layers }
+
+    if (!layers || !Object.keys(layers).length) {
+        console.log('No preview to generate')
+        return
     }
+
+    for (const trait in layers) {
+        if (layers.hasOwnProperty(trait)) {
+            layers[trait] = layers[trait].map((layer) => {
+                return {
+                    ...layer,
+                    weight: parseFloat(layer.weight)
+                }
+            })
+        }
+    }
+
+    const collection = types.Collection.createFrom({
+        ...collectionStore.prepare(),
+        sourceDirectory: collectionStore.sourceDirectory,
+        outputDirectory: collectionStore.outputDirectory,
+        traits: [...collectionStore.traits],
+        layers: layers,
+        width: parseFloat(collectionStore.width.toString()),
+        height: parseFloat(collectionStore.height.toString()),
+        size: parseInt(collectionStore.size.toString(), 10)
+    })
+
+    console.log(collection)
+    const path = await rpc.CollectionService.SaveCollection(types.Collection.createFrom(collection))
+    if (path && path !== '') store.addDocument(path)
   })
   rpc.on('shortcut.language.english', () => {
     intl.locale.value = 'en'
