@@ -64,6 +64,18 @@ const useCollectionStore = defineStore('collection', () => {
   }
 
   function prepare(this: any): Object {
+    const layers = {}
+
+    for (const key in this.layers) {
+      const variant = this.layers[key]
+      variant.width = parseFloat(variant.width || '0')
+      variant.height = parseFloat(variant.height || '0')
+      variant.weight = parseFloat(variant.weight || '0')
+
+      console.log(variant)
+      layers[key] = { ...variant }
+    }
+
     return {
       sourceDirectory: this.sourceDirectory,
       outputDirectory: this.outputDirectory,
@@ -72,7 +84,7 @@ const useCollectionStore = defineStore('collection', () => {
       artist: this.artist,
       baseUri: this.baseUri,
       traits: this.traits,
-      layers: this.layers,
+      layers: layers,
       width: parseFloat(this.width),
       height: parseFloat(this.height),
       size: parseInt(this.size, 10),
@@ -92,7 +104,7 @@ const useCollectionStore = defineStore('collection', () => {
     this.height = 0
     this.size = 0
     this.preview = '',
-    this.gif = {}
+      this.gif = {}
   }
 
   return { hydrate, prepare, reset, traits, layers, sourceDirectory, outputDirectory, name, description, artist, baseUri, width, height, size, preview, gif }
