@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted } from 'vue'
+import { nextTick, onActivated, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
@@ -25,9 +25,11 @@ onMounted(() => {
     })
 })
 
-async function load() {
+onActivated(() => {
     rpc.setPageTitle("Build Settings")
+})
 
+async function load() {
     collectionStore.size = collectionStore.size || SIZE
     collectionStore.height = collectionStore.height || HEIGHT
     collectionStore.width = collectionStore.width || WIDTH
@@ -67,14 +69,16 @@ async function load() {
                         <label for="collection-name" class="block text-sm opacity-75">Collection Name</label>
                         <div class="mt-1">
                             <input type="text" id="collection-name" class="field" name="collection-name"
-                                autocomplete="off" placeholder="e.g. Boss Beauties" autofocus v-model="collectionStore.name" />
+                                autocomplete="off" placeholder="e.g. Boss Beauties" autofocus
+                                v-model="collectionStore.name" />
                         </div>
                     </div>
                     <div class="col-span-12">
                         <label for="collection-name" class="block text-sm opacity-75">Collection Artist</label>
                         <div class="mt-1">
                             <input type="text" id="collection-artist" class="field" name="collection-artist"
-                                autocomplete="off" placeholder="e.g Your name or pseudonym" v-model="collectionStore.artist" />
+                                autocomplete="off" placeholder="e.g Your name or pseudonym"
+                                v-model="collectionStore.artist" />
                         </div>
                     </div>
                     <div class="col-span-12">
@@ -83,7 +87,8 @@ async function load() {
                         <div class="mt-1">
                             <textarea rows="6" id="collection-description" class="field scrollbar-none"
                                 name="collection-description" autocomplete="off"
-                                placeholder="A short description about your collection" v-model="collectionStore.description" />
+                                placeholder="A short description about your collection"
+                                v-model="collectionStore.description" />
                         </div>
                     </div>
 
@@ -102,14 +107,14 @@ async function load() {
                         <label for="collection-width" class="block text-sm opacity-75">Layer Width</label>
                         <div class="mt-1">
                             <input type="text" name="collection-width" id="collection-width" autocomplete="off"
-                                class="field" v-model="collectionStore.width" />
+                                class="field" v-model.number="collectionStore.width" />
                         </div>
                     </div>
                     <div class="col-span-6">
                         <label for="collection-height" class="block text-sm opacity-75">Layer Height</label>
                         <div class="mt-1">
                             <input type="text" name="collection-height" id="collection-height" autocomplete="off"
-                                class="field" v-model="collectionStore.height" />
+                                class="field" v-model.number="collectionStore.height" />
                         </div>
                     </div>
 
@@ -117,7 +122,7 @@ async function load() {
                         <label for="collection-size" class="block text-sm opacity-75">Collection Size</label>
                         <div class="mt-1">
                             <input type="text" name="collection-size" id="collection-size" autocomplete="off"
-                                class="field" v-model="collectionStore.size" />
+                                class="field" v-model.number="collectionStore.size" />
                         </div>
                     </div>
                     <div class="col-span-6"></div>
