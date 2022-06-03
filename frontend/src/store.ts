@@ -104,7 +104,7 @@ const useCollectionStore = defineStore('collection', () => {
     this.height = 0
     this.size = 0
     this.preview = '',
-      this.gif = {}
+    this.gif = {}
   }
 
   return { hydrate, prepare, reset, traits, layers, sourceDirectory, outputDirectory, name, description, artist, baseUri, width, height, size, preview, gif }

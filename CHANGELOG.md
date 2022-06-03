@@ -1,5 +1,18 @@
 # Release Notes for Varly
 
+
+## 0.5.0 - 2022-06-03
+## Added
+- Added solid titlebar to window frame
+- Added toolbar and status bar to Run screen
+- Added generated NFT preview during build
+- Added thumbnail previews to trait variants in Layers screen
+- Added experimented support for exporting an animated GIF from collection (`File > Print`)
+
+## Fixed
+- Fixed issue where some JSON metadata could not be generated correctly
+- Fixed issue where _Start New Project_ in Start screen and _Start New Project_ in sidebar were inconsistent
+
 ## 0.4.0 - 2022-04-22
 ### Added
 - Added more coverage for the Spanish language translations

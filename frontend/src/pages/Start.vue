@@ -44,6 +44,24 @@ async function load() {
   })
 }
 
+async function startNewProject() {
+  if (!Object.keys(collectionStore.layers).length) {
+            return router.push({ name: 'artwork.layers' })
+        }
+
+        const response = await rpc.app.MessageDialog({
+            Title: t(`confirm_start_new_project_title`),
+            Message: t(`confirm_start_new_project_message`),
+            Buttons: [`OK`, `Cancel`],
+            DefaultButton: `OK`
+        })
+
+        if (['ok', 'yes'].includes(response.toLowerCase())) {
+            collectionStore.reset()
+            router.push({ name: 'artwork.layers' })
+        }
+}
+
 async function loadLayers() {
   const sourceDirectory = await rpc.app.OpenDirectoryDialog(t('open_layers_folder'))
 
@@ -89,7 +107,7 @@ function loadCollection(collection: types.Collection) {
         <div class="col-span-1">
           <div>
             <img
-              @click="loadLayers"
+              @click="startNewProject"
               class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
               src="@/assets/varly-new-document.png"
               alt=""

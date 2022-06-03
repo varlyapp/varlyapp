@@ -16,16 +16,13 @@ const collectionStore = useCollectionStore()
 
 const { t } = useI18n({ useScope: 'global' })
 
-onMounted(() => {
+onActivated(() => {
     load()
     nextTick(() => {
         rpc.on('shortcut.view.refresh', () => {
             if (route.name === 'artwork.build') load()
         })
     })
-})
-
-onActivated(() => {
     rpc.setPageTitle("Build Settings")
 })
 
@@ -77,7 +74,7 @@ async function load() {
                         <label for="collection-name" class="block text-sm opacity-75">Collection Artist</label>
                         <div class="mt-1">
                             <input type="text" id="collection-artist" class="field" name="collection-artist"
-                                autocomplete="off" placeholder="e.g Your name or pseudonym"
+                                autocomplete="off" placeholder="e.g. your name or pseudonym"
                                 v-model="collectionStore.artist" />
                         </div>
                     </div>
@@ -87,7 +84,7 @@ async function load() {
                         <div class="mt-1">
                             <textarea rows="6" id="collection-description" class="field scrollbar-none"
                                 name="collection-description" autocomplete="off"
-                                placeholder="A short description about your collection"
+                                placeholder="A short description of your collection"
                                 v-model="collectionStore.description" />
                         </div>
                     </div>
@@ -96,7 +93,7 @@ async function load() {
                         <label for="collection-name" class="block text-sm opacity-75">Collection Base URI</label>
                         <div class="mt-1">
                             <input type="text" id="collection-base-uri" class="field" name="collection-base-uri"
-                                autocomplete="off" spellcheck="false" placeholder="e.g ipfs://your-collection-cid/"
+                                autocomplete="off" spellcheck="false" placeholder="e.g. ipfs://your-collection-cid/"
                                 v-model="collectionStore.baseUri" />
                         </div>
                     </div>

@@ -30,6 +30,7 @@ type Collection struct {
 	OutputDirectory string               `json:"outputDirectory"`
 	Traits          []Trait              `json:"traits"`
 	Layers          map[string][]Variant `json:"layers"`
+	LayersDummy     []Variant            `json:"layersDummy"`
 	Width           float64              `json:"width"`
 	Height          float64              `json:"height"`
 	Size            int                  `json:"size"`

@@ -61,6 +61,8 @@ github.com/wabarc/ipfs-pinner v1.1.0 h1:AMyWZlPFVRo35lF90jHEesVf+z44NyXzOkVPVQgl
 github.com/wabarc/ipfs-pinner v1.1.0/go.mod h1:sn/whSfICvf6qZLUFbS8ZpajajcakkQ9aAeofDC1g44=
 github.com/wailsapp/mimetype v1.4.1 h1:pQN9ycO7uo4vsUUuPeHEYoUkLVkaRntMnHJxVwYhwHs=
 github.com/wailsapp/mimetype v1.4.1/go.mod h1:9aV5k31bBOv5z6u+QP8TltzvNGJPmNJD4XlAL3U+j3o=
+github.com/wailsapp/wails/v2 v2.0.0-beta.37 h1:LQpw4vXUl8v1tOyqIwbMVivclruUKpnYu8fRHIwcPkI=
+github.com/wailsapp/wails/v2 v2.0.0-beta.37/go.mod h1:dPVZfCu+SSg6HddAATME5Wj1ObXhSGIYDS7K88P383c=
 github.com/ybbus/httpretry v1.0.1 h1:lpo0rx/qY4kvishWD6kDgEFW7uGzx4gB/9AgPO5rg9Q=
 github.com/ybbus/httpretry v1.0.1/go.mod h1:Md7FpyqeEX8F0pOnH0KN4MW1ek3cypGJmbtCNJSJMZg=
 golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 h1:HWj/xjIHfjYU5nVXpTM0s39J9CbLn7Cc5a7IC5rwsMQ=
