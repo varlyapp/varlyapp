@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { nextTick, onActivated, onBeforeMount, ref } from 'vue'
+import { nextTick, onActivated, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { types } from '@/wailsjs/go/models'
-import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
+import { types } from '@wails/go/models'
+import { CogIcon, RectangleStackIcon, PlayIcon } from '@heroicons/vue/24/outline'
 import Sidebar from '@/components/Sidebar.vue'
 import { useStore, useCollectionStore } from '@/store'
 import rpc from '@/rpc'
@@ -97,7 +97,7 @@ function loadCollection(collection: types.Collection) {
 <template>
   <section class="h-full flex">
     <Sidebar :links="[
-      { icon: CollectionIcon, text: t('layer_setup'), to: 'artwork.layers', selected: false },
+      { icon: RectangleStackIcon, text: t('layer_setup'), to: 'artwork.layers', selected: false },
       { icon: CogIcon, text: t('build_settings'), to: 'artwork.build', selected: false },
       { icon: PlayIcon, text: t('run'), to: 'artwork.run', selected: false },
     ]" />
@@ -109,7 +109,7 @@ function loadCollection(collection: types.Collection) {
             <img
               @click="startNewProject"
               class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
-              src="@/assets/varly-new-document.png"
+              src="@assets/varly-new-document.png"
               alt=""
             >
           </div>
@@ -121,7 +121,7 @@ function loadCollection(collection: types.Collection) {
             <img
               @click="() => router.push({ name: 'artwork.layers' })"
               class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
-              src="@/assets/varly-current-document.png"
+              src="@assets/varly-current-document.png"
               alt=""
             >
           </div>
@@ -136,7 +136,7 @@ function loadCollection(collection: types.Collection) {
             <img
               @click="loadCollection(collection)"
               class="animate__animated animate__fadeIn w-full h-full m-0 p-0 object-cover"
-              src="@/assets/varly-document.png"
+              src="@assets/varly-document.png"
               alt=""
             >
           </div>

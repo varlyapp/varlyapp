@@ -2,17 +2,16 @@
 import { nextTick, onMounted, ref, onActivated } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import Confetti from 'vue-confetti-explosion'
-import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
+import { CogIcon, RectangleStackIcon, PlayIcon } from '@heroicons/vue/24/outline'
 import {
     PlayIcon as SolidPlayIcon,
-    RefreshIcon as SolidRefreshIcon,
+    ArrowPathIcon as SolidRefreshIcon,
     FolderOpenIcon as SolidFolderOpenIcon,
-} from '@heroicons/vue/solid'
+} from '@heroicons/vue/24/solid'
 import Progress from '@/components/Progress.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import { types } from '@/wailsjs/go/models'
-import { LogInfo } from '@/wailsjs/runtime/runtime'
+import { types } from '@wails/go/models'
+import { LogInfo } from '@wails/runtime/runtime'
 import Preview from '@/components/Preview.vue'
 import Spinner from '@/components/Spinner.vue'
 import { useStore, useCollectionStore } from '@/store'
@@ -164,17 +163,7 @@ async function generateCollection() {
     await rpc.CollectionService.GenerateCollection(collection)
 
     toggleIsWorking()
-    queueConfetti()
     store.setIsGeneratingCollection(false)
-}
-
-function queueConfetti() {
-    isDone.value = true
-    LogInfo('Setting isDone to true')
-    setTimeout(() => {
-        isDone.value = false
-        LogInfo('Setting isDone to false')
-    }, 3000)
 }
 
 function toggleIsWorking() {
@@ -199,7 +188,7 @@ async function selectOutputDirectory() {
         <Sidebar
             :links="[
                 {
-                    icon: CollectionIcon,
+                    icon: RectangleStackIcon,
                     text: t('layer_setup'),
                     to: 'artwork.layers',
                     selected: false,
@@ -352,14 +341,5 @@ async function selectOutputDirectory() {
                 </div>
             </main>
         </article>
-
-        <Confetti
-            v-if="isDone"
-            @done="() => (isDone = false)"
-            :particle-count="200"
-            :particle-size="10"
-            :duration="4000"
-            class="absolute w-full h-full top-0 right-0 bottom-0 left-0"
-        />
     </section>
 </template>

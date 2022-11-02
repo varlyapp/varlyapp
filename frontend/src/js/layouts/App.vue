@@ -2,7 +2,7 @@
 import { nextTick, onBeforeMount, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { types } from '@/wailsjs/go/models'
+import { types } from '@wails/go/models'
 import { useStore, useCollectionStore } from '@/store'
 import rpc from '@/rpc'
 

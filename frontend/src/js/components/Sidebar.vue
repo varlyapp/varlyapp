@@ -2,8 +2,8 @@
 import { computed, type FunctionalComponent, type PropType } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { BrowserOpenURL } from '@/wailsjs/runtime'
-import { BadgeCheckIcon, DocumentAddIcon, FolderOpenIcon, HeartIcon } from '@heroicons/vue/outline'
+import { BrowserOpenURL } from '@wails/runtime'
+import { CheckBadgeIcon, DocumentPlusIcon, FolderOpenIcon, HeartIcon } from '@heroicons/vue/24/outline'
 import SidebarButton from '@/components/SidebarButton.vue'
 import { useCollectionStore } from '@/store'
 import rpc from '@/rpc'
@@ -49,10 +49,10 @@ const presets = {
     links: [
         { icon: null, text: t('support'), to: '', selected: false },
         { icon: HeartIcon, text: t('sponsor_on_github'), to: () => BrowserOpenURL('https://github.com/sponsors/selvindev'), selected: false },
-        { icon: BadgeCheckIcon, text: t('follow_on_twitter'), to: () => BrowserOpenURL('https://twitter.com/varlyapp'), selected: false },
+        { icon: CheckBadgeIcon, text: t('follow_on_twitter'), to: () => BrowserOpenURL('https://twitter.com/varlyapp'), selected: false },
         { icon: null, text: t('workspace'), to: '', selected: false },
         { icon: FolderOpenIcon, text: t('recent_projects'), to: 'start', selected: route.name === 'start' },
-        { icon: DocumentAddIcon, text: t('start_new_project'), to: startNewProjectAction(), selected: false },
+        { icon: DocumentPlusIcon, text: t('start_new_project'), to: startNewProjectAction(), selected: false },
     ]
 }
 

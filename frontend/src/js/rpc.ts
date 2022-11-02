@@ -1,8 +1,8 @@
-import * as app from '@/wailsjs/go/main/App'
-import * as CollectionService from '@/wailsjs/go/services/CollectionService'
-import * as FileSystemService from '@/wailsjs/go/services/FileSystemService'
-import * as SettingsService from '@/wailsjs/go/services/SettingsService'
-import { WindowSetTitle, EventsOnMultiple } from '@/wailsjs/runtime'
+import * as app from '@wails/go/main/App'
+import * as CollectionService from '@wails/go/services/CollectionService'
+import * as FileSystemService from '@wails/go/services/FileSystemService'
+import * as SettingsService from '@wails/go/services/SettingsService'
+import { WindowSetTitle, EventsOnMultiple } from '@wails/runtime'
 
 const rpc = { app, CollectionService, FileSystemService, SettingsService, on, setPageTitle }
 

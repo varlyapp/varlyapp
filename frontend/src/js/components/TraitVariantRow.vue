@@ -13,7 +13,7 @@ function getRowClasses(index) {
 
 <style>
 .opacity-background {
-    background: url("@/assets/opacity-pattern.png") repeat left top;
+    background: url("@assets/opacity-pattern.png") repeat left top;
 }
 </style>
 

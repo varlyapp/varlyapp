@@ -2,7 +2,7 @@
 import { nextTick, onActivated, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { CogIcon, CollectionIcon, PlayIcon } from '@heroicons/vue/outline'
+import { CogIcon, RectangleStackIcon, PlayIcon } from '@heroicons/vue/24/outline'
 import { useCollectionStore } from '@/store'
 import Sidebar from '@/components/Sidebar.vue'
 import rpc from '@/rpc'
@@ -54,7 +54,7 @@ async function load() {
 <template>
     <section class="h-full flex">
         <Sidebar :links="[
-            { icon: CollectionIcon, text: t('layer_setup'), to: 'artwork.layers', selected: false },
+            { icon: RectangleStackIcon, text: t('layer_setup'), to: 'artwork.layers', selected: false },
             { icon: CogIcon, text: t('build_settings'), to: 'artwork.build', selected: true },
             { icon: PlayIcon, text: t('run'), to: 'artwork.run', selected: false },
         ]" />

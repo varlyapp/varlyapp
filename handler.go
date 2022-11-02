@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"net/url"
 	"os"
-	"strings"
 )
 
 type Handler struct {
@@ -18,21 +16,17 @@ func NewHandler() *Handler {
 
 func (h *Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var err error
-	f := strings.Replace(req.RequestURI, "wails://wails", "", 1)
-	f, err = url.PathUnescape(f)
+	path := req.URL.Path
+	f, err := os.ReadFile(path)
+
+	fmt.Println("path", path)
+	fmt.Println("req.URL", req.URL.String())
 
 	if err != nil {
 		fmt.Println("🚨 ", err)
 		res.WriteHeader(http.StatusBadRequest)
-		res.Write([]byte(fmt.Sprintf("Could not clean up file name %s", f)))
-	}
-	c, err := os.ReadFile(f)
-
-	if err != nil {
-		fmt.Println("🚨 ", err)
-		res.WriteHeader(http.StatusBadRequest)
-		res.Write([]byte(fmt.Sprintf("Could not serve file %s", f)))
+		res.Write([]byte(fmt.Sprintf("Could not serve file %s", path)))
 	}
 
-	res.Write(c)
+	res.Write(f)
 }

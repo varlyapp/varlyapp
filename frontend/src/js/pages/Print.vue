@@ -2,11 +2,11 @@
 import { nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { types } from '@/wailsjs/go/models'
+import { types } from '@wails/go/models'
 import { useCollectionStore, useStore } from '@/store'
 import Preview from '@/components/Preview.vue'
 import FloatingButtonBar from '@/components/FloatingButtonBar.vue'
-import { XCircleIcon, UploadIcon } from '@heroicons/vue/outline'
+import { XCircleIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/outline'
 import rpc from '@/rpc'
 
 const { t } = useI18n({ useScope: 'global' })
@@ -206,7 +206,7 @@ async function exportGIF() {
             <button v-if="collectionStore.layers && Object.keys(collectionStore.layers).length" type="button"
                 class="flex mt-2 py-3 px-4 items-center rounded text-slate-50 bg-fuchsia-700 shadow shadow-fuchsia-900 hover:bg-opacity-90"
                 :class="[isWorking ? 'opacity-50' : '']" :disabled="isWorking" @click="exportGIF">
-                <UploadIcon class="w-4 mr-2" />
+                <ArrowUpTrayIcon class="w-4 mr-2" />
                 <span v-text="t('export_gif')" />
             </button>
         </FloatingButtonBar>
